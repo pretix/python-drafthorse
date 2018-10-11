@@ -1,0 +1,15 @@
+language: python
+sudo: false
+python:
+    - "3.5"
+    - "3.6"
+install:
+    - pip install -U pip wheel coverage codecov
+    - pip install -r requirements_dev.txt
+script:
+    - flake8 drafthorse tests
+    - isort -rc -c drafthorse tests
+    - coverage run -m py.test -v tests/ && codecov
+cache:
+    directories:
+        - $HOME/.cache/pip

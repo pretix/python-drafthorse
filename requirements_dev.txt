@@ -1,0 +1,4 @@
+lxml
+pytest
+flake8
+isort
