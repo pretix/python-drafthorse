@@ -1,8 +1,10 @@
 import xml.etree.cElementTree as ET
 
+from drafthorse.models.note import IncludedNote
 from . import NS_RAM, NS_UDT, NS_FERD_1p0
 from .elements import Element
 from .fields import DateTimeField, Field, MultiField, StringField
+from .trade import TradeTransaction
 
 
 class DocumentContextParameter(Element):
@@ -21,27 +23,11 @@ class DocumentContext(Element):
         tag = "SpecifiedExchangedDocumentContext"
 
 
-class IncludedNote(Element):
-    content = StringField(NS_FERD_1p0, "Content")
-
-    class Meta:
-        namespace = NS_FERD_1p0
-        tag = "IncludedNote"
-
-
-class IssueDateTime(Element):
-    value = DateTimeField()
-
-    class Meta:
-        namespace = NS_FERD_1p0
-        tag = "IssueDateTime"
-
-
 class Header(Element):
     id = StringField(NS_FERD_1p0, "ID")
     name = StringField(NS_FERD_1p0, "Name")
     type_code = StringField(NS_FERD_1p0, "TypeCode")
-    issue_date_time = Field(IssueDateTime)
+    issue_date_time = DateTimeField(NS_FERD_1p0, "IssueDateTime")
     notes = MultiField(IncludedNote)
 
     class Meta:
@@ -50,8 +36,9 @@ class Header(Element):
 
 
 class Document(Element):
-    context = Field(DocumentContext)
+    context = Field(DocumentContext, required=True)
     header = Field(Header)
+    trade = Field(TradeTransaction)
 
     def __init__(self):
         super().__init__()

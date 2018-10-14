@@ -64,15 +64,69 @@ class StringElement(Element):
         return node
 
 
-class DateTimeElement(Element):
-    def __init__(self, value=None):
-        super().__init__()
-        self.value = None
+class DecimalElement(StringElement):
+    def __init__(self, namespace, tag, value=0):
+        super().__init__(namespace, tag)
+        self.value = value
 
     def to_etree(self):
         node = self._etree_node()
-        node.text = self.value.strftime("%Y%m%d")
+        node.text = str(self.value)
         return node
+
+
+class QuantityElement(StringElement):
+    def __init__(self, namespace, tag, amount="", unit_code=""):
+        super().__init__(namespace, tag)
+        self.amount = amount
+        self.unit_code = unit_code
+
+    def to_etree(self):
+        node = self._etree_node()
+        node.text = str(self.amount)
+        node.attrib["unitCode"] = self.unit_code
+        return node
+
+
+class CurrencyElement(StringElement):
+    def __init__(self, namespace, tag, amount="", currency="EUR"):
+        super().__init__(namespace, tag)
+        self.amount = amount
+        self.currency = currency
+
+    def to_etree(self):
+        node = self._etree_node()
+        node.text = str(self.amount)
+        node.attrib["currencyID"] = self.currency
+        return node
+
+
+class IDElement(Element):
+    def __init__(self, text="", scheme_id=""):
+        super().__init__()
+        self.text = text
+        self.scheme_id = scheme_id
+
+    def to_etree(self):
+        node = self._etree_node()
+        node.text = self.text
+        node.attrib['schemeID'] = self.scheme_id
+        return node
+
+
+class DateTimeElement(Element):
+    def __init__(self, namespace, tag, value=None):
+        super().__init__()
+        self.value = None
+        self.namespace = namespace
+        self.tag = tag
+
+    def to_etree(self):
+        t = ET.Element("{%s}%s" % (self.namespace, self.tag))
+        node = self._etree_node()
+        node.text = self.value.strftime("%Y%m%d")
+        t.append(node)
+        return t
 
     class Meta:
         namespace = NS_UDT
@@ -80,3 +134,22 @@ class DateTimeElement(Element):
         attributes = {
             "format": "102"
         }
+
+
+class IndicatorElement(Element):
+    def __init__(self, namespace, tag, value=None):
+        super().__init__()
+        self.value = None
+        self.namespace = namespace
+        self.tag = tag
+
+    def to_etree(self):
+        t = ET.Element("{%s}%s" % (self.namespace, self.tag))
+        node = self._etree_node()
+        node.text = str(self.value).lower()
+        t.append(node)
+        return t
+
+    class Meta:
+        namespace = NS_UDT
+        tag = "Indicator"

@@ -40,15 +40,102 @@ class StringField(Field):
         instance._data[self.name].text = value
 
 
-class DateTimeField(Field):
+class IDField(Field):
     def __init__(self, default=False, required=False, _d=None):
-        from .elements import DateTimeElement
-        super().__init__(DateTimeElement, default, required, _d)
+        from .elements import IDElement
+        super().__init__(IDElement, default, required, _d)
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+
+        if not isinstance(value, (tuple, list)):
+            raise TypeError("Please pass a 2-tuple of including scheme ID and ID.")
+        instance._data[self.name].text = value[1]
+        instance._data[self.name].scheme_id = value[0]
+
+
+class DecimalField(Field):
+    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+        from .elements import DecimalElement
+        super().__init__(DecimalElement, default, required, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
+
+
+class QuantityField(Field):
+    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+        from .elements import QuantityElement
+        super().__init__(QuantityElement, default, required, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+
+        if not isinstance(value, (tuple, list)):
+            raise TypeError("Please pass a 2-tuple of including amount and unit code.")
+        instance._data[self.name].value = value[0]
+        instance._data[self.name].unit_code = value[1]
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
+
+
+class CurrencyField(Field):
+    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+        from .elements import CurrencyElement
+        super().__init__(CurrencyElement, default, required, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+
+        if not isinstance(value, (tuple, list)):
+            raise TypeError("Please pass a 2-tuple of including amount and currency.")
+        instance._data[self.name].value = value[0]
+        instance._data[self.name].currency = value[1]
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
+
+
+class IndicatorField(Field):
+    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+        from .elements import IndicatorElement
+        super().__init__(IndicatorElement, default, required, _d)
+        self.namespace = namespace
+        self.tag = tag
 
     def __set__(self, instance, value):
         if instance._data.get(self.name, None) is None:
             instance._data[self.name] = self.initialize()
         instance._data[self.name].value = value
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
+
+
+class DateTimeField(Field):
+    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+        from .elements import DateTimeElement
+        super().__init__(DateTimeElement, default, required, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+        instance._data[self.name].value = value
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
 
 
 class Container():

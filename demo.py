@@ -10,5 +10,5 @@ doc.header.name = "RECHNUNG"
 doc.header.type_code = "380"
 doc.header.issue_date_time.value = date.today()
 doc.header.notes.add(IncludedNote(content="Test Node 1"))
-doc.header.notes.add(IncludedNote(content="Test Node 2"))
+doc.header.notes.add(IncludedNote(content="Test Node 2", subject_code="foo"))
 print(prettify(doc.serialize()))
