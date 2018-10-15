@@ -1,5 +1,5 @@
 from drafthorse.models.delivery import SupplyChainEvent
-from . import NS_FERD_1p0, BASIC, COMFORT, EXTENDED
+from . import NS_RAM, BASIC, COMFORT, EXTENDED
 from .accounting import TradeAllowanceCharge, BillingSpecifiedPeriod, AccountingAccount
 from .elements import Element
 from .fields import CurrencyField, QuantityField, Field, MultiField, StringField
@@ -13,38 +13,38 @@ from .references import LineReceivingAdviceReferencedDocument, LineDespatchAdvic
 
 class AllowanceCharge(TradeAllowanceCharge):
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "AppliedTradeAllowanceCharge"
 
 
 class GrossPrice(Element):
-    amount = CurrencyField(NS_FERD_1p0, "ChargeAmount", required=True, profile=COMFORT,
+    amount = CurrencyField(NS_RAM, "ChargeAmount", required=True, profile=COMFORT,
                            _d="Bruttopreis")
-    basis_quantity = QuantityField(NS_FERD_1p0, "BasisQuantity", required=False,
+    basis_quantity = QuantityField(NS_RAM, "BasisQuantity", required=False,
                                    profile=COMFORT, _d="Preisbasismenge")
     charge = Field(AllowanceCharge, required=False, profile=COMFORT)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "GrossPriceProductTradePrice"
 
 
 class NetPrice(Element):
-    amount = CurrencyField(NS_FERD_1p0, "ChargeAmount", required=True, profile=COMFORT)
-    basis_quantity = QuantityField(NS_FERD_1p0, "BasisQuantity", required=False,
+    amount = CurrencyField(NS_RAM, "ChargeAmount", required=True, profile=COMFORT)
+    basis_quantity = QuantityField(NS_RAM, "BasisQuantity", required=False,
                                    profile=COMFORT, _d="Preisbasismenge")
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "NetPriceProductTradePrice"
 
 
 class LineDocument(Element):
-    line_id = StringField(NS_FERD_1p0, "LineID")
+    line_id = StringField(NS_RAM, "LineID")
     notes = MultiField(IncludedNote)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "AssociatedDocumentLineDocument"
 
 
@@ -58,16 +58,16 @@ class LineAgreement(Element):
     net = Field(NetPrice)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "SpecifiedSupplyChainTradeAgreement"
 
 
 class LineDelivery(Element):
-    billed_quantity = QuantityField(NS_FERD_1p0, "BilledQuantity", required=True,
+    billed_quantity = QuantityField(NS_RAM, "BilledQuantity", required=True,
                                     profile=BASIC, _d="Menge, berechnet")
-    charge_free_quantity = QuantityField(NS_FERD_1p0, "ChargeFreeQuantity", required=False,
+    charge_free_quantity = QuantityField(NS_RAM, "ChargeFreeQuantity", required=False,
                                          profile=EXTENDED, _d="Menge, ohne Berechnung")
-    package_quantity = QuantityField(NS_FERD_1p0, "ChargeFreeQuantity", required=False,
+    package_quantity = QuantityField(NS_RAM, "ChargeFreeQuantity", required=False,
                                      profile=EXTENDED, _d="Anzahl Packstücke")
     ship_to = Field(ShipToTradeParty, required=False, profile=EXTENDED)
     ultimate_ship_to = Field(UltimateShipToTradeParty, required=False, profile=EXTENDED)
@@ -81,18 +81,18 @@ class LineDelivery(Element):
                           profile=EXTENDED)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "SpecifiedSupplyChainTradeDelivery"
 
 
 class LineSummation(Element):
-    total_amount = CurrencyField(NS_FERD_1p0, "LineTotalAmount", required=True,
+    total_amount = CurrencyField(NS_RAM, "LineTotalAmount", required=True,
                                  profile=COMFORT)
-    total_allowance_charge = CurrencyField(NS_FERD_1p0, "TotalAllowanceChargeAmount",
+    total_allowance_charge = CurrencyField(NS_RAM, "TotalAllowanceChargeAmount",
                                            required=False, profile=EXTENDED, _d="Gesamtbetrag der Zu- und Abschläge")
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "SpecifiedTradeSettlementMonetarySummation"
 
 
@@ -104,7 +104,7 @@ class LineSettlement(Element):
     monetary_summation = Field(LineSummation, required=False, profile=COMFORT)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "SpecifiedSupplyChainTradeSettlement"
 
 
@@ -116,5 +116,5 @@ class LineItem(Element):
     product = Field(TradeProduct)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "IncludedSupplyChainTradeLineItem"

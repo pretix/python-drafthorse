@@ -1,4 +1,4 @@
-from . import NS_FERD_1p0, BASIC, EXTENDED
+from . import NS_RAM, BASIC, EXTENDED
 from .elements import Element
 from .fields import DateTimeField, StringField, IDField, Field
 from .party import ShipToTradeParty, ShipFromTradeParty, UltimateShipToTradeParty
@@ -6,21 +6,21 @@ from .references import DespatchAdviceReferencedDocument, DeliveryNoteReferenced
 
 
 class SupplyChainEvent(Element):
-    occurrence = DateTimeField(NS_FERD_1p0, "OccurenceDateTime",
+    occurrence = DateTimeField(NS_RAM, "OccurenceDateTime",
                                required=False, profile=BASIC,
                                _d="Tatsächlicher Lieferungszeitpunkt")
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "ActualDeliverySupplyChainEvent"
 
 
 class LogisticsTransportMovement(Element):
-    mode_code = StringField(NS_FERD_1p0, "ModeCode", required=False, profile=EXTENDED)
-    id = IDField(NS_FERD_1p0, "ID", required=False, profile=EXTENDED)
+    mode_code = StringField(NS_RAM, "ModeCode", required=False, profile=EXTENDED)
+    id = IDField(NS_RAM, "ID", required=False, profile=EXTENDED)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "SpecifiedLogisticsTransportMovement"
 
 
@@ -28,7 +28,7 @@ class SupplyChainConsignment(Element):
     movement = Field(LogisticsTransportMovement, required=False, profile=EXTENDED)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "RelatedSupplyChainConsignment"
 
 
@@ -45,5 +45,5 @@ class TradeDelivery(Element):
                           profile=EXTENDED)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "ApplicableSupplyChainTradeDelivery"

@@ -1,4 +1,4 @@
-from . import NS_FERD_1p0, COMFORT, EXTENDED, BASIC
+from . import NS_RAM, COMFORT, EXTENDED, BASIC, NS_FERD_1p0
 from .accounting import ApplicableTradeTax, BillingSpecifiedPeriod, MonetarySummation, \
     AccountingAccount
 from .accounting import TradeAllowanceCharge
@@ -14,12 +14,12 @@ from .tradelines import LineItem
 
 
 class TradeAgreement(Element):
-    buyer_reference = StringField(NS_FERD_1p0, "BuyerReference", required=False,
+    buyer_reference = StringField(NS_RAM, "BuyerReference", required=False,
                                   profile=COMFORT, _d="Referenz des Käufers")
     seller = Field(SellerTradeParty, required=True, _d="Detailinformationen zum Verkäufer")
     buyer = Field(BuyerTradeParty, required=True)
     end_user = Field(EndUserTradeParty, required=False, _d="Abweichender Endverbraucher")
-    delivery_type_code = StringField(NS_FERD_1p0, "DeliveryTypeCode", required=False,
+    delivery_type_code = StringField(NS_RAM, "DeliveryTypeCode", required=False,
                                      profile=EXTENDED, _d="Lieferbedingung (Code)")
     buyer_order = BuyerOrderReferencedDocument(required=False, profile=COMFORT)
     customer_order = CustomerOrderReferencedDocument(required=False, profile=COMFORT)
@@ -28,25 +28,25 @@ class TradeAgreement(Element):
                                        profile=COMFORT)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "ApplicableSupplyChainTradeAgreement"
 
 
 class LogisticsServiceCharge(Element):
-    description = StringField(NS_FERD_1p0, "Description", required=True, profile=COMFORT,
+    description = StringField(NS_RAM, "Description", required=True, profile=COMFORT,
                               _d="Identifikation der Servicegebühr")
-    applied_amount = CurrencyField(NS_FERD_1p0, "AppliedAmount", required=True,
+    applied_amount = CurrencyField(NS_RAM, "AppliedAmount", required=True,
                                    profile=COMFORT, _d="Betrag der Servicegebühr")
     trade_tax = MultiField(ApplicableTradeTax, required=False, profile=COMFORT)
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "SpecifiedLogisticsServiceCharge"
 
 
 class TradeSettlement(Element):
-    payment_reference = StringField(NS_FERD_1p0, "PaymentReference")
-    currency_code = StringField(NS_FERD_1p0, "InvoiceCurrencyCode")
+    payment_reference = StringField(NS_RAM, "PaymentReference")
+    currency_code = StringField(NS_RAM, "InvoiceCurrencyCode")
     invoicee = Field(InvoiceeTradeParty, required=False, profile=COMFORT,
                      _d="Rechnungsempfänger")
     payee = Field(PayeeTradeParty, required=False, profile=COMFORT,
@@ -64,7 +64,7 @@ class TradeSettlement(Element):
                                _d="Detailinformationen zur Buchungsreferenz")
 
     class Meta:
-        namespace = NS_FERD_1p0
+        namespace = NS_RAM
         tag = "ApplicableSupplyChainTradeSettlement"
 
 
