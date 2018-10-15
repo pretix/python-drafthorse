@@ -1,3 +1,4 @@
+from .container import Container, StringContainer, CurrencyContainer, IDContainer
 from . import BASIC
 
 
@@ -188,22 +189,6 @@ class DateTimeField(Field):
         return self.cls(self.namespace, self.tag)
 
 
-class Container:
-    def __init__(self, child_type):
-        super().__init__()
-        self.children = []
-        self.child_type = child_type
-
-    def add(self, item):
-        if isinstance(self.child_type, type) and not isinstance(item, self.child_type):
-            raise TypeError("{} is not of type {}".format(item, self.child_type))
-        self.children.append(item)
-
-    def append_to(self, node):
-        for child in self.children:
-            child.append_to(node)
-
-
 class MultiField(Field):
     def __init__(self, inner_type, default=False, required=False, profile=BASIC, _d=None):
         super().__init__(Container, default, required, profile, _d)
@@ -211,19 +196,6 @@ class MultiField(Field):
 
     def initialize(self):
         return self.cls(child_type=self.inner_type)
-
-
-class StringContainer(Container):
-    def __init__(self, child_type, namespace, tag):
-        super().__init__(child_type)
-        self.namespace = namespace
-        self.tag = tag
-
-    def append_to(self, node):
-        for child in self.children:
-            from .elements import StringElement
-            cnode = StringElement(namespace=self.namespace, tag=self.tag, text=child)
-            cnode.append_to(node)
 
 
 class MultiStringField(Field):
@@ -236,19 +208,6 @@ class MultiStringField(Field):
         return self.cls(child_type=str, namespace=self.namespace, tag=self.tag)
 
 
-class CurrencyContainer(Container):
-    def __init__(self, child_type, namespace, tag):
-        super().__init__(child_type)
-        self.namespace = namespace
-        self.tag = tag
-
-    def append_to(self, node):
-        for child in self.children:
-            from .elements import CurrencyElement
-            cnode = CurrencyElement(namespace=self.namespace, tag=self.tag, amount=child[0], currency=child[1])
-            cnode.append_to(node)
-
-
 class MultiCurrencyField(Field):
     def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         super().__init__(CurrencyContainer, default, required, profile, _d)
@@ -257,19 +216,6 @@ class MultiCurrencyField(Field):
 
     def initialize(self):
         return self.cls(child_type=(tuple, list), namespace=self.namespace, tag=self.tag)
-
-
-class IDContainer(Container):
-    def __init__(self, child_type, namespace, tag):
-        super().__init__(child_type)
-        self.namespace = namespace
-        self.tag = tag
-
-    def append_to(self, node):
-        for child in self.children:
-            from .elements import IDElement
-            cnode = IDElement(namespace=self.namespace, tag=self.tag, scheme_id=child[0], text=child[1])
-            cnode.append_to(node)
 
 
 class MultiIDField(Field):

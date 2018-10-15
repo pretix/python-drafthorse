@@ -8,7 +8,7 @@ from .references import (DeliveryNoteReferencedDocument,
 
 
 class SupplyChainEvent(Element):
-    occurrence = DateTimeField(NS_RAM, "OccurenceDateTime",
+    occurrence = DateTimeField(NS_RAM, "OccurrenceDateTime",
                                required=False, profile=BASIC,
                                _d="Tatsächlicher Lieferungszeitpunkt")
 

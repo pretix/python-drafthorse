@@ -31,6 +31,10 @@ class ApplicableTradeTax(LineApplicableTradeTax):
                                                   required=False, profile=EXTENDED,
                                                   _d="Gesamtbetrag Zu- und Abschläge des Steuersatzes")
 
+    class Meta:
+        namespace = NS_RAM
+        tag = "ApplicableTradeTax"
+
 
 class AccountingAccount(Element):
     id = StringField(NS_RAM, "ID", required=True, profile=EXTENDED, _d="Buchungsreferenz")

@@ -12,16 +12,28 @@ class ProductCharacteristic(Element):
                                   profile=EXTENDED, _d="Numerische Messgröße")
     value = StringField(NS_RAM, "Value", required=False, profile=EXTENDED)
 
+    class Meta:
+        namespace = NS_RAM
+        tag = "ApplicableProductCharacteristic"
+
 
 class ProductClassification(Element):
     class_code = ClassificationField(NS_RAM, "ClassCode", required=True,
                                      profile=EXTENDED)
     value = StringField(NS_RAM, "ClassName", required=True, profile=EXTENDED)
 
+    class Meta:
+        namespace = NS_RAM
+        tag = "DesignatedProductClassification"
+
 
 class OriginCountry(Element):
     id = StringField(NS_RAM, "ID", required=True, profile=EXTENDED,
                      _d="Land der Produktherkunft")
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "OriginTradeCountry"
 
 
 class ReferencedProduct(Element):
@@ -34,6 +46,10 @@ class ReferencedProduct(Element):
                                     profile=EXTENDED)
     unit_quantity = QuantityField(NS_RAM, "UnitQuantity", required=False,
                                   profile=EXTENDED)
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "IncludedReferencedProduct"
 
 
 class TradeProduct(Element):
@@ -48,3 +64,7 @@ class TradeProduct(Element):
     classifications = MultiField(ProductClassification, required=False, profile=EXTENDED)
     origins = MultiField(OriginCountry, required=False, profile=EXTENDED)
     included_products = MultiField(ReferencedProduct, required=False, profile=EXTENDED)
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "SpecifiedTradeProduct"

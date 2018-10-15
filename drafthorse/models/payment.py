@@ -70,6 +70,10 @@ class PaymentPenaltyTerms(Element):
     actual_amount = CurrencyField(NS_RAM, "ActualPenaltyAmount", required=False,
                                   profile=EXTENDED, _d="Betrag des Zahlungszuschlags")
 
+    class Meta:
+        namespace = NS_RAM
+        tag = "ApplicableTradePaymentPenaltyTerms"
+
 
 class PaymentDiscountTerms(Element):
     basis_date_time = DateTimeField(NS_RAM, "BasisDateTime", required=False,
@@ -82,6 +86,10 @@ class PaymentDiscountTerms(Element):
                                        profile=EXTENDED, _d="Prozentwert des Zahlungsabschlags")
     actual_amount = CurrencyField(NS_RAM, "ActualDiscountAmount", required=False,
                                   profile=EXTENDED, _d="Betrag des Zahlungsabschlags")
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "ApplicableTradePaymentDiscountTerms"
 
 
 class PaymentTerms(Element):

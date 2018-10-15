@@ -18,3 +18,10 @@ doc.header.notes.add(n)
 doc.trade.agreement.seller.name = "Lieferant GmbH"
 
 print(prettify(doc.serialize()))
+
+samplexml = open("sample.xml", "rb").read()
+doc = Document.parse(samplexml)
+
+print(doc.header.name)
+print(doc.trade.agreement.seller.name)
+print([str(a.content) for a in doc.header.notes.children])

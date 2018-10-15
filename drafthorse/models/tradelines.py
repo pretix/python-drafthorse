@@ -1,8 +1,7 @@
-from drafthorse.models.delivery import SupplyChainEvent
-
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .accounting import (AccountingAccount, BillingSpecifiedPeriod,
-                         TradeAllowanceCharge)
+                         TradeAllowanceCharge, ApplicableTradeTax)
+from .delivery import SupplyChainEvent
 from .elements import Element
 from .fields import (CurrencyField, Field, MultiField, QuantityField,
                      StringField)
@@ -104,7 +103,7 @@ class LineSummation(Element):
 
 
 class LineSettlement(Element):
-    trade_tax = Field(LineAdditionalReferencedDocument, required=False, profile=COMFORT)
+    trade_tax = Field(ApplicableTradeTax, required=False, profile=COMFORT)
     period = Field(BillingSpecifiedPeriod, required=False, profile=EXTENDED)
     accounting_account = Field(AccountingAccount, required=False, profile=EXTENDED,
                                _d="Kostenstelle")
