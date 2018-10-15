@@ -48,7 +48,6 @@ class Element(metaclass=BaseElementMeta):
 
     def serialize(self):
         xml = b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + ET.tostring(self.to_etree(), "utf-8")
-        print(xml)
         validate_xml(xmlout=xml, schema="ZUGFeRD1p0")
         return xml
 

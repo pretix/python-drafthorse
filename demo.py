@@ -14,4 +14,7 @@ n = IncludedNote()
 n.content.add("Test Node 1")
 n.content.add("Test Node 2")
 doc.header.notes.add(n)
+
+doc.trade.agreement.seller.name = "Lieferant GmbH"
+
 print(prettify(doc.serialize()))
