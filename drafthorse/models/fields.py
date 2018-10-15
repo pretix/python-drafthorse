@@ -1,9 +1,13 @@
+from . import BASIC
+
+
 class Field:
-    def __init__(self, cls, default=False, required=False, _d=None):
+    def __init__(self, cls, default=False, required=False, profile=BASIC, _d=None):
         self.cls = cls
         self.required = required
         self.default = default
         self.__doc__ = _d
+        self.profile = profile
         super().__init__()
 
     def initialize(self):
@@ -25,9 +29,9 @@ class Field:
 
 
 class StringField(Field):
-    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         from .elements import StringElement
-        super().__init__(StringElement, default, required, _d)
+        super().__init__(StringElement, default, required, profile, _d)
         self.namespace = namespace
         self.tag = tag
 
@@ -40,10 +44,56 @@ class StringField(Field):
         instance._data[self.name].text = value
 
 
+class AgencyIDField(Field):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
+        from .elements import AgencyIDElement
+        super().__init__(AgencyIDElement, default, required, profile, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+
+        if not isinstance(value, (tuple, list)):
+            raise TypeError("Please pass a 2-tuple of scheme agency ID and ID.")
+        instance._data[self.name].text = value[1]
+        instance._data[self.name].scheme_id = value[0]
+
+
+class ClassificationField(Field):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
+        from .elements import ClassificationElement
+        super().__init__(ClassificationElement, default, required, profile, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+
+        if not isinstance(value, (tuple, list)):
+            raise TypeError("Please pass a 3-tuple of list ID, list version and ID.")
+        instance._data[self.name].text = value[2]
+        instance._data[self.name].list_id = value[0]
+        instance._data[self.name].list_version_id = value[1]
+
+
 class IDField(Field):
-    def __init__(self, default=False, required=False, _d=None):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         from .elements import IDElement
-        super().__init__(IDElement, default, required, _d)
+        super().__init__(IDElement, default, required, profile, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
 
     def __set__(self, instance, value):
         if instance._data.get(self.name, None) is None:
@@ -56,9 +106,9 @@ class IDField(Field):
 
 
 class DecimalField(Field):
-    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         from .elements import DecimalElement
-        super().__init__(DecimalElement, default, required, _d)
+        super().__init__(DecimalElement, default, required, profile, _d)
         self.namespace = namespace
         self.tag = tag
 
@@ -67,9 +117,9 @@ class DecimalField(Field):
 
 
 class QuantityField(Field):
-    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         from .elements import QuantityElement
-        super().__init__(QuantityElement, default, required, _d)
+        super().__init__(QuantityElement, default, required, profile, _d)
         self.namespace = namespace
         self.tag = tag
 
@@ -87,9 +137,9 @@ class QuantityField(Field):
 
 
 class CurrencyField(Field):
-    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         from .elements import CurrencyElement
-        super().__init__(CurrencyElement, default, required, _d)
+        super().__init__(CurrencyElement, default, required, profile, _d)
         self.namespace = namespace
         self.tag = tag
 
@@ -107,9 +157,9 @@ class CurrencyField(Field):
 
 
 class IndicatorField(Field):
-    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         from .elements import IndicatorElement
-        super().__init__(IndicatorElement, default, required, _d)
+        super().__init__(IndicatorElement, default, required, profile, _d)
         self.namespace = namespace
         self.tag = tag
 
@@ -123,9 +173,9 @@ class IndicatorField(Field):
 
 
 class DateTimeField(Field):
-    def __init__(self, namespace, tag, default=False, required=False, _d=None):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         from .elements import DateTimeElement
-        super().__init__(DateTimeElement, default, required, _d)
+        super().__init__(DateTimeElement, default, required, profile, _d)
         self.namespace = namespace
         self.tag = tag
 
@@ -138,7 +188,7 @@ class DateTimeField(Field):
         return self.cls(self.namespace, self.tag)
 
 
-class Container():
+class Container:
     def __init__(self, child_type):
         super().__init__()
         self.children = []
@@ -155,8 +205,8 @@ class Container():
 
 
 class MultiField(Field):
-    def __init__(self, inner_type, default=False, required=False, _d=None):
-        super().__init__(Container, default, required, _d)
+    def __init__(self, inner_type, default=False, required=False, profile=BASIC, _d=None):
+        super().__init__(Container, default, required, profile, _d)
         self.inner_type = inner_type
 
     def initialize(self):

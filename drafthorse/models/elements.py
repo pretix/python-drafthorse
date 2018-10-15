@@ -101,9 +101,37 @@ class CurrencyElement(StringElement):
         return node
 
 
-class IDElement(Element):
-    def __init__(self, text="", scheme_id=""):
-        super().__init__()
+class ClassificationElement(StringElement):
+    def __init__(self, namespace, tag, text="", list_id="", list_version_id=""):
+        super().__init__(namespace, tag)
+        self.text = text
+        self.list_id = list_id
+        self.list_version_id = list_version_id
+
+    def to_etree(self):
+        node = self._etree_node()
+        node.text = self.text
+        node.attrib['listID'] = self.list_id
+        node.attrib['listVersionID'] = self.list_version_id
+        return node
+
+
+class AgencyIDElement(StringElement):
+    def __init__(self, namespace, tag, text="", scheme_id=""):
+        super().__init__(namespace, tag)
+        self.text = text
+        self.scheme_id = scheme_id
+
+    def to_etree(self):
+        node = self._etree_node()
+        node.text = self.text
+        node.attrib['schemeAgencyID'] = self.scheme_id
+        return node
+
+
+class IDElement(StringElement):
+    def __init__(self, namespace, tag, text="", scheme_id=""):
+        super().__init__(namespace, tag)
         self.text = text
         self.scheme_id = scheme_id
 

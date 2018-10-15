@@ -1,13 +1,13 @@
 import xml.etree.cElementTree as ET
 
 from drafthorse.models.note import IncludedNote
-from . import NS_RAM, NS_UDT, NS_FERD_1p0
+from . import NS_RAM, NS_UDT, NS_FERD_1p0, EXTENDED, BASIC
 from .elements import Element
-from .fields import DateTimeField, Field, MultiField, StringField
+from .fields import DateTimeField, Field, MultiField, StringField, IndicatorField
 from .trade import TradeTransaction
 
 
-class DocumentContextParameter(Element):
+class GuidelineDocumentContextParameter(Element):
     id = StringField(NS_FERD_1p0, "ID")
 
     class Meta:
@@ -15,20 +15,51 @@ class DocumentContextParameter(Element):
         tag = "GuidelineSpecifiedDocumentContextParameter"
 
 
+class BusinessDocumentContextParameter(Element):
+    id = StringField(NS_FERD_1p0, "ID")
+
+    class Meta:
+        namespace = NS_FERD_1p0
+        tag = "BusinessSpecifiedDocumentContextParameter"
+
+
 class DocumentContext(Element):
-    parameter = Field(DocumentContextParameter)
+    test_indicator = IndicatorField(NS_FERD_1p0, "TestIndicator", required=False,
+                                    profile=BASIC, _d="Testkennzeichen")
+    guideline_parameter = Field(GuidelineDocumentContextParameter, required=True,
+                                profile=BASIC, _d="Anwendungsempfehlung")
+    business_parameter = Field(BusinessDocumentContextParameter, required=False,
+                               profile=EXTENDED, _d="Geschäftsprozess, Wert")
 
     class Meta:
         namespace = NS_FERD_1p0
         tag = "SpecifiedExchangedDocumentContext"
 
 
+class EffectivePeriod(Element):
+    complete = DateTimeField(NS_FERD_1p0, "CompleteDateTime")
+
+    class Meta:
+        namespace = NS_FERD_1p0
+        tag = "EffectiveSpecifiedPeriod"
+
+
 class Header(Element):
-    id = StringField(NS_FERD_1p0, "ID")
-    name = StringField(NS_FERD_1p0, "Name")
-    type_code = StringField(NS_FERD_1p0, "TypeCode")
-    issue_date_time = DateTimeField(NS_FERD_1p0, "IssueDateTime")
+    id = StringField(NS_FERD_1p0, "ID", required=True, profile=BASIC,
+                     _d="Rechnungsnummer")
+    name = StringField(NS_FERD_1p0, "Name", required=True, profile=BASIC,
+                       _d="Dokumentenart (Freitext)")
+    type_code = StringField(NS_FERD_1p0, "TypeCode", required=True, profile=BASIC,
+                            _d="Dokumentenart (Code)")
+    issue_date_time = DateTimeField(NS_FERD_1p0, "IssueDateTime", required=True,
+                                    profile=BASIC, _d="Rechnungsdatum")
+    copy_indicator = IndicatorField(NS_FERD_1p0, "CopyIndicator", required=False,
+                                    profile=EXTENDED, _d="Indikator Original/Kopie")
+    effective_period = Field(EffectivePeriod, required=False, profile=EXTENDED,
+                             _d="Vertragliches Fälligkeitsdatum der Rechnung")
     notes = MultiField(IncludedNote)
+
+    # TODO: LanguageID
 
     class Meta:
         namespace = NS_FERD_1p0
@@ -37,8 +68,8 @@ class Header(Element):
 
 class Document(Element):
     context = Field(DocumentContext, required=True)
-    header = Field(Header)
-    trade = Field(TradeTransaction)
+    header = Field(Header, required=True)
+    trade = Field(TradeTransaction, required=True)
 
     def __init__(self):
         super().__init__()

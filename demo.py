@@ -4,7 +4,7 @@ from drafthorse.models.document import Document, IncludedNote
 from drafthorse.utils import prettify
 
 doc = Document()
-doc.context.parameter.id = "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort"
+doc.context.guideline_parameter.id = "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort"
 doc.header.id = "RE1337"
 doc.header.name = "RECHNUNG"
 doc.header.type_code = "380"
