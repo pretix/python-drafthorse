@@ -1,6 +1,7 @@
 from . import NS_FERD_1p0, COMFORT, BASIC, EXTENDED
 from .elements import Element
-from .fields import Field, StringField, IDField, DateTimeField, DecimalField, CurrencyField
+from .fields import Field, StringField, IDField, DateTimeField, DecimalField, CurrencyField, MultiStringField, \
+    MultiCurrencyField
 
 
 class PayerFinancialAccount(Element):
@@ -44,7 +45,7 @@ class PayeeFinancialInstitution(Element):
 
 class PaymentMeans(Element):
     type_code = StringField(NS_FERD_1p0, "TypeCode", required=False, profile=COMFORT)
-    information = StringField(NS_FERD_1p0, "Information", required=False, profile=COMFORT)  # TODO: Allow multiple
+    information = MultiStringField(NS_FERD_1p0, "Information", required=False, profile=COMFORT)
     id = IDField(NS_FERD_1p0, "ID", required=False, profile=BASIC)
     payer_account = Field(PayerFinancialAccount)
     payer_institution = Field(PayerFinancialInstitution)
@@ -87,8 +88,8 @@ class PaymentTerms(Element):
                               _d="Freitext der Zahlungsbedingungen")
     due = DateTimeField(NS_FERD_1p0, "DueDateDateTime", required=False, profile=COMFORT,
                         _d="Fälligkeitsdatum")
-    partial_amount = CurrencyField(NS_FERD_1p0, "PartialPaymentAmount", profile=EXTENDED,
-                                   required=False, _d="Betrag der Teilzahlung")  # TODO: Allow multiple times
+    partial_amount = MultiCurrencyField(NS_FERD_1p0, "PartialPaymentAmount", profile=EXTENDED,
+                                        required=False, _d="Betrag der Teilzahlung")
     penalty_terms = Field(PaymentPenaltyTerms, required=False, profile=EXTENDED,
                           _d="Detailinformationen zu Zahlungszuschlägen")
     discount_terms = Field(PaymentDiscountTerms, required=False, profile=EXTENDED,

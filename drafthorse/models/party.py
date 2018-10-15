@@ -1,6 +1,6 @@
 from . import NS_FERD_1p0, COMFORT, BASIC, EXTENDED
 from .elements import Element
-from .fields import StringField, Field, IDField, MultiField
+from .fields import StringField, Field, IDField, MultiField, MultiIDField
 
 
 class PostalTradeAddress(Element):
@@ -67,8 +67,8 @@ class TradeContact(Element):
 class TradeParty(Element):
     id = StringField(NS_FERD_1p0, "ID", required=False, profile=COMFORT,
                      _d="Identifier des Verkäufers")
-    global_id = IDField(NS_FERD_1p0, "GlobalID", required=False, profile=COMFORT,
-                        _d="Globaler Identifier des Verkäufers")  # TODO: Support multiple
+    global_id = MultiIDField(NS_FERD_1p0, "GlobalID", required=False, profile=COMFORT,
+                             _d="Globaler Identifier des Verkäufers")
     name = StringField(NS_FERD_1p0, "Name", required=False, profile=BASIC)
     contact = Field(TradeContact, required=False, profile=EXTENDED,
                     _d="Ansprechpartner des Käufers")

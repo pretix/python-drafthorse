@@ -9,6 +9,9 @@ doc.header.id = "RE1337"
 doc.header.name = "RECHNUNG"
 doc.header.type_code = "380"
 doc.header.issue_date_time.value = date.today()
-doc.header.notes.add(IncludedNote(content="Test Node 1"))
-doc.header.notes.add(IncludedNote(content="Test Node 2", subject_code="foo"))
+doc.header.languages.add("de")
+n = IncludedNote()
+n.content.add("Test Node 1")
+n.content.add("Test Node 2")
+doc.header.notes.add(n)
 print(prettify(doc.serialize()))

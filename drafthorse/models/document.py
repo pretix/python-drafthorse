@@ -3,7 +3,7 @@ import xml.etree.cElementTree as ET
 from drafthorse.models.note import IncludedNote
 from . import NS_RAM, NS_UDT, NS_FERD_1p0, EXTENDED, BASIC
 from .elements import Element
-from .fields import DateTimeField, Field, MultiField, StringField, IndicatorField
+from .fields import DateTimeField, Field, MultiField, StringField, IndicatorField, MultiStringField
 from .trade import TradeTransaction
 
 
@@ -58,8 +58,7 @@ class Header(Element):
     effective_period = Field(EffectivePeriod, required=False, profile=EXTENDED,
                              _d="Vertragliches Fälligkeitsdatum der Rechnung")
     notes = MultiField(IncludedNote)
-
-    # TODO: LanguageID
+    languages = MultiStringField(NS_FERD_1p0, "LanguageID", required=False, profile=EXTENDED)
 
     class Meta:
         namespace = NS_FERD_1p0
