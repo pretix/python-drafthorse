@@ -1,16 +1,14 @@
 import sys
-from decimal import Decimal
-
-from datetime import date, datetime
-
 import xml.etree.cElementTree as ET
 from collections import OrderedDict
+from datetime import datetime
+from decimal import Decimal
 
 from drafthorse.utils import validate_xml
 
 from . import NS_UDT
-from .fields import Field
 from .container import Container
+from .fields import Field
 
 
 class BaseElementMeta(type):

@@ -1,5 +1,6 @@
-from .container import Container, StringContainer, CurrencyContainer, IDContainer
 from . import BASIC
+from .container import (Container, CurrencyContainer, IDContainer,
+                        StringContainer)
 
 
 class Field:

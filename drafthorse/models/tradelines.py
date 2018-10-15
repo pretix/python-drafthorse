@@ -1,6 +1,6 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
-from .accounting import (AccountingAccount, BillingSpecifiedPeriod,
-                         TradeAllowanceCharge, ApplicableTradeTax)
+from .accounting import (AccountingAccount, ApplicableTradeTax,
+                         BillingSpecifiedPeriod, TradeAllowanceCharge)
 from .delivery import SupplyChainEvent
 from .elements import Element
 from .fields import (CurrencyField, Field, MultiField, QuantityField,
