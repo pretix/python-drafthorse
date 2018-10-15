@@ -21,7 +21,13 @@ class LineApplicableTradeTax(Element):
         tag = "ApplicableTradeTax"
 
 
-class ApplicableTradeTax(LineApplicableTradeTax):
+class ApplicableTradeTax(Element):
+    calculated_amount = CurrencyField(NS_RAM, "CalculatedAmount", required=True,
+                                      profile=BASIC, _d="Steuerbetrag")
+    type_code = StringField(NS_RAM, "TypeCode", required=True, profile=BASIC,
+                            _d="Steuerart (Code)")
+    exemption_reason = StringField(NS_RAM, "ExemptionReason", required=False,
+                                   profile=COMFORT, _d="Grund der Steuerbefreiung (Freitext)")
     basis_amount = CurrencyField(NS_RAM, "BasisAmount", required=True,
                                  profile=BASIC, _d="Basisbetrag der Steuerberechnung")
     line_total_basis_amount = CurrencyField(NS_RAM, "LineTotalBasisAmount",
@@ -30,6 +36,10 @@ class ApplicableTradeTax(LineApplicableTradeTax):
     allowance_charge_basis_amount = CurrencyField(NS_RAM, "AllowanceChargeBasisAmount",
                                                   required=False, profile=EXTENDED,
                                                   _d="Gesamtbetrag Zu- und Abschläge des Steuersatzes")
+    category_code = StringField(NS_RAM, "CategoryCode", required=False,
+                                profile=COMFORT, _d="Steuerkategorie (Wert)")
+    applicable_percent = DecimalField(NS_RAM, "ApplicablePercent",
+                                      required=True, profile=BASIC)
 
     class Meta:
         namespace = NS_RAM

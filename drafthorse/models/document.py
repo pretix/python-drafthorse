@@ -22,16 +22,16 @@ class BusinessDocumentContextParameter(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "BusinessSpecifiedDocumentContextParameter"
+        tag = "BusinessProcessSpecifiedDocumentContextParameter"
 
 
 class DocumentContext(Element):
     test_indicator = IndicatorField(NS_RAM, "TestIndicator", required=False,
                                     profile=BASIC, _d="Testkennzeichen")
-    guideline_parameter = Field(GuidelineDocumentContextParameter, required=True,
-                                profile=BASIC, _d="Anwendungsempfehlung")
     business_parameter = Field(BusinessDocumentContextParameter, required=False,
                                profile=EXTENDED, _d="Geschäftsprozess, Wert")
+    guideline_parameter = Field(GuidelineDocumentContextParameter, required=True,
+                                profile=BASIC, _d="Anwendungsempfehlung")
 
     class Meta:
         namespace = NS_FERD_1p0

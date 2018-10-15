@@ -5,9 +5,26 @@ from xml.dom import minidom
 logger = logging.getLogger("drafthorse")
 
 
+def minify(xml):
+    try:
+        from lxml import etree
+        return b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(etree.fromstring(xml))
+    except ImportError:
+        logger.warning("Could not minify output as LXML is not installed.")
+        return xml
+
+
 def prettify(xml):
-    reparsed = minidom.parseString(xml)
-    return reparsed.toprettyxml(indent="\t")
+    try:
+        from lxml import etree
+    except ImportError:
+        reparsed = minidom.parseString(xml)
+        return reparsed.toprettyxml(indent="\t")
+    else:
+        parser = etree.XMLParser(remove_blank_text=True)
+        return b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(
+            etree.fromstring(xml, parser), pretty_print=True
+        )
 
 
 def validate_xml(xmlout, schema):

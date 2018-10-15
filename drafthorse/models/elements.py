@@ -43,7 +43,7 @@ class Element(metaclass=BaseElementMeta):
 
     def to_etree(self):
         node = self._etree_node()
-        for v in self._data.values():
+        for k, v in self._data.items():
             if v is not None:
                 v.append_to(node)
         return node
@@ -51,13 +51,14 @@ class Element(metaclass=BaseElementMeta):
     def get_tag(self):
         return "{%s}%s" % (self.Meta.namespace, self.Meta.tag)
 
-    def append_to(self, node):
-        node.append(self.to_etree())
+    def append_to(self, node, required=False):
+        el = self.to_etree()
+        if required or list(el) or el.text:
+            node.append(el)
 
     def serialize(self):
         xml = b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + ET.tostring(self.to_etree(), "utf-8")
-        validate_xml(xmlout=xml, schema="ZUGFeRD1p0")
-        return xml
+        return validate_xml(xmlout=xml, schema="ZUGFeRD1p0")
 
     def from_etree(self, root):
         if hasattr(self, 'Meta') and hasattr(self.Meta, 'namespace') and root.tag != "{%s}%s" % (self.Meta.namespace, self.Meta.tag):
@@ -108,13 +109,13 @@ class StringElement(Element):
 
 
 class DecimalElement(StringElement):
-    def __init__(self, namespace, tag, value=0):
+    def __init__(self, namespace, tag, value=None):
         super().__init__(namespace, tag)
         self.value = value
 
     def to_etree(self):
         node = self._etree_node()
-        node.text = str(self.value)
+        node.text = str(self.value) if self.value is not None else ""
         return node
 
     def __str__(self):
@@ -263,7 +264,7 @@ class DateTimeElement(StringElement):
 
 
 class IndicatorElement(StringElement):
-    def __init__(self, namespace, tag, value=None):
+    def __init__(self, namespace, tag, value=False):
         super().__init__(namespace, tag)
         self.value = value
 
@@ -273,8 +274,9 @@ class IndicatorElement(StringElement):
     def to_etree(self):
         t = self._etree_node()
         node = ET.Element("{%s}%s" % (NS_UDT, "Indicator"))
-        node.text = self.value
+        node.text = str(self.value).lower()
         t.append(node)
+        return t
 
     def __str__(self):
         return "{}".format(self.value)

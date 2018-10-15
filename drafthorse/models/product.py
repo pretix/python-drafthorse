@@ -53,13 +53,13 @@ class ReferencedProduct(Element):
 
 
 class TradeProduct(Element):
-    name = StringField(NS_RAM, "Name", required=False, profile=COMFORT)
-    description = StringField(NS_RAM, "Description", required=False, profile=COMFORT)
     global_id = IDField(NS_RAM, "GlobalID", required=False, profile=COMFORT)
     seller_assigned_id = StringField(NS_RAM, "SellerAssignedID", required=False,
                                      profile=COMFORT)
     buyer_assigned_id = StringField(NS_RAM, "BuyerAssignedID", required=False,
                                     profile=COMFORT)
+    name = StringField(NS_RAM, "Name", required=False, profile=COMFORT)
+    description = StringField(NS_RAM, "Description", required=False, profile=COMFORT)
     characteristics = MultiField(ProductCharacteristic, required=False, profile=EXTENDED)
     classifications = MultiField(ProductClassification, required=False, profile=EXTENDED)
     origins = MultiField(OriginCountry, required=False, profile=EXTENDED)
