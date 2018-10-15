@@ -1,10 +1,9 @@
 import logging
 import os
-
 from xml.dom import minidom
 
-
 logger = logging.getLogger("drafthorse")
+
 
 def prettify(xml):
     reparsed = minidom.parseString(xml)

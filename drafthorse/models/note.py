@@ -1,6 +1,6 @@
-from . import NS_RAM, BASIC, COMFORT, EXTENDED
+from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import StringField, MultiStringField
+from .fields import MultiStringField, StringField
 
 
 class IncludedNote(Element):

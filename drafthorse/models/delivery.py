@@ -1,8 +1,10 @@
-from . import NS_RAM, BASIC, EXTENDED
+from . import BASIC, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import DateTimeField, StringField, IDField, Field
-from .party import ShipToTradeParty, ShipFromTradeParty, UltimateShipToTradeParty
-from .references import DespatchAdviceReferencedDocument, DeliveryNoteReferencedDocument
+from .fields import DateTimeField, Field, IDField, StringField
+from .party import (ShipFromTradeParty, ShipToTradeParty,
+                    UltimateShipToTradeParty)
+from .references import (DeliveryNoteReferencedDocument,
+                         DespatchAdviceReferencedDocument)
 
 
 class SupplyChainEvent(Element):

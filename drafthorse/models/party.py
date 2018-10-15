@@ -1,6 +1,6 @@
-from . import NS_RAM, COMFORT, BASIC, EXTENDED
+from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import StringField, Field, IDField, MultiField, MultiIDField
+from .fields import Field, IDField, MultiField, MultiIDField, StringField
 
 
 class PostalTradeAddress(Element):

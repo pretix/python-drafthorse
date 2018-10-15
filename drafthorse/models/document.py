@@ -1,9 +1,11 @@
 import xml.etree.cElementTree as ET
 
 from drafthorse.models.note import IncludedNote
-from . import NS_FERD_1p0, NS_UDT, NS_RAM, EXTENDED, BASIC
+
+from . import BASIC, EXTENDED, NS_RAM, NS_UDT, NS_FERD_1p0
 from .elements import Element
-from .fields import DateTimeField, Field, MultiField, StringField, IndicatorField, MultiStringField
+from .fields import (DateTimeField, Field, IndicatorField, MultiField,
+                     MultiStringField, StringField)
 from .trade import TradeTransaction
 
 

@@ -1,14 +1,21 @@
 from drafthorse.models.delivery import SupplyChainEvent
-from . import NS_RAM, BASIC, COMFORT, EXTENDED
-from .accounting import TradeAllowanceCharge, BillingSpecifiedPeriod, AccountingAccount
+
+from . import BASIC, COMFORT, EXTENDED, NS_RAM
+from .accounting import (AccountingAccount, BillingSpecifiedPeriod,
+                         TradeAllowanceCharge)
 from .elements import Element
-from .fields import CurrencyField, QuantityField, Field, MultiField, StringField
+from .fields import (CurrencyField, Field, MultiField, QuantityField,
+                     StringField)
 from .note import IncludedNote
-from .party import UltimateShipToTradeParty, ShipToTradeParty
+from .party import ShipToTradeParty, UltimateShipToTradeParty
 from .product import TradeProduct
-from .references import LineReceivingAdviceReferencedDocument, LineDespatchAdviceReferencedDocument, \
-    LineDeliveryNoteReferencedDocument, LineCustomerOrderReferencedDocument, LineContractReferencedDocument, \
-    LineBuyerOrderReferencedDocument, LineAdditionalReferencedDocument
+from .references import (LineAdditionalReferencedDocument,
+                         LineBuyerOrderReferencedDocument,
+                         LineContractReferencedDocument,
+                         LineCustomerOrderReferencedDocument,
+                         LineDeliveryNoteReferencedDocument,
+                         LineDespatchAdviceReferencedDocument,
+                         LineReceivingAdviceReferencedDocument)
 
 
 class AllowanceCharge(TradeAllowanceCharge):

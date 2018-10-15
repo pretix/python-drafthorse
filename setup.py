@@ -1,8 +1,9 @@
 from codecs import open
 from os import path
 
-from sepadd import version
 from setuptools import find_packages, setup
+
+from sepadd import version
 
 here = path.abspath(path.dirname(__file__))
 
@@ -10,7 +11,7 @@ try:
     # Get the long description from the relevant file
     with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
         long_description = f.read()
-except:
+except:  # noqa
     long_description = ''
 
 setup(
@@ -34,6 +35,7 @@ setup(
 
     keywords='xml banking sepa',
     install_requires=[
+        'lxml'
     ],
 
     packages=find_packages(include=['sepadd', 'sepadd.*']),

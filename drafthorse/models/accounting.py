@@ -1,6 +1,7 @@
-from . import NS_RAM, COMFORT, EXTENDED, BASIC
+from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import DateTimeField, StringField, CurrencyField, DecimalField, MultiField, IndicatorField
+from .fields import (CurrencyField, DateTimeField, DecimalField,
+                     IndicatorField, MultiField, StringField)
 
 
 class LineApplicableTradeTax(Element):

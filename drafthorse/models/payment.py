@@ -1,7 +1,8 @@
-from . import NS_RAM, COMFORT, BASIC, EXTENDED
+from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import Field, StringField, IDField, DateTimeField, DecimalField, CurrencyField, MultiStringField, \
-    MultiCurrencyField
+from .fields import (CurrencyField, DateTimeField, DecimalField, Field,
+                     IDField, MultiCurrencyField, MultiStringField,
+                     StringField)
 
 
 class PayerFinancialAccount(Element):

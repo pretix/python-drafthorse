@@ -3,6 +3,7 @@ import xml.etree.cElementTree as ET
 from collections import OrderedDict
 
 from drafthorse.utils import validate_xml
+
 from . import NS_UDT
 from .fields import Field
 
@@ -50,7 +51,6 @@ class Element(metaclass=BaseElementMeta):
         print(xml)
         validate_xml(xmlout=xml, schema="ZUGFeRD1p0")
         return xml
-
 
 
 class StringElement(Element):
