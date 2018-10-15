@@ -37,13 +37,13 @@ class OriginCountry(Element):
 
 
 class ReferencedProduct(Element):
-    name = StringField(NS_RAM, "Name", required=False, profile=EXTENDED)
-    description = StringField(NS_RAM, "Description", required=False, profile=EXTENDED)
     global_id = IDField(NS_RAM, "GlobalID", required=False, profile=EXTENDED)
     seller_assigned_id = StringField(NS_RAM, "SellerAssignedID", required=False,
                                      profile=EXTENDED)
     buyer_assigned_id = StringField(NS_RAM, "BuyerAssignedID", required=False,
                                     profile=EXTENDED)
+    name = StringField(NS_RAM, "Name", required=False, profile=EXTENDED)
+    description = StringField(NS_RAM, "Description", required=False, profile=EXTENDED)
     unit_quantity = QuantityField(NS_RAM, "UnitQuantity", required=False,
                                   profile=EXTENDED)
 

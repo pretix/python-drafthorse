@@ -47,7 +47,7 @@ class EmailURI(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "EmailURICommunication"
+        tag = "EmailURIUniversalCommunication"
 
 
 class TradeContact(Element):

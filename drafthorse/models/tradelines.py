@@ -28,7 +28,7 @@ class GrossPrice(Element):
                            _d="Bruttopreis")
     basis_quantity = QuantityField(NS_RAM, "BasisQuantity", required=False,
                                    profile=COMFORT, _d="Preisbasismenge")
-    charge = Field(AllowanceCharge, required=False, profile=COMFORT)
+    charge = MultiField(AllowanceCharge, required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
@@ -73,7 +73,7 @@ class LineDelivery(Element):
                                     profile=BASIC, _d="Menge, berechnet")
     charge_free_quantity = QuantityField(NS_RAM, "ChargeFreeQuantity", required=False,
                                          profile=EXTENDED, _d="Menge, ohne Berechnung")
-    package_quantity = QuantityField(NS_RAM, "ChargeFreeQuantity", required=False,
+    package_quantity = QuantityField(NS_RAM, "PackageQuantity", required=False,
                                      profile=EXTENDED, _d="Anzahl Packstücke")
     ship_to = Field(ShipToTradeParty, required=False, profile=EXTENDED)
     ultimate_ship_to = Field(UltimateShipToTradeParty, required=False, profile=EXTENDED)
@@ -118,7 +118,7 @@ class LineItem(Element):
     document = Field(LineDocument, required=True)
     agreement = Field(LineAgreement)
     delivery = Field(LineDelivery)
-    settlement = Field(LineSettlement)
+    settlement = Field(LineSettlement, required=True)
     product = Field(TradeProduct)
 
     class Meta:

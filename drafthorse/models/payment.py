@@ -2,7 +2,7 @@ from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (CurrencyField, DateTimeField, DecimalField, Field,
                      IDField, MultiCurrencyField, MultiStringField,
-                     StringField)
+                     StringField, AgencyIDField, QuantityField)
 
 
 class PayerFinancialAccount(Element):
@@ -47,7 +47,7 @@ class PayeeFinancialInstitution(Element):
 class PaymentMeans(Element):
     type_code = StringField(NS_RAM, "TypeCode", required=False, profile=COMFORT)
     information = MultiStringField(NS_RAM, "Information", required=False, profile=COMFORT)
-    id = IDField(NS_RAM, "ID", required=False, profile=BASIC)
+    id = AgencyIDField(NS_RAM, "ID", required=False, profile=BASIC)
     payer_account = Field(PayerFinancialAccount)
     payer_institution = Field(PayerFinancialInstitution)
     payee_account = Field(PayeeFinancialAccount)
@@ -61,8 +61,8 @@ class PaymentMeans(Element):
 class PaymentPenaltyTerms(Element):
     basis_date_time = DateTimeField(NS_RAM, "BasisDateTime", required=False,
                                     profile=EXTENDED, _d="Bezugsdatum der Fälligkeit")
-    basis_period_measure = StringField(NS_RAM, "BasisPeriodMeasure", required=False,
-                                       profile=EXTENDED, _d="Fälligkeitszeitraum")
+    basis_period_measure = QuantityField(NS_RAM, "BasisPeriodMeasure", required=False,
+                                         profile=EXTENDED, _d="Fälligkeitszeitraum")
     basis_amount = CurrencyField(NS_RAM, "BasisAmount", required=False,
                                  profile=EXTENDED, _d="Basisbetrag des Zahlungszuschlags")
     calculation_percent = DecimalField(NS_RAM, "CalculationPercent", required=False,
@@ -78,8 +78,8 @@ class PaymentPenaltyTerms(Element):
 class PaymentDiscountTerms(Element):
     basis_date_time = DateTimeField(NS_RAM, "BasisDateTime", required=False,
                                     profile=EXTENDED, _d="Bezugsdatum der Fälligkeit")
-    basis_period_measure = StringField(NS_RAM, "BasisPeriodMeasure", required=False,
-                                       profile=EXTENDED, _d="Fälligkeitszeitraum")
+    basis_period_measure = QuantityField(NS_RAM, "BasisPeriodMeasure", required=False,
+                                         profile=EXTENDED, _d="Fälligkeitszeitraum")
     basis_amount = CurrencyField(NS_RAM, "BasisAmount", required=False,
                                  profile=EXTENDED, _d="Basisbetrag des Zahlungsabschlags")
     calculation_percent = DecimalField(NS_RAM, "CalculationPercent", required=False,

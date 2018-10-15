@@ -26,6 +26,7 @@ class BaseElementMeta(type):
 
 class Element(metaclass=BaseElementMeta):
     def __init__(self, **kwargs):
+        self.required = kwargs.get('required', False)
         self._data = OrderedDict([
             (f.name, f.initialize() if f.default else None) for f in self._fields
         ])
@@ -49,9 +50,9 @@ class Element(metaclass=BaseElementMeta):
     def get_tag(self):
         return "{%s}%s" % (self.Meta.namespace, self.Meta.tag)
 
-    def append_to(self, node, required=False):
+    def append_to(self, node):
         el = self.to_etree()
-        if required or list(el) or el.text:
+        if self.required or list(el) or el.text:
             node.append(el)
 
     def serialize(self):
@@ -66,6 +67,8 @@ class Element(metaclass=BaseElementMeta):
             element = getattr(self, field.name)
             field_index[element.get_tag()] = (field.name, element)
         for child in root:
+            if child.tag == ET.Comment:
+                continue
             if child.tag in field_index:
                 name, childel = field_index[child.tag]
                 if isinstance(getattr(self, name), Container):
@@ -73,6 +76,7 @@ class Element(metaclass=BaseElementMeta):
                 else:
                     getattr(self, name).from_etree(child)
             else:
+                print(root, field_index)
                 raise TypeError("Unknown element {}".format(child.tag))
         return self
 
@@ -203,7 +207,7 @@ class AgencyIDElement(StringElement):
         return node
 
     def from_etree(self, root):
-        self.text = Decimal(root.text)
+        self.text = root.text
         self.scheme_id = root.attrib['schemeAgencyID']
         return self
 
@@ -241,9 +245,13 @@ class DateTimeElement(StringElement):
     def to_etree(self):
         t = self._etree_node()
         node = ET.Element("{%s}%s" % (NS_UDT, "DateTimeString"))
-        node.text = self.value.strftime("%Y%m%d")
-        node.attrib['format'] = self.format
-        t.append(node)
+        if self.value:
+            if self.format == '102':
+                node.text = self.value.strftime("%Y%m%d")
+            elif self.format == '616':
+                node.text = self.value.strftime("%G%V")
+            node.attrib['format'] = self.format
+            t.append(node)
         return t
 
     def from_etree(self, root):
@@ -251,10 +259,33 @@ class DateTimeElement(StringElement):
             raise TypeError("Date containers should have one child")
         if root[0].tag != "{%s}%s" % (NS_UDT, "DateTimeString"):
             raise TypeError("Tag %s not recognized" % root[0].tag)
-        if root[0].attrib['format'] != '102':
-            raise TypeError("Date format %s cannot be parsed" % root[0].attrib['format'])
-        self.value = datetime.strptime(root[0].text, '%Y%m%d').date()
         self.format = root[0].attrib['format']
+        if self.format == '102':
+            self.value = datetime.strptime(root[0].text, '%Y%m%d').date()
+        elif self.format == '616':
+            self.value = datetime.strptime(root[0].text + '1', '%G%V%u').date()
+        else:
+            raise TypeError("Date format %s cannot be parsed" % root[0].attrib['format'])
+        return self
+
+    def __str__(self):
+        return "{}".format(self.value)
+
+
+class DirectDateTimeElement(StringElement):
+    def __init__(self, namespace, tag, value=None):
+        super().__init__(namespace, tag)
+        self.value = value
+        self.format = format
+
+    def to_etree(self):
+        t = self._etree_node()
+        if self.value:
+            t.text = self.value.strftime("%Y-%m-%dT%H:%M:%S")
+        return t
+
+    def from_etree(self, root):
+        self.value = datetime.strptime(root.text, '%Y-%m-%dT%H:%M:%S').date()
         return self
 
     def __str__(self):
@@ -262,7 +293,7 @@ class DateTimeElement(StringElement):
 
 
 class IndicatorElement(StringElement):
-    def __init__(self, namespace, tag, value=False):
+    def __init__(self, namespace, tag, value=None):
         super().__init__(namespace, tag)
         self.value = value
 
@@ -271,6 +302,8 @@ class IndicatorElement(StringElement):
 
     def to_etree(self):
         t = self._etree_node()
+        if self.value is None:
+            return t
         node = ET.Element("{%s}%s" % (NS_UDT, "Indicator"))
         node.text = str(self.value).lower()
         t.append(node)
@@ -278,3 +311,11 @@ class IndicatorElement(StringElement):
 
     def __str__(self):
         return "{}".format(self.value)
+
+    def from_etree(self, root):
+        if len(root) != 1:
+            raise TypeError("Indicator containers should have one child")
+        if root[0].tag != "{%s}%s" % (NS_UDT, "Indicator"):
+            raise TypeError("Tag %s not recognized" % root[0].tag)
+        self.value = root[0].text == 'true'
+        return self

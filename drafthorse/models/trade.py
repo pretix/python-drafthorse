@@ -1,7 +1,7 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_FERD_1p0
-from .accounting import (AccountingAccount, ApplicableTradeTax,
+from .accounting import (ApplicableTradeTax,
                          BillingSpecifiedPeriod, MonetarySummation,
-                         TradeAllowanceCharge)
+                         TradeAllowanceCharge, AppliedTradeTax, ReceivableAccountingAccount)
 from .delivery import TradeDelivery
 from .elements import Element
 from .fields import CurrencyField, Field, MultiField, StringField
@@ -15,17 +15,25 @@ from .references import (AdditionalReferencedDocument,
 from .tradelines import LineItem
 
 
+class DeliveryTerms(Element):
+    type_code = StringField(NS_RAM, "DeliveryTypeCode", required=False,
+                            profile=EXTENDED, _d="Lieferbedingung (Code)")
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "ApplicableTradeDeliveryTerms"
+
+
 class TradeAgreement(Element):
     buyer_reference = StringField(NS_RAM, "BuyerReference", required=False,
                                   profile=COMFORT, _d="Referenz des Käufers")
     seller = Field(SellerTradeParty, required=True, _d="Detailinformationen zum Verkäufer")
     buyer = Field(BuyerTradeParty, required=True)
     end_user = Field(EndUserTradeParty, required=False, _d="Abweichender Endverbraucher")
-    delivery_type_code = StringField(NS_RAM, "DeliveryTypeCode", required=False,
-                                     profile=EXTENDED, _d="Lieferbedingung (Code)")
-    buyer_order = BuyerOrderReferencedDocument(required=False, profile=COMFORT)
-    customer_order = CustomerOrderReferencedDocument(required=False, profile=COMFORT)
-    contract = ContractReferencedDocument(required=False, profile=COMFORT)
+    delivery_terms = Field(DeliveryTerms, required=False, profile=EXTENDED)
+    buyer_order = Field(BuyerOrderReferencedDocument, required=False, profile=COMFORT)
+    customer_order = Field(CustomerOrderReferencedDocument, required=False, profile=COMFORT)
+    contract = Field(ContractReferencedDocument, required=False, profile=COMFORT)
     additional_references = MultiField(AdditionalReferencedDocument, required=False,
                                        profile=COMFORT)
 
@@ -39,7 +47,7 @@ class LogisticsServiceCharge(Element):
                               _d="Identifikation der Servicegebühr")
     applied_amount = CurrencyField(NS_RAM, "AppliedAmount", required=True,
                                    profile=COMFORT, _d="Betrag der Servicegebühr")
-    trade_tax = MultiField(ApplicableTradeTax, required=False, profile=COMFORT)
+    trade_tax = MultiField(AppliedTradeTax, required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
@@ -62,7 +70,7 @@ class TradeSettlement(Element):
     terms = MultiField(PaymentTerms, required=False, profile=COMFORT)
     money_summation = Field(MonetarySummation, required=True, profile=BASIC,
                             _d="Detailinformation zu Belegsummen")
-    accounting_account = Field(AccountingAccount, required=False, profile=EXTENDED,
+    accounting_account = Field(ReceivableAccountingAccount, required=False, profile=EXTENDED,
                                _d="Detailinformationen zur Buchungsreferenz")
 
     class Meta:

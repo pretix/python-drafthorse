@@ -14,14 +14,14 @@ def minify(xml):
         return xml
 
 
-def prettify(xml):
+def prettify(xml, **kwargs):
     try:
         from lxml import etree
     except ImportError:
         reparsed = minidom.parseString(xml)
         return reparsed.toprettyxml(indent="\t")
     else:
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(remove_blank_text=True, **kwargs)
         return b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(
             etree.fromstring(xml, parser), pretty_print=True
         )

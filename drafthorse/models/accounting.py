@@ -1,7 +1,7 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (CurrencyField, DateTimeField, DecimalField,
-                     IndicatorField, MultiField, StringField)
+                     IndicatorField, MultiField, StringField, QuantityField)
 
 
 class LineApplicableTradeTax(Element):
@@ -51,7 +51,15 @@ class AccountingAccount(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "ReceivableSpecifiedTradeAccount"
+        tag = "SpecifiedTradeAccountingAccount"
+
+
+class ReceivableAccountingAccount(Element):
+    id = StringField(NS_RAM, "ID", required=True, profile=EXTENDED, _d="Buchungsreferenz")
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "ReceivableSpecifiedTradeAccountingAccount"
 
 
 class MonetarySummation(Element):
@@ -112,7 +120,7 @@ class TradeAllowanceCharge(Element):
                                        _d="Rabatt in Prozent")
     basis_amount = CurrencyField(NS_RAM, "BasisAmount", required=False,
                                  profile=EXTENDED, _d="Basisbetrag des Rabatts")
-    basis_quantity = CurrencyField(NS_RAM, "BasisQuantity", required=False,
+    basis_quantity = QuantityField(NS_RAM, "BasisQuantity", required=False,
                                    profile=EXTENDED, _d="Basismenge des Rabatts")
     actual_amount = CurrencyField(NS_RAM, "ActualAmount", required=True,
                                   profile=COMFORT, _d="Betrag des Zu-/Abschlags")

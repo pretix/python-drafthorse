@@ -13,7 +13,7 @@ class Field:
         super().__init__()
 
     def initialize(self):
-        return self.cls()
+        return self.cls(required=self.required)
 
     def __get__(self, instance, objtype):
         if instance._data.get(self.name, None) is None:
@@ -178,6 +178,22 @@ class DateTimeField(Field):
     def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         from .elements import DateTimeElement
         super().__init__(DateTimeElement, default, required, profile, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+        instance._data[self.name].value = value
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
+
+
+class DirectDateTimeField(Field):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
+        from .elements import DirectDateTimeElement
+        super().__init__(DirectDateTimeElement, default, required, profile, _d)
         self.namespace = namespace
         self.tag = tag
 
