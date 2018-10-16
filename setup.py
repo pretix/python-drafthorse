@@ -38,5 +38,5 @@ setup(
                          'lxml'
                      ] + (['isoweek'] if sys.version_info < (3, 6) else []),
 
-    packages=find_packages(include=['sepadd', 'sepadd.*']),
+    packages=find_packages(include=['drafthorse', 'drafthorse.*']),
 )

@@ -100,6 +100,9 @@ class StringElement(Element):
         self.tag = tag
         self.text = text
 
+    def __repr__(self):
+        return '<{}: {}>'.format(type(self).__name__, str(self))
+
     def __str__(self):
         return self.text
 
