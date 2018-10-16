@@ -1,3 +1,4 @@
+import collections
 import sys
 import xml.etree.cElementTree as ET
 from collections import OrderedDict
@@ -12,6 +13,10 @@ from .fields import Field
 
 
 class BaseElementMeta(type):
+    @classmethod
+    def __prepare__(self, name, bases):
+        return collections.OrderedDict()
+
     def __new__(mcls, name, bases, attrs):
         cls = super(BaseElementMeta, mcls).__new__(mcls, name, bases, attrs)
         fields = list(cls._fields) if hasattr(cls, '_fields') else []
@@ -60,8 +65,10 @@ class Element(metaclass=BaseElementMeta):
         return validate_xml(xmlout=xml, schema="ZUGFeRD1p0")
 
     def from_etree(self, root):
-        if hasattr(self, 'Meta') and hasattr(self.Meta, 'namespace') and root.tag != "{%s}%s" % (self.Meta.namespace, self.Meta.tag):
-            raise TypeError("Invalid XML, found tag {} where {} was expected".format(root.tag, "{%s}%s" % (self.Meta.namespace, self.Meta.tag)))
+        if hasattr(self, 'Meta') and hasattr(self.Meta, 'namespace') and root.tag != "{%s}%s" % (
+                self.Meta.namespace, self.Meta.tag):
+            raise TypeError("Invalid XML, found tag {} where {} was expected".format(root.tag, "{%s}%s" % (
+                self.Meta.namespace, self.Meta.tag)))
         field_index = {}
         for field in self._fields:
             element = getattr(self, field.name)
@@ -76,7 +83,6 @@ class Element(metaclass=BaseElementMeta):
                 else:
                     getattr(self, name).from_etree(child)
             else:
-                print(root, field_index)
                 raise TypeError("Unknown element {}".format(child.tag))
         return self
 
