@@ -11,7 +11,7 @@ drafthorse -- Basic ZUGFeRD implementation in Python
    :target: https://pypi.python.org/pypi/drafthorse
 
 This is a low-level python implementation of the ZUGFeRD XML format. ZUGFeRD is a German
-format for sending digital invoices. ZUGFeRD XML files can are to be attached to a PDF
+format for sending digital invoices. ZUGFeRD XML files are to be attached to a PDF
 file, which can be done using the ``factur-x`` Python library. This library can be used to generate or parse the contents of this XML file.
 
 By low-level, we mean that this library models the ZUGFeRD data model 1:1 without any further
@@ -32,7 +32,7 @@ Parsing::
 
 Generating::
 
-    >>> from datetime import Date
+    >>> from datetime import date
     >>> from drafthorse.models.document import Document
     >>> from drafthorse.models.note import IncludedNote
 
