@@ -2,7 +2,6 @@ import sys
 
 from codecs import open
 from os import path
-
 from setuptools import find_packages, setup
 
 from drafthorse import version
@@ -17,19 +16,18 @@ except:  # noqa
     long_description = ''
 
 setup(
-    name='sepadd',
+    name='drafthorse',
     version=version,
-    description='Python SEPA Direct Debit XML implementation',
+    description='Python ZUGFeRD XML implementation',
     long_description=long_description,
-    url='https://github.com/raphaelm/python-sepadd',
+    url='https://github.com/pretix/pretix-drafthorse',
     author='Raphael Michel',
-    author_email='mail@raphaelmichel.de',
-    license='MIT License',
+    author_email='michel@rami.io',
+    license='Apache License',
     classifiers=[
-        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: Other Audience',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
