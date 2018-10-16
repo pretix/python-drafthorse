@@ -1,3 +1,5 @@
+import sys
+
 from codecs import open
 from os import path
 
@@ -35,8 +37,8 @@ setup(
 
     keywords='xml banking sepa',
     install_requires=[
-        'lxml'
-    ],
+                         'lxml'
+                     ] + (['isoweek'] if sys.version_info < (3, 6) else []),
 
     packages=find_packages(include=['sepadd', 'sepadd.*']),
 )

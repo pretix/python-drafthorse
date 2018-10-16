@@ -255,7 +255,10 @@ class DateTimeElement(StringElement):
             if self.format == '102':
                 node.text = self.value.strftime("%Y%m%d")
             elif self.format == '616':
-                node.text = self.value.strftime("%G%V")
+                if sys.version_info < (3, 6):
+                    node.text = '{}{}'.format(self.value.isocalendar()[0], self.value.isocalendar()[1])
+                else:
+                    node.text = self.value.strftime("%G%V")
             node.attrib['format'] = self.format
             t.append(node)
         return t
@@ -269,7 +272,12 @@ class DateTimeElement(StringElement):
         if self.format == '102':
             self.value = datetime.strptime(root[0].text, '%Y%m%d').date()
         elif self.format == '616':
-            self.value = datetime.strptime(root[0].text + '1', '%G%V%u').date()
+            if sys.version_info < (3, 6):
+                from isoweek import Week
+                w = Week(int(root[0].text[:4]), int(root[0].text[4:]))
+                self.value = w.monday()
+            else:
+                self.value = datetime.strptime(root[0].text + '1', '%G%V%u').date()
         else:
             raise TypeError("Date format %s cannot be parsed" % root[0].attrib['format'])
         return self
