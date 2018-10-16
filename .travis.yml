@@ -6,6 +6,7 @@ python:
 install:
     - pip install -U pip wheel coverage codecov
     - pip install -r requirements_dev.txt
+    - python setup.py develop
 script:
     - flake8 drafthorse tests
     - isort -rc -c drafthorse tests
