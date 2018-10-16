@@ -5,7 +5,7 @@ from os import path
 
 from setuptools import find_packages, setup
 
-from sepadd import version
+from drafthorse import version
 
 here = path.abspath(path.dirname(__file__))
 
