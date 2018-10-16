@@ -1,6 +1,6 @@
 from . import COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import StringField, DirectDateTimeField
+from .fields import DirectDateTimeField, StringField
 
 
 class ReferencedDocument(Element):
