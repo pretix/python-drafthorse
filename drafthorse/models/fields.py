@@ -114,6 +114,11 @@ class DecimalField(Field):
         self.namespace = namespace
         self.tag = tag
 
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+        instance._data[self.name].value = value
+
     def initialize(self):
         return self.cls(self.namespace, self.tag)
 
