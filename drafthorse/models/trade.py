@@ -68,8 +68,8 @@ class TradeSettlement(Element):
                                   _d="Schalter für Zu-/Abschlag")
     service_charge = MultiField(LogisticsServiceCharge, required=False, profile=COMFORT)
     terms = MultiField(PaymentTerms, required=False, profile=COMFORT)
-    money_summation = Field(MonetarySummation, required=True, profile=BASIC,
-                            _d="Detailinformation zu Belegsummen")
+    monetary_summation = Field(MonetarySummation, required=True, profile=BASIC,
+                               _d="Detailinformation zu Belegsummen")
     accounting_account = Field(ReceivableAccountingAccount, required=False, profile=EXTENDED,
                                _d="Detailinformationen zur Buchungsreferenz")
 

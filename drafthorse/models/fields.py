@@ -136,7 +136,7 @@ class QuantityField(Field):
 
         if not isinstance(value, (tuple, list)):
             raise TypeError("Please pass a 2-tuple of including amount and unit code.")
-        instance._data[self.name].value = value[0]
+        instance._data[self.name].amount = value[0]
         instance._data[self.name].unit_code = value[1]
 
     def initialize(self):
@@ -156,7 +156,7 @@ class CurrencyField(Field):
 
         if not isinstance(value, (tuple, list)):
             raise TypeError("Please pass a 2-tuple of including amount and currency.")
-        instance._data[self.name].value = value[0]
+        instance._data[self.name].amount = value[0]
         instance._data[self.name].currency = value[1]
 
     def initialize(self):
