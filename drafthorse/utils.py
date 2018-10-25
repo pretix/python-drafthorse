@@ -36,4 +36,4 @@ def validate_xml(xmlout, schema):
     schema = etree.XMLSchema(file=os.path.join(os.path.dirname(__file__), 'schema', schema + '.xsd'))
     parser = etree.XMLParser(schema=schema)
     xml_root = etree.fromstring(xmlout, parser)
-    return etree.tostring(xml_root, pretty_print=True)
+    return b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(xml_root, pretty_print=True)
