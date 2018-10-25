@@ -35,10 +35,10 @@ class SimpleContainer(Container):
         return '{%s}%s' % (self.namespace, self.tag)
 
     def empty_element(self):
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def set_element(self, el, child):
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def append_to(self, node):
         for child in self.children:
