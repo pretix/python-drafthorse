@@ -33,7 +33,7 @@ class Element(metaclass=BaseElementMeta):
     def __init__(self, **kwargs):
         self.required = kwargs.get('required', False)
         self._data = OrderedDict([
-            (f.name, f.initialize() if f.default else None) for f in self._fields
+            (f.name, f.initialize() if f.default or f.required else None) for f in self._fields
         ])
         for k, v in kwargs.items():
             setattr(self, k, v)

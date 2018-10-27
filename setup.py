@@ -35,8 +35,9 @@ setup(
 
     keywords='xml banking sepa',
     install_requires=[
-                         'lxml'
-                     ] + (['isoweek'] if sys.version_info < (3, 6) else []),
+        'lxml',
+        'PyPDF2'
+    ] + (['isoweek'] if sys.version_info < (3, 6) else []),
 
     packages=find_packages(include=['drafthorse', 'drafthorse.*']),
     include_package_data=True,
