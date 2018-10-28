@@ -26,10 +26,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import datetime
 import hashlib
-from PyPDF2 import PdfFileReader, PdfFileWriter
-from PyPDF2.generic import createStringObject, DictionaryObject, NameObject, DecodedStreamObject, ArrayObject
 from io import BytesIO
+
 from lxml import etree
+
+from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2.generic import (ArrayObject, DecodedStreamObject, DictionaryObject,
+                            NameObject, createStringObject)
 
 
 def attach_xml(original_pdf, xml_data, level='BASIC'):
@@ -73,7 +76,7 @@ def _get_original_output_intents(original_pdf):
                 ori_output_intent_dict['/DestOutputProfile'].getObject()
             output_intents.append(
                 (ori_output_intent_dict, dest_output_profile_dict))
-    except:
+    except:  # noqa
         pass
     return output_intents
 
