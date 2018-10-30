@@ -20,7 +20,7 @@ setup(
     version=version,
     description='Python ZUGFeRD XML implementation',
     long_description=long_description,
-    url='https://github.com/pretix/pretix-drafthorse',
+    url='https://github.com/pretix/python-drafthorse',
     author='Raphael Michel',
     author_email='michel@rami.io',
     license='Apache License',
