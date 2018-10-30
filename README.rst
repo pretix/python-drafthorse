@@ -77,4 +77,9 @@ Credits and License
 
 Maintainer: Raphael Michel <michel@rami.io>
 
-License: Apache License 2.0
+License of the Python code: Apache License 2.0
+
+The PDF handling (drafthorse/pdf.py) is based on the code of factur-x, Copyright 2016-2018, Alexis de Lattre <alexis.delattre@akretion.com>,
+released under a BSD license.
+
+The packages includes schemas and samples of the ZUGFeRD specification (.xsd and .xml files) which are owned by the *Forum für elektronische Rechnungen bei der AWV e.V („FeRD“)* and are released under a proprietary license that allows bundling them together with other software for free.
