@@ -29,7 +29,6 @@ import hashlib
 from io import BytesIO
 
 from lxml import etree
-
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2.generic import (ArrayObject, DecodedStreamObject, DictionaryObject,
                             NameObject, createStringObject)
