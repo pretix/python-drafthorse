@@ -61,7 +61,7 @@ def attach_xml(original_pdf, xml_data, level='BASIC'):
     outbuffer = BytesIO()
     output.write(outbuffer)
     outbuffer.seek(0)
-    return outbuffer
+    return outbuffer.read()
 
 
 def _get_original_output_intents(original_pdf):
