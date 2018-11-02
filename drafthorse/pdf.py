@@ -26,6 +26,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import datetime
 import hashlib
+import os
 from io import BytesIO
 
 from lxml import etree
@@ -85,7 +86,7 @@ def _prepare_pdf_metadata_txt(pdf_metadata):
     info_dict = {
         '/Author': pdf_metadata.get('author', ''),
         '/CreationDate': pdf_date,
-        '/Creator': 'pretix',
+        '/Creator': 'python-drafthorse',
         '/Keywords': pdf_metadata.get('keywords', ''),
         '/ModDate': pdf_date,
         '/Subject': pdf_metadata.get('subject', ''),
@@ -139,22 +140,20 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     desc_xmp = etree.SubElement(rdf, ns_rdf + 'Description', nsmap=nsmap_xmp)
     desc_xmp.set(ns_rdf + 'about', '')
     creator = etree.SubElement(desc_xmp, ns_xmp + 'CreatorTool')
-    creator.text = 'pretix'
+    creator.text = 'python-drafthorse'
     timestamp = datetime.datetime.now().isoformat()
     etree.SubElement(desc_xmp, ns_xmp + 'CreateDate').text = timestamp
     etree.SubElement(desc_xmp, ns_xmp + 'ModifyDate').text = timestamp
 
-    """
-    xmp_file = resource_filename(__name__, 'xmp/Factur-X_extension_schema.xmp')
+    xmp_file = os.path.join(os.path.dirname(__file__), 'schema', 'ZUGFeRD1p0_extension_schema.xmp')
     # Reason for defining a parser below:
     # http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output
     parser = etree.XMLParser(remove_blank_text=True)
     facturx_ext_schema_root = etree.parse(open(xmp_file), parser)
     # The Factur-X extension schema must be embedded into each PDF document
-    facturx_ext_schema_desc_xpath = facturx_ext_schema_root.xpath(
-        '//rdf:Description', namespaces=nsmap_rdf)
+    facturx_ext_schema_desc_xpath = facturx_ext_schema_root.xpath('//rdf:Description', namespaces=nsmap_rdf)
     rdf.append(facturx_ext_schema_desc_xpath[1])
-    """
+
     # Now is the ZUGFeRD description tag
     zugferd_desc = etree.SubElement(rdf, ns_rdf + 'Description', nsmap=nsmap_zf)
     zugferd_desc.set(ns_rdf + 'about', '')
