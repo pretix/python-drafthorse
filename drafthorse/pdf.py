@@ -145,15 +145,6 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     etree.SubElement(desc_xmp, ns_xmp + 'CreateDate').text = timestamp
     etree.SubElement(desc_xmp, ns_xmp + 'ModifyDate').text = timestamp
 
-    xmp_file = os.path.join(os.path.dirname(__file__), 'schema', 'ZUGFeRD1p0_extension_schema.xmp')
-    # Reason for defining a parser below:
-    # http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output
-    parser = etree.XMLParser(remove_blank_text=True)
-    facturx_ext_schema_root = etree.parse(open(xmp_file), parser)
-    # The Factur-X extension schema must be embedded into each PDF document
-    facturx_ext_schema_desc_xpath = facturx_ext_schema_root.xpath('//rdf:Description', namespaces=nsmap_rdf)
-    rdf.append(facturx_ext_schema_desc_xpath[1])
-
     # Now is the ZUGFeRD description tag
     zugferd_desc = etree.SubElement(rdf, ns_rdf + 'Description', nsmap=nsmap_zf)
     zugferd_desc.set(ns_rdf + 'about', '')
@@ -165,6 +156,15 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     fx_doc_version.text = '1.0'
     fx_conformance_level = etree.SubElement(zugferd_desc, ns_zf + 'ConformanceLevel', nsmap=nsmap_zf)
     fx_conformance_level.text = level
+
+    xmp_file = os.path.join(os.path.dirname(__file__), 'schema', 'ZUGFeRD1p0_extension_schema.xmp')
+    # Reason for defining a parser below:
+    # http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output
+    parser = etree.XMLParser(remove_blank_text=True)
+    facturx_ext_schema_root = etree.parse(open(xmp_file), parser)
+    # The Factur-X extension schema must be embedded into each PDF document
+    facturx_ext_schema_desc_xpath = facturx_ext_schema_root.xpath('//rdf:Description', namespaces=nsmap_rdf)
+    rdf.append(facturx_ext_schema_desc_xpath[1])
 
     # TODO: should be UTF-16be ??
     xml_str = etree.tostring(root, pretty_print=True, encoding="UTF-8", xml_declaration=False)
@@ -179,8 +179,9 @@ def _facturx_update_metadata_add_attachment(pdf_filestream, facturx_xml_str, pdf
     md5sum = hashlib.md5(facturx_xml_str).hexdigest()
     md5sum_obj = createStringObject(md5sum)
     params_dict = DictionaryObject({
-        NameObject('/CheckSum'): md5sum_obj,
+        #NameObject('/CheckSum'): md5sum_obj,
         NameObject('/ModDate'): createStringObject(datetime.datetime.now().isoformat()),
+        NameObject('/CreationDate'): createStringObject(datetime.datetime.now().isoformat()),
         NameObject('/Size'): NameObject(str(len(facturx_xml_str))),
     })
     file_entry = DecodedStreamObject()
@@ -200,8 +201,8 @@ def _facturx_update_metadata_add_attachment(pdf_filestream, facturx_xml_str, pdf
 
     fname_obj = createStringObject("ZUGFeRD-invoice.xml")
     filespec_dict = DictionaryObject({
-        NameObject("/AFRelationship"): NameObject("/Data"),
-        NameObject("/Desc"): createStringObject("Factur-X Invoice"),
+        NameObject("/AFRelationship"): NameObject("/Alternative"),
+        NameObject("/Desc"): createStringObject("Invoice metadata conforming to ZUGFeRD standard (http://www.ferd-net.de/front_content.php?idcat=231&lang=4)"),
         NameObject("/Type"): NameObject("/Filespec"),
         NameObject("/F"): fname_obj,
         NameObject("/EF"): ef_dict,
