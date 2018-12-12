@@ -30,6 +30,7 @@ import os
 from io import BytesIO
 
 from lxml import etree
+
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2.generic import (ArrayObject, DecodedStreamObject, DictionaryObject,
                             NameObject, createStringObject)
@@ -176,11 +177,11 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
 
 def _facturx_update_metadata_add_attachment(pdf_filestream, facturx_xml_str, pdf_metadata, facturx_level,
                                             output_intents):
-    md5sum = hashlib.md5(facturx_xml_str).hexdigest()
-    md5sum_obj = createStringObject(md5sum)
+    # md5sum = hashlib.md5(facturx_xml_str).hexdigest()
+    # md5sum_obj = createStringObject(md5sum)
     pdf_date = datetime.datetime.utcnow().strftime('D:%Y%m%d%H%M%SZ')
     params_dict = DictionaryObject({
-        #NameObject('/CheckSum'): md5sum_obj,
+        # NameObject('/CheckSum'): md5sum_obj,
         NameObject('/ModDate'): createStringObject(pdf_date),
         NameObject('/CreationDate'): createStringObject(pdf_date),
         NameObject('/Size'): NameObject(str(len(facturx_xml_str))),
