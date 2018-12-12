@@ -1,20 +1,22 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
-from .accounting import (AccountingAccount, ApplicableTradeTax,
-                         BillingSpecifiedPeriod, TradeAllowanceCharge)
+from .accounting import (
+    AccountingAccount, ApplicableTradeTax, BillingSpecifiedPeriod,
+    TradeAllowanceCharge,
+)
 from .delivery import SupplyChainEvent
 from .elements import Element
-from .fields import (CurrencyField, Field, MultiField, QuantityField,
-                     StringField)
+from .fields import (
+    CurrencyField, Field, MultiField, QuantityField, StringField,
+)
 from .note import IncludedNote
 from .party import ShipToTradeParty, UltimateShipToTradeParty
 from .product import TradeProduct
-from .references import (LineAdditionalReferencedDocument,
-                         LineBuyerOrderReferencedDocument,
-                         LineContractReferencedDocument,
-                         LineCustomerOrderReferencedDocument,
-                         LineDeliveryNoteReferencedDocument,
-                         LineDespatchAdviceReferencedDocument,
-                         LineReceivingAdviceReferencedDocument)
+from .references import (
+    LineAdditionalReferencedDocument, LineBuyerOrderReferencedDocument,
+    LineContractReferencedDocument, LineCustomerOrderReferencedDocument,
+    LineDeliveryNoteReferencedDocument, LineDespatchAdviceReferencedDocument,
+    LineReceivingAdviceReferencedDocument,
+)
 
 
 class AllowanceCharge(TradeAllowanceCharge):

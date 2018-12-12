@@ -1,17 +1,20 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_FERD_1p0
-from .accounting import (ApplicableTradeTax, AppliedTradeTax,
-                         BillingSpecifiedPeriod, MonetarySummation,
-                         ReceivableAccountingAccount, TradeAllowanceCharge)
+from .accounting import (
+    ApplicableTradeTax, AppliedTradeTax, BillingSpecifiedPeriod,
+    MonetarySummation, ReceivableAccountingAccount, TradeAllowanceCharge,
+)
 from .delivery import TradeDelivery
 from .elements import Element
 from .fields import CurrencyField, Field, MultiField, StringField
-from .party import (BuyerTradeParty, EndUserTradeParty, InvoiceeTradeParty,
-                    PayeeTradeParty, SellerTradeParty)
+from .party import (
+    BuyerTradeParty, EndUserTradeParty, InvoiceeTradeParty, PayeeTradeParty,
+    SellerTradeParty,
+)
 from .payment import PaymentMeans, PaymentTerms
-from .references import (AdditionalReferencedDocument,
-                         BuyerOrderReferencedDocument,
-                         ContractReferencedDocument,
-                         CustomerOrderReferencedDocument)
+from .references import (
+    AdditionalReferencedDocument, BuyerOrderReferencedDocument,
+    ContractReferencedDocument, CustomerOrderReferencedDocument,
+)
 from .tradelines import LineItem
 
 

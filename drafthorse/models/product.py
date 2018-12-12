@@ -1,7 +1,8 @@
 from . import COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import (ClassificationField, IDField, MultiField, QuantityField,
-                     StringField)
+from .fields import (
+    ClassificationField, IDField, MultiField, QuantityField, StringField,
+)
 
 
 class ProductCharacteristic(Element):

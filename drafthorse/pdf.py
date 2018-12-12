@@ -25,15 +25,15 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import datetime
-import hashlib
 import os
 from io import BytesIO
 
 from lxml import etree
-
 from PyPDF2 import PdfFileReader, PdfFileWriter
-from PyPDF2.generic import (ArrayObject, DecodedStreamObject, DictionaryObject,
-                            NameObject, createStringObject)
+from PyPDF2.generic import (
+    ArrayObject, DecodedStreamObject, DictionaryObject, NameObject,
+    createStringObject,
+)
 
 
 def attach_xml(original_pdf, xml_data, level='BASIC'):
