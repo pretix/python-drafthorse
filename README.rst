@@ -59,8 +59,6 @@ Generating::
     >>> new_pdf_bytes = attach_xml(original_pdf_bytes, xml, 'BASIC')
 
 
-
-
 Development
 -----------
 
