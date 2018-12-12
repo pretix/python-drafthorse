@@ -53,6 +53,9 @@ Generating::
     >>> xml
     b'<?xml version="1.0" encoding="UTF-8"?><rsm:CrossIndustryDocument …'
 
+    # Attach XML to an existing PDF.
+    # Note that the existing PDF should be compliant to PDF/A-3!
+    # You can validate this here: https://www.pdf-online.com/osa/validate.aspx
     >>> new_pdf_bytes = attach_xml(original_pdf_bytes, xml, 'BASIC')
 
 

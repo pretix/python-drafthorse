@@ -46,7 +46,7 @@ def attach_xml(original_pdf, xml_data, level='BASIC'):
     # for page in reader.pages:
     #    output.addPage(page)
 
-    output._header = "%PDF-1.6".encode()
+    output._header = "%PDF-1.6\r\n%\xc7\xec\x8f\xa2".encode()
     output.appendPagesFromReader(reader)
 
     original_pdf_id = reader.trailer.get('/ID')
@@ -82,7 +82,7 @@ def _get_original_output_intents(original_pdf):
 
 
 def _prepare_pdf_metadata_txt(pdf_metadata):
-    pdf_date = datetime.datetime.now().isoformat()
+    pdf_date = datetime.datetime.utcnow().strftime('D:%Y%m%d%H%M%SZ')
     info_dict = {
         '/Author': pdf_metadata.get('author', ''),
         '/CreationDate': pdf_date,
@@ -141,9 +141,9 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     desc_xmp.set(ns_rdf + 'about', '')
     creator = etree.SubElement(desc_xmp, ns_xmp + 'CreatorTool')
     creator.text = 'python-drafthorse'
-    timestamp = datetime.datetime.now().isoformat()
-    etree.SubElement(desc_xmp, ns_xmp + 'CreateDate').text = timestamp
-    etree.SubElement(desc_xmp, ns_xmp + 'ModifyDate').text = timestamp
+    xmp_date = datetime.datetime.utcnow().replace(microsecond=0).isoformat() + '+00:00'
+    etree.SubElement(desc_xmp, ns_xmp + 'CreateDate').text = xmp_date
+    etree.SubElement(desc_xmp, ns_xmp + 'ModifyDate').text = xmp_date
 
     # Now is the ZUGFeRD description tag
     zugferd_desc = etree.SubElement(rdf, ns_rdf + 'Description', nsmap=nsmap_zf)
@@ -178,10 +178,11 @@ def _facturx_update_metadata_add_attachment(pdf_filestream, facturx_xml_str, pdf
                                             output_intents):
     md5sum = hashlib.md5(facturx_xml_str).hexdigest()
     md5sum_obj = createStringObject(md5sum)
+    pdf_date = datetime.datetime.utcnow().strftime('D:%Y%m%d%H%M%SZ')
     params_dict = DictionaryObject({
         #NameObject('/CheckSum'): md5sum_obj,
-        NameObject('/ModDate'): createStringObject(datetime.datetime.now().isoformat()),
-        NameObject('/CreationDate'): createStringObject(datetime.datetime.now().isoformat()),
+        NameObject('/ModDate'): createStringObject(pdf_date),
+        NameObject('/CreationDate'): createStringObject(pdf_date),
         NameObject('/Size'): NameObject(str(len(facturx_xml_str))),
     })
     file_entry = DecodedStreamObject()
