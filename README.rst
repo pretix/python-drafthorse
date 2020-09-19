@@ -46,7 +46,7 @@ Generating::
     >>> doc.header.languages.add("de")
     >>> note = IncludedNote()
     >>> note.content.add("Test Node 1")
-    >>> doc.header.notes.add(n)
+    >>> doc.header.notes.add(note)
     >>> doc.trade.agreement.seller.name = "Lieferant GmbH"
 
     >>> xml = doc.serialize()
