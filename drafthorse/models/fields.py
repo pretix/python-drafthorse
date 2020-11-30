@@ -155,7 +155,11 @@ class CurrencyField(Field):
         if instance._data.get(self.name, None) is None:
             instance._data[self.name] = self.initialize()
 
-        instance._data[self.name].amount = value
+        if not isinstance(value, (tuple, list)):
+            raise TypeError("Please pass a 2-tuple of including amount and currency.")
+
+        instance._data[self.name].amount = value[0]
+        instance._data[self.name].currency = value[1]
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)
@@ -228,7 +232,7 @@ class MultiStringField(Field):
         return self.cls(child_type=str, namespace=self.namespace, tag=self.tag)
 
 
-class MultiCurrencyField(Field):
+class MultiDecimalField(Field):
     def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
         super().__init__(CurrencyContainer, default, required, profile, _d)
         self.namespace = namespace

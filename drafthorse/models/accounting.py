@@ -1,3 +1,4 @@
+
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (
@@ -7,8 +8,8 @@ from .fields import (
 
 
 class LineApplicableTradeTax(Element):
-    calculated_amount = CurrencyField(NS_RAM, "CalculatedAmount", required=True,
-                                      profile=BASIC, _d="Steuerbetrag")
+    calculated_amount = DecimalField(NS_RAM, "CalculatedAmount", required=True,
+                                     profile=BASIC, _d="Steuerbetrag")
     type_code = StringField(NS_RAM, "TypeCode", required=True, profile=BASIC,
                             _d="Steuerart (Code)")
     exemption_reason = StringField(NS_RAM, "ExemptionReason", required=False,
@@ -24,7 +25,7 @@ class LineApplicableTradeTax(Element):
 
 
 class ApplicableTradeTax(Element):
-    calculated_amount = CurrencyField(NS_RAM, "CalculatedAmount", required=True,
+    calculated_amount = DecimalField(NS_RAM, "CalculatedAmount", required=True,
                                       profile=BASIC, _d="Steuerbetrag")
     type_code = StringField(NS_RAM, "TypeCode", required=True, profile=BASIC,
                             _d="Steuerart (Code)")
@@ -32,12 +33,12 @@ class ApplicableTradeTax(Element):
                                    profile=COMFORT, _d="Grund der Steuerbefreiung (Freitext)")
     exemption_reason_code = StringField(NS_RAM, "ExemptionReasonCode", required=False,
                                         profile=EXTENDED, _d="Grund der Steuerbefreiung (Code)")
-    basis_amount = CurrencyField(NS_RAM, "BasisAmount", required=True,
+    basis_amount = DecimalField(NS_RAM, "BasisAmount", required=True,
                                  profile=BASIC, _d="Basisbetrag der Steuerberechnung")
-    line_total_basis_amount = CurrencyField(NS_RAM, "LineTotalBasisAmount",
+    line_total_basis_amount = DecimalField(NS_RAM, "LineTotalBasisAmount",
                                             required=False, profile=EXTENDED,
                                             _d="Warenbetrag des Steuersatzes")
-    allowance_charge_basis_amount = CurrencyField(NS_RAM, "AllowanceChargeBasisAmount",
+    allowance_charge_basis_amount = DecimalField(NS_RAM, "AllowanceChargeBasisAmount",
                                                   required=False, profile=EXTENDED,
                                                   _d="Gesamtbetrag Zu- und Abschläge des Steuersatzes")
     category_code = StringField(NS_RAM, "CategoryCode", required=False,
@@ -67,21 +68,21 @@ class ReceivableAccountingAccount(Element):
 
 
 class MonetarySummation(Element):
-    line_total = CurrencyField(NS_RAM, "LineTotalAmount", required=True,
+    line_total = DecimalField(NS_RAM, "LineTotalAmount", required=True,
                                profile=BASIC, _d="Gesamtbetrag der Positionen")
-    charge_total = CurrencyField(NS_RAM, "ChargeTotalAmount", required=True,
+    charge_total = DecimalField(NS_RAM, "ChargeTotalAmount", required=True,
                                  profile=BASIC, _d="Gesamtbetrag der Zuschläge")
-    allowance_total = CurrencyField(NS_RAM, "AllowanceTotalAmount", required=True,
+    allowance_total = DecimalField(NS_RAM, "AllowanceTotalAmount", required=True,
                                     profile=BASIC, _d="Gesamtbetrag der Abschläge")
-    tax_basis_total = CurrencyField(NS_RAM, "TaxBasisTotalAmount", required=True,
+    tax_basis_total = DecimalField(NS_RAM, "TaxBasisTotalAmount", required=True,
                                     profile=BASIC, _d="Steuerbasisbetrag")
     tax_total = CurrencyField(NS_RAM, "TaxTotalAmount", required=True,
                               profile=BASIC, _d="Steuergesamtbetrag")
-    grand_total = CurrencyField(NS_RAM, "GrandTotalAmount", required=True,
+    grand_total = DecimalField(NS_RAM, "GrandTotalAmount", required=True,
                                 profile=BASIC, _d="Bruttosumme")
-    prepaid_total = CurrencyField(NS_RAM, "TotalPrepaidAmount", required=False,
+    prepaid_total = DecimalField(NS_RAM, "TotalPrepaidAmount", required=False,
                                   profile=COMFORT, _d="Anzahlungsbetrag")
-    due_amount = CurrencyField(NS_RAM, "DuePayableAmount", required=False,
+    due_amount = DecimalField(NS_RAM, "DuePayableAmount", required=False,
                                profile=COMFORT, _d="Zahlbetrag")
 
     class Meta:
@@ -122,11 +123,11 @@ class TradeAllowanceCharge(Element):
     calculation_percent = DecimalField(NS_RAM, "CalculationPercent",
                                        required=False, profile=EXTENDED,
                                        _d="Rabatt in Prozent")
-    basis_amount = CurrencyField(NS_RAM, "BasisAmount", required=False,
+    basis_amount = DecimalField(NS_RAM, "BasisAmount", required=False,
                                  profile=EXTENDED, _d="Basisbetrag des Rabatts")
     basis_quantity = QuantityField(NS_RAM, "BasisQuantity", required=False,
                                    profile=EXTENDED, _d="Basismenge des Rabatts")
-    actual_amount = CurrencyField(NS_RAM, "ActualAmount", required=True,
+    actual_amount = DecimalField(NS_RAM, "ActualAmount", required=True,
                                   profile=COMFORT, _d="Betrag des Zu-/Abschlags")
     reason_code = StringField(NS_RAM, "ReasonCode", required=False, profile=EXTENDED)
     reason = StringField(NS_RAM, "Reason", required=False, profile=COMFORT)

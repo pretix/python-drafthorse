@@ -159,21 +159,24 @@ class QuantityElement(StringElement):
 
 
 class CurrencyElement(StringElement):
-    def __init__(self, namespace, tag, amount=""):
+    def __init__(self, namespace, tag, amount="", currency="EUR"):
         super().__init__(namespace, tag)
         self.amount = amount
+        self.currency = currency
 
     def to_etree(self):
         node = self._etree_node()
         node.text = str(self.amount)
+        node.attrib["currencyID"] = self.currency
         return node
 
     def from_etree(self, root):
         self.amount = Decimal(root.text)
+        self.currency = root.attrib.get('currencyID', 'EUR')
         return self
 
     def __str__(self):
-        return self.amount
+        return "{} {}".format(self.amount, self.currency)
 
 
 class ClassificationElement(StringElement):

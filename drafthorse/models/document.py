@@ -2,7 +2,7 @@ import xml.etree.cElementTree as ET
 
 from drafthorse.models.note import IncludedNote
 
-from . import BASIC, EXTENDED, NS_RAM, NS_UDT, NS_RSM
+from . import BASIC, EXTENDED, NS_RAM, NS_UDT, NS_RSM, NS_QDT, NS_A
 from .elements import Element
 from .fields import (
     DateTimeField, Field, IndicatorField, MultiField, MultiStringField,
@@ -76,9 +76,11 @@ class Invoice(Element):
 
     def __init__(self):
         super().__init__()
-        ET.register_namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance")
+        ET.register_namespace("a", NS_A)
         ET.register_namespace("rsm", NS_RSM)
+        ET.register_namespace("qdt", NS_QDT)
         ET.register_namespace("ram", NS_RAM)
+        ET.register_namespace("xsi", "http://www.w3.org/2001/XMLSchema")
         ET.register_namespace("udt", NS_UDT)
 
     class Meta:

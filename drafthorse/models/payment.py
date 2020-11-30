@@ -1,8 +1,8 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (
-    AgencyIDField, CurrencyField, DateTimeField, DecimalField, Field,
-    MultiCurrencyField, MultiStringField, QuantityField, StringField,
+    AgencyIDField, DecimalField, DateTimeField, DecimalField, Field,
+    MultiDecimalField, MultiStringField, QuantityField, StringField,
 )
 
 
@@ -40,11 +40,11 @@ class PaymentPenaltyTerms(Element):
                                     profile=EXTENDED, _d="Bezugsdatum der Fälligkeit")
     basis_period_measure = QuantityField(NS_RAM, "BasisPeriodMeasure", required=False,
                                          profile=EXTENDED, _d="Fälligkeitszeitraum")
-    basis_amount = CurrencyField(NS_RAM, "BasisAmount", required=False,
+    basis_amount = DecimalField(NS_RAM, "BasisAmount", required=False,
                                  profile=EXTENDED, _d="Basisbetrag des Zahlungszuschlags")
     calculation_percent = DecimalField(NS_RAM, "CalculationPercent", required=False,
                                        profile=EXTENDED, _d="Prozentwert des Zahlungszuschlags")
-    actual_amount = CurrencyField(NS_RAM, "ActualPenaltyAmount", required=False,
+    actual_amount = DecimalField(NS_RAM, "ActualPenaltyAmount", required=False,
                                   profile=EXTENDED, _d="Betrag des Zahlungszuschlags")
 
     class Meta:
@@ -57,11 +57,11 @@ class PaymentDiscountTerms(Element):
                                     profile=EXTENDED, _d="Bezugsdatum der Fälligkeit")
     basis_period_measure = QuantityField(NS_RAM, "BasisPeriodMeasure", required=False,
                                          profile=EXTENDED, _d="Fälligkeitszeitraum")
-    basis_amount = CurrencyField(NS_RAM, "BasisAmount", required=False,
+    basis_amount = DecimalField(NS_RAM, "BasisAmount", required=False,
                                  profile=EXTENDED, _d="Basisbetrag des Zahlungsabschlags")
     calculation_percent = DecimalField(NS_RAM, "CalculationPercent", required=False,
                                        profile=EXTENDED, _d="Prozentwert des Zahlungsabschlags")
-    actual_amount = CurrencyField(NS_RAM, "ActualDiscountAmount", required=False,
+    actual_amount = DecimalField(NS_RAM, "ActualDiscountAmount", required=False,
                                   profile=EXTENDED, _d="Betrag des Zahlungsabschlags")
 
     class Meta:
@@ -74,7 +74,7 @@ class PaymentTerms(Element):
                               _d="Freitext der Zahlungsbedingungen")
     due = DateTimeField(NS_RAM, "DueDateDateTime", required=False, profile=COMFORT,
                         _d="Fälligkeitsdatum")
-    partial_amount = MultiCurrencyField(NS_RAM, "PartialPaymentAmount", profile=EXTENDED,
+    partial_amount = MultiDecimalField(NS_RAM, "PartialPaymentAmount", profile=EXTENDED,
                                         required=False, _d="Betrag der Teilzahlung")
     penalty_terms = Field(PaymentPenaltyTerms, required=False, profile=EXTENDED,
                           _d="Detailinformationen zu Zahlungszuschlägen")

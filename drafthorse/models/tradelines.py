@@ -6,7 +6,7 @@ from .accounting import (
 from .delivery import SupplyChainEvent
 from .elements import Element
 from .fields import (
-    CurrencyField, Field, MultiField, QuantityField, StringField,
+    DecimalField, Field, MultiField, QuantityField, StringField,
 )
 from .note import IncludedNote
 from .party import ShipToTradeParty, UltimateShipToTradeParty
@@ -26,7 +26,7 @@ class AllowanceCharge(TradeAllowanceCharge):
 
 
 class GrossPrice(Element):
-    amount = CurrencyField(NS_RAM, "ChargeAmount", required=True, profile=COMFORT,
+    amount = DecimalField(NS_RAM, "ChargeAmount", required=True, profile=COMFORT,
                            _d="Bruttopreis")
     basis_quantity = QuantityField(NS_RAM, "BasisQuantity", required=False,
                                    profile=COMFORT, _d="Preisbasismenge")
@@ -38,7 +38,7 @@ class GrossPrice(Element):
 
 
 class NetPrice(Element):
-    amount = CurrencyField(NS_RAM, "ChargeAmount", required=True, profile=COMFORT)
+    amount = DecimalField(NS_RAM, "ChargeAmount", required=True, profile=COMFORT)
     basis_quantity = QuantityField(NS_RAM, "BasisQuantity", required=False,
                                    profile=COMFORT, _d="Preisbasismenge")
 
@@ -94,9 +94,9 @@ class LineDelivery(Element):
 
 
 class LineSummation(Element):
-    total_amount = CurrencyField(NS_RAM, "LineTotalAmount", required=True,
+    total_amount = DecimalField(NS_RAM, "LineTotalAmount", required=True,
                                  profile=COMFORT)
-    total_allowance_charge = CurrencyField(NS_RAM, "TotalAllowanceChargeAmount",
+    total_allowance_charge = DecimalField(NS_RAM, "TotalAllowanceChargeAmount",
                                            required=False, profile=EXTENDED, _d="Gesamtbetrag der Zu- und Abschläge")
 
     class Meta:

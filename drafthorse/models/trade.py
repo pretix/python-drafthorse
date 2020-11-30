@@ -5,7 +5,7 @@ from .accounting import (
 )
 from .delivery import TradeDelivery
 from .elements import Element
-from .fields import CurrencyField, Field, MultiField, StringField
+from .fields import DecimalField, Field, MultiField, StringField
 from .party import (
     BuyerTradeParty, EndUserTradeParty, InvoiceeTradeParty, PayeeTradeParty,
     SellerTradeParty,
@@ -48,7 +48,7 @@ class TradeAgreement(Element):
 class LogisticsServiceCharge(Element):
     description = StringField(NS_RAM, "Description", required=True, profile=COMFORT,
                               _d="Identifikation der Servicegebühr")
-    applied_amount = CurrencyField(NS_RAM, "AppliedAmount", required=True,
+    applied_amount = DecimalField(NS_RAM, "AppliedAmount", required=True,
                                    profile=COMFORT, _d="Betrag der Servicegebühr")
     trade_tax = MultiField(AppliedTradeTax, required=False, profile=COMFORT)
 
