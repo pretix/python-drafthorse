@@ -81,10 +81,10 @@ class TradeSettlement(Element):
 
 
 class TradeTransaction(Element):
+    items = MultiField(LineItem, required=True)
     agreement = Field(TradeAgreement, required=True)
     delivery = Field(TradeDelivery, required=True)
     settlement = Field(TradeSettlement, required=True)
-    items = MultiField(LineItem, required=True)
 
     class Meta:
         namespace = NS_RSM

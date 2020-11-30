@@ -60,9 +60,9 @@ class Element(metaclass=BaseElementMeta):
         if self.required or list(el) or el.text:
             node.append(el)
 
-    def serialize(self):
+    def serialize(self, schema="FACTUR-X_BASIC"):
         xml = b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + ET.tostring(self.to_etree(), "utf-8")
-        return validate_xml(xmlout=xml, schema="ZUGFeRD1p0")
+        return validate_xml(xmlout=xml, schema=schema)
 
     def from_etree(self, root):
         if hasattr(self, 'Meta') and hasattr(self.Meta, 'namespace') and root.tag != "{%s}%s" % (

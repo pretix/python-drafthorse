@@ -30,6 +30,8 @@ class ApplicableTradeTax(Element):
                             _d="Steuerart (Code)")
     exemption_reason = StringField(NS_RAM, "ExemptionReason", required=False,
                                    profile=COMFORT, _d="Grund der Steuerbefreiung (Freitext)")
+    exemption_reason_code = StringField(NS_RAM, "ExemptionReasonCode", required=False,
+                                        profile=EXTENDED, _d="Grund der Steuerbefreiung (Code)")
     basis_amount = CurrencyField(NS_RAM, "BasisAmount", required=True,
                                  profile=BASIC, _d="Basisbetrag der Steuerberechnung")
     line_total_basis_amount = CurrencyField(NS_RAM, "LineTotalBasisAmount",
@@ -40,8 +42,8 @@ class ApplicableTradeTax(Element):
                                                   _d="Gesamtbetrag Zu- und Abschläge des Steuersatzes")
     category_code = StringField(NS_RAM, "CategoryCode", required=False,
                                 profile=COMFORT, _d="Steuerkategorie (Wert)")
-    applicable_percent = DecimalField(NS_RAM, "ApplicablePercent",
-                                      required=True, profile=BASIC)
+    rate_applicable_percent = DecimalField(NS_RAM, "RateApplicablePercent",
+                                           required=True, profile=BASIC)
 
     class Meta:
         namespace = NS_RAM
@@ -84,7 +86,7 @@ class MonetarySummation(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "SpecifiedTradeSettlementMonetarySummation"
+        tag = "SpecifiedTradeSettlementHeaderMonetarySummation"
 
 
 class BillingSpecifiedPeriod(Element):

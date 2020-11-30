@@ -101,7 +101,7 @@ class LineSummation(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "SpecifiedTradeSettlementMonetarySummation"
+        tag = "SpecifiedTradeSettlementLineMonetarySummation"
 
 
 class LineSettlement(Element):
@@ -118,10 +118,10 @@ class LineSettlement(Element):
 
 class LineItem(Element):
     document = Field(LineDocument, required=True)
+    product = Field(TradeProduct)
     agreement = Field(LineAgreement)
     delivery = Field(LineDelivery)
     settlement = Field(LineSettlement, required=True)
-    product = Field(TradeProduct)
 
     class Meta:
         namespace = NS_RAM
