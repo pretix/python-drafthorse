@@ -24,11 +24,30 @@ class PayeeFinancialAccount(Element):
         tag = "PayeePartyCreditorFinancialAccount"
 
 
+class PayerFinancialInstitution(Element):
+    bic = StringField(NS_RAM, "BICID")
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "PayerSpecifiedDebtorFinancialInstitution"
+
+
+class PayeeFinancialInstitution(Element):
+    bic = StringField(NS_RAM, "BICID")
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "PayeeSpecifiedCreditorFinancialInstitution"
+
+
 class PaymentMeans(Element):
     type_code = StringField(NS_RAM, "TypeCode", required=False, profile=COMFORT)
     information = MultiStringField(NS_RAM, "Information", required=False, profile=COMFORT)
     payer_account = Field(PayerFinancialAccount)
+    payer_institution = Field(PayerFinancialInstitution)
     payee_account = Field(PayeeFinancialAccount)
+    payee_institution = Field(PayeeFinancialInstitution)
+
 
     class Meta:
         namespace = NS_RAM
@@ -41,11 +60,11 @@ class PaymentPenaltyTerms(Element):
     basis_period_measure = QuantityField(NS_RAM, "BasisPeriodMeasure", required=False,
                                          profile=EXTENDED, _d="Fälligkeitszeitraum")
     basis_amount = DecimalField(NS_RAM, "BasisAmount", required=False,
-                                 profile=EXTENDED, _d="Basisbetrag des Zahlungszuschlags")
+                                profile=EXTENDED, _d="Basisbetrag des Zahlungszuschlags")
     calculation_percent = DecimalField(NS_RAM, "CalculationPercent", required=False,
                                        profile=EXTENDED, _d="Prozentwert des Zahlungszuschlags")
     actual_amount = DecimalField(NS_RAM, "ActualPenaltyAmount", required=False,
-                                  profile=EXTENDED, _d="Betrag des Zahlungszuschlags")
+                                 profile=EXTENDED, _d="Betrag des Zahlungszuschlags")
 
     class Meta:
         namespace = NS_RAM
@@ -58,11 +77,11 @@ class PaymentDiscountTerms(Element):
     basis_period_measure = QuantityField(NS_RAM, "BasisPeriodMeasure", required=False,
                                          profile=EXTENDED, _d="Fälligkeitszeitraum")
     basis_amount = DecimalField(NS_RAM, "BasisAmount", required=False,
-                                 profile=EXTENDED, _d="Basisbetrag des Zahlungsabschlags")
+                                profile=EXTENDED, _d="Basisbetrag des Zahlungsabschlags")
     calculation_percent = DecimalField(NS_RAM, "CalculationPercent", required=False,
                                        profile=EXTENDED, _d="Prozentwert des Zahlungsabschlags")
     actual_amount = DecimalField(NS_RAM, "ActualDiscountAmount", required=False,
-                                  profile=EXTENDED, _d="Betrag des Zahlungsabschlags")
+                                 profile=EXTENDED, _d="Betrag des Zahlungsabschlags")
 
     class Meta:
         namespace = NS_RAM
@@ -75,7 +94,7 @@ class PaymentTerms(Element):
     due = DateTimeField(NS_RAM, "DueDateDateTime", required=False, profile=COMFORT,
                         _d="Fälligkeitsdatum")
     partial_amount = MultiDecimalField(NS_RAM, "PartialPaymentAmount", profile=EXTENDED,
-                                        required=False, _d="Betrag der Teilzahlung")
+                                       required=False, _d="Betrag der Teilzahlung")
     penalty_terms = Field(PaymentPenaltyTerms, required=False, profile=EXTENDED,
                           _d="Detailinformationen zu Zahlungszuschlägen")
     discount_terms = Field(PaymentDiscountTerms, required=False, profile=EXTENDED,

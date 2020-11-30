@@ -23,11 +23,13 @@ class ContractReferencedDocument(ReferencedDocument):
 
 
 class AdditionalReferencedDocument(Element):
+    issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
+                                     profile=COMFORT)
+    uri_id = StringField(NS_RAM, "URIID", required=False,
+                                     profile=EXTENDED)
     date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=False,
                                            profile=COMFORT)
     type_code = StringField(NS_RAM, "TypeCode", profile=EXTENDED, required=True)
-    issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
-                                     profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
@@ -87,12 +89,12 @@ class LineReceivingAdviceReferencedDocument(ReferencedDocument):
 
 
 class LineAdditionalReferencedDocument(Element):
+    issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
+                                     profile=COMFORT)
     line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
     date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=False,
                                            profile=COMFORT)
     reference_type_code = StringField(NS_RAM, "ReferenceTypeCode", profile=EXTENDED, required=True)
-    issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
-                                     profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
