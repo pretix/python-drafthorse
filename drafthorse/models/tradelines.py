@@ -50,7 +50,6 @@ class NetPrice(Element):
 class LineDocument(Element):
     line_id = StringField(NS_RAM, "LineID")
     notes = MultiField(IncludedNote)
-    line_status_code
 
     class Meta:
         namespace = NS_RAM
@@ -91,7 +90,7 @@ class LineDelivery(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "SpecifiedSupplyChainTradeDelivery"
+        tag = "SpecifiedLineTradeDelivery"
 
 
 class LineSummation(Element):
