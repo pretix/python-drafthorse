@@ -57,11 +57,10 @@ class CurrencyContainer(SimpleContainer):
         return CurrencyElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):
-        el.amount = child[0]
-        el.currency = child[1]
+        el.amount = child
 
     def add_from_etree(self, root):
-        self.add((root.text, root.attrib['currencyID']))
+        self.add(root.text)
 
 
 class IDContainer(SimpleContainer):

@@ -8,21 +8,10 @@ from .fields import (
 
 class PayerFinancialAccount(Element):
     iban = StringField(NS_RAM, "IBANID")
-    proprietary_id = StringField(NS_RAM, "ProprietaryID")
 
     class Meta:
         namespace = NS_RAM
         tag = "PayerPartyDebtorFinancialAccount"
-
-
-class PayerFinancialInstitution(Element):
-    bic = StringField(NS_RAM, "BICID")
-    german_blz = StringField(NS_RAM, "GermanBankleitzahlID")
-    name = StringField(NS_RAM, "Name")
-
-    class Meta:
-        namespace = NS_RAM
-        tag = "PayerSpecifiedDebtorFinancialInstitution"
 
 
 class PayeeFinancialAccount(Element):
@@ -35,24 +24,11 @@ class PayeeFinancialAccount(Element):
         tag = "PayeePartyCreditorFinancialAccount"
 
 
-class PayeeFinancialInstitution(Element):
-    bic = StringField(NS_RAM, "BICID")
-    german_blz = StringField(NS_RAM, "GermanBankleitzahlID")
-    name = StringField(NS_RAM, "Name")
-
-    class Meta:
-        namespace = NS_RAM
-        tag = "PayeeSpecifiedCreditorFinancialInstitution"
-
-
 class PaymentMeans(Element):
     type_code = StringField(NS_RAM, "TypeCode", required=False, profile=COMFORT)
     information = MultiStringField(NS_RAM, "Information", required=False, profile=COMFORT)
-    id = AgencyIDField(NS_RAM, "ID", required=False, profile=BASIC)
     payer_account = Field(PayerFinancialAccount)
-    payer_institution = Field(PayerFinancialInstitution)
     payee_account = Field(PayeeFinancialAccount)
-    payee_institution = Field(PayeeFinancialInstitution)
 
     class Meta:
         namespace = NS_RAM

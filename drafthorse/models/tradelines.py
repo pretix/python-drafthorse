@@ -13,7 +13,7 @@ from .party import ShipToTradeParty, UltimateShipToTradeParty
 from .product import TradeProduct
 from .references import (
     LineAdditionalReferencedDocument, LineBuyerOrderReferencedDocument,
-    LineContractReferencedDocument, LineCustomerOrderReferencedDocument,
+    LineContractReferencedDocument, LineUltimateCustomerOrderReferencedDocument,
     LineDeliveryNoteReferencedDocument, LineDespatchAdviceReferencedDocument,
     LineReceivingAdviceReferencedDocument,
 )
@@ -50,6 +50,7 @@ class NetPrice(Element):
 class LineDocument(Element):
     line_id = StringField(NS_RAM, "LineID")
     notes = MultiField(IncludedNote)
+    line_status_code
 
     class Meta:
         namespace = NS_RAM
@@ -59,7 +60,7 @@ class LineDocument(Element):
 class LineAgreement(Element):
     buyer_order = Field(LineBuyerOrderReferencedDocument, required=False, profile=EXTENDED)
     contract = Field(LineContractReferencedDocument, required=False, profile=EXTENDED)
-    customer_order = Field(LineCustomerOrderReferencedDocument, required=False, profile=EXTENDED)
+    customer_order = Field(LineUltimateCustomerOrderReferencedDocument, required=False, profile=EXTENDED)
     additional_references = MultiField(LineAdditionalReferencedDocument, required=False,
                                        profile=COMFORT)
     gross = Field(GrossPrice, required=False, profile=COMFORT)
@@ -67,7 +68,7 @@ class LineAgreement(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "SpecifiedSupplyChainTradeAgreement"
+        tag = "SpecifiedLineTradeAgreement"
 
 
 class LineDelivery(Element):
@@ -113,7 +114,7 @@ class LineSettlement(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "SpecifiedSupplyChainTradeSettlement"
+        tag = "SpecifiedLineTradeSettlement"
 
 
 class LineItem(Element):

@@ -2,7 +2,7 @@ import xml.etree.cElementTree as ET
 
 from drafthorse.models.note import IncludedNote
 
-from . import BASIC, EXTENDED, NS_RAM, NS_UDT, NS_FERD_1p0
+from . import BASIC, EXTENDED, NS_RAM, NS_UDT, NS_RSM
 from .elements import Element
 from .fields import (
     DateTimeField, Field, IndicatorField, MultiField, MultiStringField,
@@ -36,8 +36,8 @@ class DocumentContext(Element):
                                 profile=BASIC, _d="Anwendungsempfehlung")
 
     class Meta:
-        namespace = NS_FERD_1p0
-        tag = "SpecifiedExchangedDocumentContext"
+        namespace = NS_RSM
+        tag = "ExchangedDocumentContext"
 
 
 class EffectivePeriod(Element):
@@ -65,11 +65,11 @@ class Header(Element):
     notes = MultiField(IncludedNote)
 
     class Meta:
-        namespace = NS_FERD_1p0
-        tag = "HeaderExchangedDocument"
+        namespace = NS_RSM
+        tag = "ExchangedDocument"
 
 
-class Document(Element):
+class Invoice(Element):
     context = Field(DocumentContext, required=True)
     header = Field(Header, required=True)
     trade = Field(TradeTransaction, required=True)
@@ -77,10 +77,10 @@ class Document(Element):
     def __init__(self):
         super().__init__()
         ET.register_namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance")
-        ET.register_namespace("rsm", NS_FERD_1p0)
+        ET.register_namespace("rsm", NS_RSM)
         ET.register_namespace("ram", NS_RAM)
         ET.register_namespace("udt", NS_UDT)
 
     class Meta:
-        namespace = NS_FERD_1p0
-        tag = "CrossIndustryDocument"
+        namespace = NS_RSM
+        tag = "CrossIndustryInvoice"

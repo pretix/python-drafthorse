@@ -21,7 +21,6 @@ class SupplyChainEvent(Element):
 
 class LogisticsTransportMovement(Element):
     mode_code = StringField(NS_RAM, "ModeCode", required=False, profile=EXTENDED)
-    id = IDField(NS_RAM, "ID", required=False, profile=EXTENDED)
 
     class Meta:
         namespace = NS_RAM
@@ -50,4 +49,4 @@ class TradeDelivery(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "ApplicableSupplyChainTradeDelivery"
+        tag = "ApplicableHeaderTradeDelivery"

@@ -99,7 +99,7 @@ class BillingSpecifiedPeriod(Element):
 class AppliedTradeTax(Element):
     type_code = StringField(NS_RAM, "TypeCode", required=True, profile=COMFORT)
     category_code = StringField(NS_RAM, "CategoryCode", required=True, profile=COMFORT)
-    applicable_percent = StringField(NS_RAM, "ApplicablePercent", required=True, profile=COMFORT)
+    rate_applicable_percent = StringField(NS_RAM, "RateApplicablePercent", required=True, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM

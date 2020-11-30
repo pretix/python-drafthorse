@@ -155,10 +155,7 @@ class CurrencyField(Field):
         if instance._data.get(self.name, None) is None:
             instance._data[self.name] = self.initialize()
 
-        if not isinstance(value, (tuple, list)):
-            raise TypeError("Please pass a 2-tuple of including amount and currency.")
-        instance._data[self.name].amount = value[0]
-        instance._data[self.name].currency = value[1]
+        instance._data[self.name].amount = value
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)

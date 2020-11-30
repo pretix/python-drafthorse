@@ -16,7 +16,7 @@ file. This library can be used to generate or parse the contents of this XML fil
 attach it to a PDF. We do not support parsing PDF files (for now).
 
 By low-level, we mean that this library models the ZUGFeRD data model 1:1 without any further
-abstractions or simplifications. You can set and parse all parameters defined in ZUGFeRD 1.0.
+abstractions or simplifications. You can set and parse all parameters defined in ZUGFeRD 2.1.
 
 All output is validated against the official XSDs, but no validation of profile levels (basic, comfort, extended) is performed.
 

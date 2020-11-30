@@ -1,4 +1,4 @@
-from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_FERD_1p0
+from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_RSM
 from .accounting import (
     ApplicableTradeTax, AppliedTradeTax, BillingSpecifiedPeriod,
     MonetarySummation, ReceivableAccountingAccount, TradeAllowanceCharge,
@@ -13,7 +13,7 @@ from .party import (
 from .payment import PaymentMeans, PaymentTerms
 from .references import (
     AdditionalReferencedDocument, BuyerOrderReferencedDocument,
-    ContractReferencedDocument, CustomerOrderReferencedDocument,
+    ContractReferencedDocument, UltimateCustomerOrderReferencedDocument,
 )
 from .tradelines import LineItem
 
@@ -35,14 +35,14 @@ class TradeAgreement(Element):
     end_user = Field(EndUserTradeParty, required=False, _d="Abweichender Endverbraucher")
     delivery_terms = Field(DeliveryTerms, required=False, profile=EXTENDED)
     buyer_order = Field(BuyerOrderReferencedDocument, required=False, profile=COMFORT)
-    customer_order = Field(CustomerOrderReferencedDocument, required=False, profile=COMFORT)
+    customer_order = Field(UltimateCustomerOrderReferencedDocument, required=False, profile=COMFORT)
     contract = Field(ContractReferencedDocument, required=False, profile=COMFORT)
     additional_references = MultiField(AdditionalReferencedDocument, required=False,
                                        profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
-        tag = "ApplicableSupplyChainTradeAgreement"
+        tag = "ApplicableHeaderTradeAgreement"
 
 
 class LogisticsServiceCharge(Element):
@@ -66,7 +66,6 @@ class TradeSettlement(Element):
                   _d="Zahlungsempfänger")
     payment_means = Field(PaymentMeans)
     trade_tax = MultiField(ApplicableTradeTax)
-    period = Field(BillingSpecifiedPeriod, required=False, profile=COMFORT)
     allowance_charge = MultiField(TradeAllowanceCharge, required=False, profile=COMFORT,
                                   _d="Schalter für Zu-/Abschlag")
     service_charge = MultiField(LogisticsServiceCharge, required=False, profile=COMFORT)
@@ -78,7 +77,7 @@ class TradeSettlement(Element):
 
     class Meta:
         namespace = NS_RAM
-        tag = "ApplicableSupplyChainTradeSettlement"
+        tag = "ApplicableHeaderTradeSettlement"
 
 
 class TradeTransaction(Element):
@@ -88,5 +87,5 @@ class TradeTransaction(Element):
     items = MultiField(LineItem, required=True)
 
     class Meta:
-        namespace = NS_FERD_1p0
-        tag = "SpecifiedSupplyChainTradeTransaction"
+        namespace = NS_RSM
+        tag = "SupplyChainTradeTransaction"
