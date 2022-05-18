@@ -1,7 +1,7 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .accounting import (
     AccountingAccount, ApplicableTradeTax, BillingSpecifiedPeriod,
-    TradeAllowanceCharge,
+    TradeAllowanceCharge, ReceivableAccountingAccount
 )
 from .delivery import SupplyChainEvent
 from .elements import Element
@@ -15,7 +15,7 @@ from .references import (
     LineAdditionalReferencedDocument, LineBuyerOrderReferencedDocument,
     LineContractReferencedDocument, LineUltimateCustomerOrderReferencedDocument,
     LineDeliveryNoteReferencedDocument, LineDespatchAdviceReferencedDocument,
-    LineReceivingAdviceReferencedDocument,
+    LineReceivingAdviceReferencedDocument, InvoiceReferencedDocument
 )
 
 
@@ -106,11 +106,15 @@ class LineSummation(Element):
 
 class LineSettlement(Element):
     trade_tax = Field(ApplicableTradeTax, required=False, profile=COMFORT)
-    period = Field(BillingSpecifiedPeriod, required=False, profile=EXTENDED)
     accounting_account = Field(AccountingAccount, required=False, profile=EXTENDED,
                                _d="Kostenstelle")
     monetary_summation = Field(LineSummation, required=False, profile=COMFORT)
-
+    period = Field(BillingSpecifiedPeriod, required=False, profile=COMFORT)
+    allowance_charge = MultiField(TradeAllowanceCharge, required=False, profile=COMFORT,
+                                  _d="Schalter für Zu-/Abschlag")
+    invoice_referenced_document = Field(InvoiceReferencedDocument, required=False, profile=EXTENDED)
+    accounting_account = Field(ReceivableAccountingAccount, required=False, profile=EXTENDED,
+                               _d="Detailinformationen zur Buchungsreferenz")
     class Meta:
         namespace = NS_RAM
         tag = "SpecifiedLineTradeSettlement"

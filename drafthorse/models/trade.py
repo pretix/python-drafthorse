@@ -1,22 +1,21 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_RSM
 from .accounting import (
-    ApplicableTradeTax, AppliedTradeTax, BillingSpecifiedPeriod,
-    MonetarySummation, ReceivableAccountingAccount, TradeAllowanceCharge,
+    ApplicableTradeTax, AppliedTradeTax,
+    MonetarySummation, ReceivableAccountingAccount, TradeAllowanceCharge, BillingSpecifiedPeriod, SellerOrderReferencedDocument
 )
 from .delivery import TradeDelivery
 from .elements import Element
-from .fields import DecimalField, Field, MultiField, StringField
+from .fields import DecimalField, Field, MultiField, StringField, IDField
 from .party import (
     BuyerTradeParty, EndUserTradeParty, InvoiceeTradeParty, PayeeTradeParty,
-    SellerTradeParty,
+    SellerTradeParty, SellerTaxRepresentativeTradeParty,
 )
 from .payment import PaymentMeans, PaymentTerms
 from .references import (
     AdditionalReferencedDocument, BuyerOrderReferencedDocument,
-    ContractReferencedDocument, UltimateCustomerOrderReferencedDocument,
+    ContractReferencedDocument, UltimateCustomerOrderReferencedDocument, ProcuringProjectType, InvoiceReferencedDocument
 )
 from .tradelines import LineItem
-
 
 class DeliveryTerms(Element):
     type_code = StringField(NS_RAM, "DeliveryTypeCode", required=False,
@@ -39,7 +38,11 @@ class TradeAgreement(Element):
     contract = Field(ContractReferencedDocument, required=False, profile=COMFORT)
     additional_references = MultiField(AdditionalReferencedDocument, required=False,
                                        profile=COMFORT)
-
+    description = StringField(NS_RAM, "Description", required=False,
+                                  profile=COMFORT)
+    seller_tax_representative_party = Field(SellerTaxRepresentativeTradeParty, required=False)
+    order_document = Field(SellerOrderReferencedDocument, required=False)
+    procuring_project_type = Field(ProcuringProjectType, required=False)
     class Meta:
         namespace = NS_RAM
         tag = "ApplicableHeaderTradeAgreement"
@@ -74,7 +77,10 @@ class TradeSettlement(Element):
                                _d="Detailinformation zu Belegsummen")
     accounting_account = Field(ReceivableAccountingAccount, required=False, profile=EXTENDED,
                                _d="Detailinformationen zur Buchungsreferenz")
-
+    creditor_reference_ID = IDField(NS_RAM, "CreditorReferenceID")
+    period = Field(BillingSpecifiedPeriod, required=False, profile=BASIC)
+    tax_currency_code = StringField(NS_RAM, "TaxCurrencyCode", required=False, profile=COMFORT)
+    invoice_referenced_document = Field(InvoiceReferencedDocument, required=False, profile=BASIC)
     class Meta:
         namespace = NS_RAM
         tag = "ApplicableHeaderTradeSettlement"

@@ -2,11 +2,25 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (
-    CurrencyField, DateTimeField, DecimalField, IndicatorField, MultiField,
-    QuantityField, StringField,
+    CurrencyField, Field, DateTimeField, DecimalField, IndicatorField, MultiField,
+    QuantityField, StringField, IDField
 )
 
+class BillingSpecifiedPeriod(Element):
+    description = StringField(NS_RAM, "Description", required=True, profile=COMFORT,
+                              _d="Freitext der Zahlungsbedingungen")
+    start = DateTimeField(NS_RAM, "StartDateTime", required=True, profile=COMFORT)
+    end = DateTimeField(NS_RAM, "EndDateTime", required=True, profile=COMFORT)
 
+    class Meta:
+        namespace = NS_RAM
+        tag = "BillingSpecifiedPeriod"
+class SellerOrderReferencedDocument(Element):
+    issuer_ID = IDField(NS_RAM, "IssuerAssignedID", profile=COMFORT)
+    issue_date_time = DateTimeField(NS_RAM, "FormattedIssueDateTime", required=True, profile=EXTENDED)
+    class Meta:
+        namespace = NS_RAM
+        tag = "SellerOrderReferencedDocument"
 class LineApplicableTradeTax(Element):
     calculated_amount = DecimalField(NS_RAM, "CalculatedAmount", required=True,
                                      profile=BASIC, _d="Steuerbetrag")
@@ -18,7 +32,6 @@ class LineApplicableTradeTax(Element):
                                 profile=COMFORT, _d="Steuerkategorie (Wert)")
     applicable_percent = DecimalField(NS_RAM, "ApplicablePercent",
                                       required=True, profile=BASIC)
-
     class Meta:
         namespace = NS_RAM
         tag = "ApplicableTradeTax"
@@ -45,7 +58,6 @@ class ApplicableTradeTax(Element):
                                 profile=COMFORT, _d="Steuerkategorie (Wert)")
     rate_applicable_percent = DecimalField(NS_RAM, "RateApplicablePercent",
                                            required=True, profile=BASIC)
-
     class Meta:
         namespace = NS_RAM
         tag = "ApplicableTradeTax"
@@ -88,15 +100,6 @@ class MonetarySummation(Element):
     class Meta:
         namespace = NS_RAM
         tag = "SpecifiedTradeSettlementHeaderMonetarySummation"
-
-
-class BillingSpecifiedPeriod(Element):
-    start = DateTimeField(NS_RAM, "StartDateTime", required=True, profile=COMFORT)
-    end = DateTimeField(NS_RAM, "EndDateTime", required=True, profile=COMFORT)
-
-    class Meta:
-        namespace = NS_RAM
-        tag = "BillingSpecifiedPeriod"
 
 
 class AppliedTradeTax(Element):

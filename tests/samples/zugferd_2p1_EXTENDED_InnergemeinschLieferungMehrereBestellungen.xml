@@ -294,14 +294,14 @@ HRB Berlin 13086</ram:Content>
 				<ram:CategoryCode>K</ram:CategoryCode>
 				<ram:RateApplicablePercent>0</ram:RateApplicablePercent>
 			</ram:ApplicableTradeTax>
-				<ram:BillingSpecifiedPeriod>
-					<ram:StartDateTime>
-						<udt:DateTimeString format="102">20181001</udt:DateTimeString>
-					</ram:StartDateTime>
-					<ram:EndDateTime>
-						<udt:DateTimeString format="102">20181031</udt:DateTimeString>
-					</ram:EndDateTime>
-				</ram:BillingSpecifiedPeriod>
+			<ram:BillingSpecifiedPeriod>
+				<ram:StartDateTime>
+					<udt:DateTimeString format="102">20181001</udt:DateTimeString>
+				</ram:StartDateTime>
+				<ram:EndDateTime>
+					<udt:DateTimeString format="102">20181031</udt:DateTimeString>
+				</ram:EndDateTime>
+			</ram:BillingSpecifiedPeriod>
 			<ram:SpecifiedTradePaymentTerms>
 				<ram:DueDateDateTime>
 					<udt:DateTimeString format="102">20181130</udt:DateTimeString>

@@ -1,14 +1,24 @@
 from . import COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import DirectDateTimeField, StringField
+from .fields import DirectDateTimeField, StringField, Field
 
+class ProcuringProjectType(Element):
+    id = StringField(NS_RAM, "ID")
+    name = StringField(NS_RAM, "Name")
+    class Meta:
+        namespace = NS_RAM
+        tag = "ProcuringProjectType"
 
 class ReferencedDocument(Element):
     date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=False,
                                            profile=COMFORT)
     issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
                                      profile=COMFORT)
-
+class AttachmentBinaryObject(Element):
+    name = StringField(NS_RAM, "filename", profile=EXTENDED)
+    class Meta:
+        namespace = NS_RAM
+        tag = "AttachmentBinaryObject"
 
 class BuyerOrderReferencedDocument(ReferencedDocument):
     class Meta:
@@ -30,10 +40,24 @@ class AdditionalReferencedDocument(Element):
     date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=False,
                                            profile=COMFORT)
     type_code = StringField(NS_RAM, "TypeCode", profile=EXTENDED, required=True)
-
+    name = StringField(NS_RAM, "Name", profile=COMFORT, required=False)
+    attached_object = Field(AttachmentBinaryObject, required=False, profile=EXTENDED)
     class Meta:
         namespace = NS_RAM
         tag = "AdditionalReferencedDocument"
+
+class InvoiceReferencedDocument(Element):
+    issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
+                                     profile=COMFORT)
+
+    date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=True,
+                                           profile=COMFORT)
+    type_code = StringField(NS_RAM, "TypeCode", profile=EXTENDED, required=False)
+
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "InvoiceReferencedDocument"
 
 
 class UltimateCustomerOrderReferencedDocument(ReferencedDocument):

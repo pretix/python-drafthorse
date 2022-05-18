@@ -14,6 +14,12 @@ class PostalTradeAddress(Element):
         namespace = NS_RAM
         tag = "PostalTradeAddress"
 
+class URIUniversalCommunication(Element):
+    uri_ID = IDField(NS_RAM, "URIID", required=False, profile=BASIC)
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "URIUniversalCommunication"
 
 class TaxRegistration(Element):
     id = IDField(NS_RAM, "ID")
@@ -21,7 +27,6 @@ class TaxRegistration(Element):
     class Meta:
         namespace = NS_RAM
         tag = "SpecifiedTaxRegistration"
-
 
 class PhoneNumber(Element):
     number = StringField(NS_RAM, "CompleteNumber", required=False,
@@ -75,7 +80,14 @@ class TradeParty(Element):
     address = Field(PostalTradeAddress, required=False, profile=BASIC,
                     _d="Anschrift des Käufers")
     tax_registrations = MultiField(TaxRegistration, required=False, profile=BASIC)
+    electronic_adress = MultiField(URIUniversalCommunication, required=False, profile=BASIC)
+    description = StringField(NS_RAM, "Description", required=True, profile=COMFORT,
+                              _d="Freitext der Zahlungsbedingungen")
 
+class SellerTaxRepresentativeTradeParty(TradeParty):
+    class Meta:
+        namespace = NS_RAM
+        tag = "SellerTaxRepresentativeTradeParty"
 
 class PayeeTradeParty(TradeParty):
     class Meta:

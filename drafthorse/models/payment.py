@@ -103,3 +103,4 @@ class PaymentTerms(Element):
     class Meta:
         namespace = NS_RAM
         tag = "SpecifiedTradePaymentTerms"
+
