@@ -33,7 +33,8 @@ def validate_xml(xmlout, schema):
     except ImportError:
         logger.warning("Could not validate output as LXML is not installed.")
         return xmlout
-    schema = etree.XMLSchema(file=os.path.join(os.path.dirname(__file__), 'schema', schema + '.xsd'))
+    if schema is not None:
+        schema = etree.XMLSchema(file=os.path.join(os.path.dirname(__file__), 'schema', schema + '.xsd'))
     parser = etree.XMLParser(schema=schema)
     xml_root = etree.fromstring(xmlout, parser)
     return b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(xml_root, pretty_print=True)
