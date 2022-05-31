@@ -56,9 +56,12 @@ class Element(metaclass=BaseElementMeta):
     def get_tag(self):
         return "{%s}%s" % (self.Meta.namespace, self.Meta.tag)
 
+    def is_empty(self, el):
+        return not list(el) and not el.text
+
     def append_to(self, node):
         el = self.to_etree()
-        if self.required or list(el) or el.text:
+        if self.required or not self.is_empty(el):
             node.append(el)
 
     def serialize(self, schema="FACTUR-X_BASIC"):
@@ -100,12 +103,16 @@ class StringElement(Element):
         self.namespace = namespace
         self.tag = tag
         self.text = text
+        self.set_on_input =False
 
     def __repr__(self):
         return '<{}: {}>'.format(type(self).__name__, str(self))
 
     def __str__(self):
-        return self.text
+        return str(self.text)
+
+    def is_empty(self, el):
+        return super().is_empty(el) and not self.set_on_input
 
     def get_tag(self):
         return "{%s}%s" % (self.namespace, self.tag)
@@ -117,6 +124,7 @@ class StringElement(Element):
 
     def from_etree(self, root):
         self.text = root.text
+        self.set_on_input = True
         return self
 
 
@@ -135,6 +143,7 @@ class DecimalElement(StringElement):
 
     def from_etree(self, root):
         self.value = Decimal(root.text)
+        self.set_on_input = True
         return self
 
 
@@ -156,6 +165,7 @@ class QuantityElement(StringElement):
     def from_etree(self, root):
         self.amount = Decimal(root.text)
         self.unit_code = root.attrib['unitCode']
+        self.set_on_input = True
         return self
 
 
@@ -174,6 +184,7 @@ class CurrencyElement(StringElement):
     def from_etree(self, root):
         self.amount = Decimal(root.text)
         self.currency = root.attrib.get('currencyID', 'EUR')
+        self.set_on_input = True
         return self
 
     def __str__(self):
@@ -198,6 +209,7 @@ class ClassificationElement(StringElement):
         self.text = Decimal(root.text)
         self.list_id = root.attrib['listID']
         self.list_version_id = root.attrib['listVersionID']
+        self.set_on_input = True
         return self
 
     def __str__(self):
@@ -218,6 +230,7 @@ class BinaryObjectElement(StringElement):
     def from_etree(self, root):
         self.text = root.text
         self.mime_code = root.attrib['mimeCode']
+        self.set_on_input = True
         return self
 
     def __str__(self):
@@ -238,6 +251,7 @@ class AgencyIDElement(StringElement):
     def from_etree(self, root):
         self.text = root.text
         self.scheme_id = root.attrib['schemeAgencyID']
+        self.set_on_input = True
         return self
 
     def __str__(self):
@@ -259,6 +273,7 @@ class IDElement(StringElement):
     def from_etree(self, root):
         self.text = root.text
         self.scheme_id = root.attrib['schemeID']
+        self.set_on_input = True
         return self
 
     def __str__(self):
@@ -303,6 +318,7 @@ class DateTimeElement(StringElement):
                 self.value = datetime.strptime(root[0].text + '1', '%G%V%u').date()
         else:
             raise TypeError("Date format %s cannot be parsed" % root[0].attrib['format'])
+        self.set_on_input = True
         return self
 
     def __str__(self):
@@ -323,6 +339,7 @@ class DirectDateTimeElement(StringElement):
 
     def from_etree(self, root):
         self.value = datetime.strptime(root.text, '%Y-%m-%dT%H:%M:%S').date()
+        self.set_on_input = True
         return self
 
     def __str__(self):
@@ -355,4 +372,5 @@ class IndicatorElement(StringElement):
         if root[0].tag != "{%s}%s" % (NS_UDT, "Indicator"):
             raise TypeError("Tag %s not recognized" % root[0].tag)
         self.value = root[0].text == 'true'
+        self.set_on_input = True
         return self
