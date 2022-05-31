@@ -1,8 +1,8 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (
-    AgencyIDField, DecimalField, DateTimeField, DecimalField, Field,
-    MultiDecimalField, MultiStringField, QuantityField, StringField,
+    AgencyIDField, DateTimeField, DecimalField, Field,
+    MultiDecimalField, MultiStringField, QuantityField, StringField, DirectDateTimeField
 )
 
 
@@ -87,6 +87,15 @@ class PaymentDiscountTerms(Element):
         namespace = NS_RAM
         tag = "ApplicableTradePaymentDiscountTerms"
 
+class TaxApplicableTradeCurrencyExchange(Element):
+    source_currency = StringField(NS_RAM, "SourceCurrencyCode", required=False, profile=EXTENDED)
+    target_currency = StringField(NS_RAM, "TargetCurrencyCode", required=False, profile=EXTENDED)
+    conversion_rate = DecimalField(NS_RAM, "ConversionRate", required=False, profile=EXTENDED)
+    date_time_string = DirectDateTimeField(NS_RAM, "ConversionRateDateTime", required=True,
+                                           profile=EXTENDED)
+    class Meta:
+        namespace = NS_RAM
+        tag = "TaxApplicableTradeCurrencyExchange"
 
 class PaymentTerms(Element):
     description = StringField(NS_RAM, "Description", required=True, profile=COMFORT,

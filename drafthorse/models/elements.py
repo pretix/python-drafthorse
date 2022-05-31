@@ -4,7 +4,8 @@ import xml.etree.cElementTree as ET
 from collections import OrderedDict
 from datetime import datetime
 from decimal import Decimal
-
+#TODO: implement mimeElement and container
+import mimetypes
 from drafthorse.utils import validate_xml
 
 from . import NS_UDT
@@ -202,6 +203,25 @@ class ClassificationElement(StringElement):
     def __str__(self):
         return "{} ({} {})".format(self.text, self.list_id, self.list_version_id)
 
+class BinaryObjectElement(StringElement):
+    def __init__(self, namespace, tag, text="", mime_code=""):
+        super().__init__(namespace, tag)
+        self.text = text
+        self.mime_code = mime_code
+
+    def to_etree(self):
+        node = self._etree_node()
+        node.text = self.text
+        node.attrib['mimeCode'] = self.mime_code
+        return node
+
+    def from_etree(self, root):
+        self.text = root.text
+        self.mime_code = root.attrib['mimeCode']
+        return self
+
+    def __str__(self):
+        return "{} ({} {})".format(self.text, self.mime_code)
 
 class AgencyIDElement(StringElement):
     def __init__(self, namespace, tag, text="", scheme_id=""):

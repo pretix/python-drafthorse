@@ -143,6 +143,24 @@ class QuantityField(Field):
     def initialize(self):
         return self.cls(self.namespace, self.tag)
 
+class BinaryObjectField(Field):
+    def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):
+        from .elements import BinaryObjectElement
+        super().__init__(BinaryObjectElement, default, required, profile, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+
+        if not isinstance(value, (tuple, list)):
+            raise TypeError("Please pass a 2-tuple of including amount and unit code.")
+        instance._data[self.name].text = value[1]
+        instance._data[self.name].mime_code = value[0]
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
 
 class CurrencyField(Field):
     def __init__(self, namespace, tag, default=False, required=False, profile=BASIC, _d=None):

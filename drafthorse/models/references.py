@@ -1,13 +1,13 @@
-from . import COMFORT, EXTENDED, NS_RAM
+from . import COMFORT, EXTENDED, NS_RAM, NS_RSM
 from .elements import Element
-from .fields import DirectDateTimeField, StringField, Field
+from .fields import DirectDateTimeField, StringField, Field, BinaryObjectField
 
 class ProcuringProjectType(Element):
     id = StringField(NS_RAM, "ID")
     name = StringField(NS_RAM, "Name")
     class Meta:
         namespace = NS_RAM
-        tag = "ProcuringProjectType"
+        tag = "SpecifiedProcuringProject"
 
 class ReferencedDocument(Element):
     date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=False,
@@ -15,7 +15,8 @@ class ReferencedDocument(Element):
     issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
                                      profile=COMFORT)
 class AttachmentBinaryObject(Element):
-    name = StringField(NS_RAM, "filename", profile=EXTENDED)
+    name = StringField(NS_RAM, "filename", required=False, profile=COMFORT)
+    #mime_code = BinaryObjectField(NS_RAM,"mime_code", profile=COMFORT)
     class Meta:
         namespace = NS_RAM
         tag = "AttachmentBinaryObject"
@@ -41,7 +42,7 @@ class AdditionalReferencedDocument(Element):
                                            profile=COMFORT)
     type_code = StringField(NS_RAM, "TypeCode", profile=EXTENDED, required=True)
     name = StringField(NS_RAM, "Name", profile=COMFORT, required=False)
-    attached_object = Field(AttachmentBinaryObject, required=False, profile=EXTENDED)
+    attached_object = BinaryObjectField(NS_RAM, "AttachmentBinaryObject", required=False, profile=EXTENDED)
     class Meta:
         namespace = NS_RAM
         tag = "AdditionalReferencedDocument"

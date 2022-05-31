@@ -22,7 +22,10 @@ def test_sample_roundtrip(filename):
         open(os.path.join(os.path.dirname(__file__), 'samples', filename), 'rb').read(),
         remove_comments=True
     )
-    schema = 'FACTUR-X_' + filename.split('_')[2]
+    if filename.split('_')[2] != "XRECHNUNG":
+        schema = 'FACTUR-X_' + filename.split('_')[2]
+    else:
+        schema = 'FACTUR-X_EN16931'
 
     # Validate that the sample file is valid, otherwise the test is moot
     validate_xml(xmlout=origxml, schema=schema)

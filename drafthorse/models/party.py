@@ -75,14 +75,14 @@ class TradeParty(Element):
     global_id = MultiIDField(NS_RAM, "GlobalID", required=False, profile=COMFORT,
                              _d="Globaler Identifier des Verkäufers")
     name = StringField(NS_RAM, "Name", required=False, profile=BASIC)
+    description = StringField(NS_RAM, "Description", required=True, profile=COMFORT,
+                              _d="Freitext der Zahlungsbedingungen")
     contact = Field(TradeContact, required=False, profile=EXTENDED,
                     _d="Ansprechpartner des Käufers")
     address = Field(PostalTradeAddress, required=False, profile=BASIC,
                     _d="Anschrift des Käufers")
-    tax_registrations = MultiField(TaxRegistration, required=False, profile=BASIC)
     electronic_adress = MultiField(URIUniversalCommunication, required=False, profile=BASIC)
-    description = StringField(NS_RAM, "Description", required=True, profile=COMFORT,
-                              _d="Freitext der Zahlungsbedingungen")
+    tax_registrations = MultiField(TaxRegistration, required=False, profile=BASIC)
 
 class SellerTaxRepresentativeTradeParty(TradeParty):
     class Meta:

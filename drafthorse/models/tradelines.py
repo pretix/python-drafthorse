@@ -108,8 +108,8 @@ class LineSettlement(Element):
     trade_tax = Field(ApplicableTradeTax, required=False, profile=COMFORT)
     accounting_account = Field(AccountingAccount, required=False, profile=EXTENDED,
                                _d="Kostenstelle")
-    monetary_summation = Field(LineSummation, required=False, profile=COMFORT)
     period = Field(BillingSpecifiedPeriod, required=False, profile=COMFORT)
+    monetary_summation = Field(LineSummation, required=False, profile=COMFORT)
     allowance_charge = MultiField(TradeAllowanceCharge, required=False, profile=COMFORT,
                                   _d="Schalter für Zu-/Abschlag")
     invoice_referenced_document = Field(InvoiceReferencedDocument, required=False, profile=EXTENDED)

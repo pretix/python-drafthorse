@@ -10,7 +10,7 @@ from .party import (
     BuyerTradeParty, EndUserTradeParty, InvoiceeTradeParty, PayeeTradeParty,
     SellerTradeParty, SellerTaxRepresentativeTradeParty,
 )
-from .payment import PaymentMeans, PaymentTerms
+from .payment import PaymentMeans, PaymentTerms, TaxApplicableTradeCurrencyExchange
 from .references import (
     AdditionalReferencedDocument, BuyerOrderReferencedDocument,
     ContractReferencedDocument, UltimateCustomerOrderReferencedDocument, ProcuringProjectType, InvoiceReferencedDocument
@@ -68,7 +68,9 @@ class TradeSettlement(Element):
     payee = Field(PayeeTradeParty, required=False, profile=COMFORT,
                   _d="Zahlungsempfänger")
     payment_means = Field(PaymentMeans)
+    invoice_currency = Field(TaxApplicableTradeCurrencyExchange)
     trade_tax = MultiField(ApplicableTradeTax)
+    period = Field(BillingSpecifiedPeriod, required=False, profile=BASIC)
     allowance_charge = MultiField(TradeAllowanceCharge, required=False, profile=COMFORT,
                                   _d="Schalter für Zu-/Abschlag")
     service_charge = MultiField(LogisticsServiceCharge, required=False, profile=COMFORT)
@@ -78,7 +80,6 @@ class TradeSettlement(Element):
     accounting_account = Field(ReceivableAccountingAccount, required=False, profile=EXTENDED,
                                _d="Detailinformationen zur Buchungsreferenz")
     creditor_reference_ID = IDField(NS_RAM, "CreditorReferenceID")
-    period = Field(BillingSpecifiedPeriod, required=False, profile=BASIC)
     tax_currency_code = StringField(NS_RAM, "TaxCurrencyCode", required=False, profile=COMFORT)
     invoice_referenced_document = Field(InvoiceReferencedDocument, required=False, profile=BASIC)
     class Meta:
