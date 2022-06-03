@@ -14,7 +14,7 @@ class Container:
             child.append_to(node)
 
     def get_tag(self):
-        return '{%s}%s' % (self.child_type.Meta.namespace, self.child_type.Meta.tag)
+        return "{%s}%s" % (self.child_type.Meta.namespace, self.child_type.Meta.tag)
 
     def empty_element(self):
         return self.child_type()
@@ -32,7 +32,7 @@ class SimpleContainer(Container):
         self.tag = tag
 
     def get_tag(self):
-        return '{%s}%s' % (self.namespace, self.tag)
+        return "{%s}%s" % (self.namespace, self.tag)
 
     def empty_element(self):
         raise NotImplementedError()
@@ -51,9 +51,9 @@ class SimpleContainer(Container):
 
 
 class CurrencyContainer(SimpleContainer):
-
     def empty_element(self):
         from .elements import CurrencyElement
+
         return CurrencyElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):
@@ -61,12 +61,13 @@ class CurrencyContainer(SimpleContainer):
         el.currency = child[1]
 
     def add_from_etree(self, root):
-        self.add((root.text, root.attrib['currencyID']))
+        self.add((root.text, root.attrib["currencyID"]))
 
 
 class IDContainer(SimpleContainer):
     def empty_element(self):
         from .elements import IDElement
+
         return IDElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):
@@ -74,13 +75,13 @@ class IDContainer(SimpleContainer):
         el.scheme_id = child[0]
 
     def add_from_etree(self, root):
-        self.add((root.attrib['schemeID'], root.text))
+        self.add((root.attrib["schemeID"], root.text))
 
 
 class StringContainer(SimpleContainer):
-
     def empty_element(self):
         from .elements import StringElement
+
         return StringElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):

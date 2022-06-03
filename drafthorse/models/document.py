@@ -5,7 +5,11 @@ from drafthorse.models.note import IncludedNote
 from . import BASIC, EXTENDED, NS_RAM, NS_UDT, NS_RSM, NS_QDT, NS_A
 from .elements import Element
 from .fields import (
-    DateTimeField, Field, IndicatorField, MultiField, MultiStringField,
+    DateTimeField,
+    Field,
+    IndicatorField,
+    MultiField,
+    MultiStringField,
     StringField,
 )
 from .trade import TradeTransaction
@@ -28,12 +32,21 @@ class BusinessDocumentContextParameter(Element):
 
 
 class DocumentContext(Element):
-    test_indicator = IndicatorField(NS_RAM, "TestIndicator", required=False,
-                                    profile=BASIC, _d="Testkennzeichen")
-    business_parameter = Field(BusinessDocumentContextParameter, required=False,
-                               profile=EXTENDED, _d="Geschäftsprozess, Wert")
-    guideline_parameter = Field(GuidelineDocumentContextParameter, required=True,
-                                profile=BASIC, _d="Anwendungsempfehlung")
+    test_indicator = IndicatorField(
+        NS_RAM, "TestIndicator", required=False, profile=BASIC, _d="Testkennzeichen"
+    )
+    business_parameter = Field(
+        BusinessDocumentContextParameter,
+        required=False,
+        profile=EXTENDED,
+        _d="Geschäftsprozess, Wert",
+    )
+    guideline_parameter = Field(
+        GuidelineDocumentContextParameter,
+        required=True,
+        profile=BASIC,
+        _d="Anwendungsempfehlung",
+    )
 
     class Meta:
         namespace = NS_RSM
@@ -49,19 +62,30 @@ class EffectivePeriod(Element):
 
 
 class Header(Element):
-    id = StringField(NS_RAM, "ID", required=True, profile=BASIC,
-                     _d="Rechnungsnummer")
-    name = StringField(NS_RAM, "Name", required=True, profile=BASIC,
-                       _d="Dokumentenart (Freitext)")
-    type_code = StringField(NS_RAM, "TypeCode", required=True, profile=BASIC,
-                            _d="Dokumentenart (Code)")
-    issue_date_time = DateTimeField(NS_RAM, "IssueDateTime", required=True,
-                                    profile=BASIC, _d="Rechnungsdatum")
-    copy_indicator = IndicatorField(NS_RAM, "CopyIndicator", required=False,
-                                    profile=EXTENDED, _d="Indikator Original/Kopie")
+    id = StringField(NS_RAM, "ID", required=True, profile=BASIC, _d="Rechnungsnummer")
+    name = StringField(
+        NS_RAM, "Name", required=True, profile=BASIC, _d="Dokumentenart (Freitext)"
+    )
+    type_code = StringField(
+        NS_RAM, "TypeCode", required=True, profile=BASIC, _d="Dokumentenart (Code)"
+    )
+    issue_date_time = DateTimeField(
+        NS_RAM, "IssueDateTime", required=True, profile=BASIC, _d="Rechnungsdatum"
+    )
+    copy_indicator = IndicatorField(
+        NS_RAM,
+        "CopyIndicator",
+        required=False,
+        profile=EXTENDED,
+        _d="Indikator Original/Kopie",
+    )
     languages = MultiStringField(NS_RAM, "LanguageID", required=False, profile=EXTENDED)
-    effective_period = Field(EffectivePeriod, required=False, profile=EXTENDED,
-                             _d="Vertragliches Fälligkeitsdatum der Rechnung")
+    effective_period = Field(
+        EffectivePeriod,
+        required=False,
+        profile=EXTENDED,
+        _d="Vertragliches Fälligkeitsdatum der Rechnung",
+    )
     notes = MultiField(IncludedNote)
 
     class Meta:

@@ -2,24 +2,24 @@ from . import COMFORT, EXTENDED, NS_RAM, NS_RSM
 from .elements import Element
 from .fields import DirectDateTimeField, StringField, Field, BinaryObjectField
 
+
 class ProcuringProjectType(Element):
     id = StringField(NS_RAM, "ID")
     name = StringField(NS_RAM, "Name")
+
     class Meta:
         namespace = NS_RAM
         tag = "SpecifiedProcuringProject"
 
+
 class ReferencedDocument(Element):
-    date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=False,
-                                           profile=COMFORT)
-    issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
-                                     profile=COMFORT)
-class AttachmentBinaryObject(Element):
-    name = StringField(NS_RAM, "filename", required=False, profile=COMFORT)
-    #mime_code = BinaryObjectField(NS_RAM,"mime_code", profile=COMFORT)
-    class Meta:
-        namespace = NS_RAM
-        tag = "AttachmentBinaryObject"
+    date_time_string = DirectDateTimeField(
+        NS_RAM, "DateTimeString", required=False, profile=COMFORT
+    )
+    issuer_assigned_id = StringField(
+        NS_RAM, "IssuerAssignedID", required=False, profile=COMFORT
+    )
+
 
 class BuyerOrderReferencedDocument(ReferencedDocument):
     class Meta:
@@ -34,27 +34,33 @@ class ContractReferencedDocument(ReferencedDocument):
 
 
 class AdditionalReferencedDocument(Element):
-    issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
-                                     profile=COMFORT)
-    uri_id = StringField(NS_RAM, "URIID", required=False,
-                                     profile=EXTENDED)
-    date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=False,
-                                           profile=COMFORT)
+    issuer_assigned_id = StringField(
+        NS_RAM, "IssuerAssignedID", required=False, profile=COMFORT
+    )
+    uri_id = StringField(NS_RAM, "URIID", required=False, profile=EXTENDED)
+    date_time_string = DirectDateTimeField(
+        NS_RAM, "DateTimeString", required=False, profile=COMFORT
+    )
     type_code = StringField(NS_RAM, "TypeCode", profile=EXTENDED, required=True)
     name = StringField(NS_RAM, "Name", profile=COMFORT, required=False)
-    attached_object = BinaryObjectField(NS_RAM, "AttachmentBinaryObject", required=False, profile=EXTENDED)
+    attached_object = BinaryObjectField(
+        NS_RAM, "AttachmentBinaryObject", required=False, profile=EXTENDED
+    )
+
     class Meta:
         namespace = NS_RAM
         tag = "AdditionalReferencedDocument"
 
+
 class InvoiceReferencedDocument(Element):
-    issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
-                                     profile=COMFORT)
+    issuer_assigned_id = StringField(
+        NS_RAM, "IssuerAssignedID", required=False, profile=COMFORT
+    )
 
-    date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=True,
-                                           profile=COMFORT)
+    date_time_string = DirectDateTimeField(
+        NS_RAM, "DateTimeString", required=True, profile=COMFORT
+    )
     type_code = StringField(NS_RAM, "TypeCode", profile=EXTENDED, required=False)
-
 
     class Meta:
         namespace = NS_RAM
@@ -114,12 +120,16 @@ class LineReceivingAdviceReferencedDocument(ReferencedDocument):
 
 
 class LineAdditionalReferencedDocument(Element):
-    issuer_assigned_id = StringField(NS_RAM, "IssuerAssignedID", required=False,
-                                     profile=COMFORT)
+    issuer_assigned_id = StringField(
+        NS_RAM, "IssuerAssignedID", required=False, profile=COMFORT
+    )
     line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
-    date_time_string = DirectDateTimeField(NS_RAM, "DateTimeString", required=False,
-                                           profile=COMFORT)
-    reference_type_code = StringField(NS_RAM, "ReferenceTypeCode", profile=EXTENDED, required=True)
+    date_time_string = DirectDateTimeField(
+        NS_RAM, "DateTimeString", required=False, profile=COMFORT
+    )
+    reference_type_code = StringField(
+        NS_RAM, "ReferenceTypeCode", profile=EXTENDED, required=True
+    )
 
     class Meta:
         namespace = NS_RAM

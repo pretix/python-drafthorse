@@ -8,7 +8,10 @@ logger = logging.getLogger("drafthorse")
 def minify(xml):
     try:
         from lxml import etree
-        return b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(etree.fromstring(xml))
+
+        return b'<?xml version="1.0" encoding="UTF-8"?>' + etree.tostring(
+            etree.fromstring(xml)
+        )
     except ImportError:
         logger.warning("Could not minify output as LXML is not installed.")
         return xml
@@ -22,7 +25,7 @@ def prettify(xml, **kwargs):
         return reparsed.toprettyxml(indent="\t")
     else:
         parser = etree.XMLParser(remove_blank_text=True, **kwargs)
-        return b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(
+        return b'<?xml version="1.0" encoding="UTF-8"?>' + etree.tostring(
             etree.fromstring(xml, parser), pretty_print=True
         )
 
@@ -34,7 +37,11 @@ def validate_xml(xmlout, schema):
         logger.warning("Could not validate output as LXML is not installed.")
         return xmlout
     if schema is not None:
-        schema = etree.XMLSchema(file=os.path.join(os.path.dirname(__file__), 'schema', schema + '.xsd'))
+        schema = etree.XMLSchema(
+            file=os.path.join(os.path.dirname(__file__), "schema", schema + ".xsd")
+        )
     parser = etree.XMLParser(schema=schema)
     xml_root = etree.fromstring(xmlout, parser)
-    return b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(xml_root, pretty_print=True)
+    return b'<?xml version="1.0" encoding="UTF-8"?>' + etree.tostring(
+        xml_root, pretty_print=True
+    )
