@@ -93,7 +93,7 @@ class Header(Element):
         tag = "ExchangedDocument"
 
 
-class Invoice(Element):
+class Document(Element):
     context = Field(DocumentContext, required=True)
     header = Field(Header, required=True)
     trade = Field(TradeTransaction, required=True)
