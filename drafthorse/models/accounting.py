@@ -177,7 +177,7 @@ class MonetarySummation(Element):
         profile=BASIC,
         _d="Steuerbasisbetrag",
     )
-    tax_total = MultiDecimalField(
+    tax_total = DecimalField(
         NS_RAM, "TaxTotalAmount", required=True, profile=BASIC, _d="Steuergesamtbetrag"
     )
     grand_total = DecimalField(

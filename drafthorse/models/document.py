@@ -33,7 +33,7 @@ class BusinessDocumentContextParameter(Element):
 
 class DocumentContext(Element):
     test_indicator = IndicatorField(
-        NS_RAM, "TestIndicator", required=False, profile=BASIC, _d="Testkennzeichen"
+        NS_RAM, "TestIndicator", required=False, profile=EXTENDED, _d="Testkennzeichen"
     )
     business_parameter = Field(
         BusinessDocumentContextParameter,

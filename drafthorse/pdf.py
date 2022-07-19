@@ -158,7 +158,7 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     fx_doc_filename = etree.SubElement(
         zugferd_desc, ns_zf + "DocumentFileName", nsmap=nsmap_zf
     )
-    fx_doc_filename.text = "ZUGFeRD-invoice.xml"
+    fx_doc_filename.text = "{}.xml".format(level)
     fx_doc_version = etree.SubElement(zugferd_desc, ns_zf + "Version", nsmap=nsmap_zf)
     fx_doc_version.text = "1.0"
     fx_conformance_level = etree.SubElement(
@@ -167,7 +167,7 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     fx_conformance_level.text = level
 
     xmp_file = os.path.join(
-        os.path.dirname(__file__), "schema", "ZUGFeRD1p0_extension_schema.xmp"
+        os.path.dirname(__file__), "schema", "ZUGFeRD2p2_extension_schema_{}.xmp".format(level)
     )
     # Reason for defining a parser below:
     # http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output
@@ -219,7 +219,7 @@ def _facturx_update_metadata_add_attachment(
         {NameObject("/F"): file_entry_obj, NameObject("/UF"): file_entry_obj}
     )
 
-    fname_obj = createStringObject("ZUGFeRD-invoice.xml")
+    fname_obj = createStringObject(facturx_level + ".xml")
     filespec_dict = DictionaryObject(
         {
             NameObject("/AFRelationship"): NameObject("/Alternative"),

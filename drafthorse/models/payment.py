@@ -49,7 +49,7 @@ class PayeeFinancialInstitution(Element):
 
 
 class PaymentMeans(Element):
-    type_code = StringField(NS_RAM, "TypeCode", required=False, profile=COMFORT)
+    type_code = StringField(NS_RAM, "TypeCode", required=True, profile=COMFORT)
     information = MultiStringField(
         NS_RAM, "Information", required=False, profile=COMFORT
     )
