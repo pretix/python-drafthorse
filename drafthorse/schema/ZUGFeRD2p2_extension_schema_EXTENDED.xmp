@@ -21,22 +21,23 @@ Adjustments for ZUGFeRD 1.0:
 - switched to new namespace URI
 - adjusted property descriptions in the extension schema descriptions
 2013-06-19 (based on ZUGFeRD RC)
-Added a trailing hash character "#" to the "zf" namespace name as required
+Added a trailing hash character "#" to the "fx" namespace name as required
 by the XMP 2005 specification which is referenced in PDF/A-2 and PDF/A-3.
 Without this change Acrobat XI Preflight validation for PDF/A-3 complains
 "Extension schema present but not valid"
 2013-06-19
-Singled out the zf properties into a separate rdf:Description node to work
+Singled out the fx properties into a separate rdf:Description node to work
+NOTE: the fx namespace has been altered to fx since ZUGfERD v2.1
 around bug #4433 in PDFlib 9.0.0 which has been fixed in PDFlib 9.0.1.
 -->
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
   <!-- The actual ZUGFeRD properties; adjust if required -->
-  <rdf:Description rdf:about="" xmlns:zf="urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#">
-  	 <zf:ConformanceLevel>EXTENDED</zf:ConformanceLevel>
-  	 <zf:DocumentFileName>EXTENDED.xml</zf:DocumentFileName>
-  	 <zf:DocumentType>INVOICE</zf:DocumentType>
-	 <zf:Version>1.0</zf:Version>
+  <rdf:Description rdf:about="" xmlns:fx="urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#">
+  	 <fx:ConformanceLevel>EXTENDED</fx:ConformanceLevel>
+  	 <fx:DocumentFileName>EXTENDED.xml</fx:DocumentFileName>
+  	 <fx:DocumentType>INVOICE</fx:DocumentType>
+	 <fx:Version>1.0</fx:Version>
   </rdf:Description>
 
   <!-- PDF/A extension schema description for the ZUGFeRD schema.
@@ -51,7 +52,7 @@ around bug #4433 in PDFlib 9.0.0 which has been fixed in PDFlib 9.0.1.
 		   <rdf:li rdf:parseType="Resource">
 			  <pdfaSchema:schema>ZUGFeRD PDFA Extension Schema</pdfaSchema:schema>
 			  <pdfaSchema:namespaceURI>urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#</pdfaSchema:namespaceURI>
-			  <pdfaSchema:prefix>zf</pdfaSchema:prefix>
+			  <pdfaSchema:prefix>fx</pdfaSchema:prefix>
 			  <pdfaSchema:property>
 				 <rdf:Seq>
 					<rdf:li rdf:parseType="Resource">
