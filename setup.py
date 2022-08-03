@@ -27,13 +27,13 @@ setup(
         "Intended Audience :: Developers",
         "Intended Audience :: Other Audience",
         "License :: OSI Approved :: Apache Software License",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     keywords="xml banking sepa",
-    install_requires=["lxml", "PyPDF2"]
-    + (["isoweek"] if sys.version_info < (3, 6) else []),
+    install_requires=["lxml", "PyPDF2"],
     packages=find_packages(include=["drafthorse", "drafthorse.*"]),
     include_package_data=True,
 )
