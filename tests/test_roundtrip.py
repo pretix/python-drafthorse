@@ -5,7 +5,7 @@ from difflib import unified_diff
 import pytest
 import lxml.etree
 
-from drafthorse.models.document import Invoice
+from drafthorse.models.document import Document
 from drafthorse.utils import prettify, validate_xml
 
 samples = os.listdir(os.path.join(os.path.dirname(__file__), "samples"))
@@ -31,7 +31,7 @@ def test_sample_roundtrip(filename):
     validate_xml(xmlout=origxml, schema=schema)
 
     # Parse the sample file into our internal python structure
-    doc = Invoice.parse(origxml)
+    doc = Document.parse(origxml)
 
     # Validate output XML and render a diff for debugging
     # skip first line (namespace order…)
