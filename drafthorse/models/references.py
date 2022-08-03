@@ -1,6 +1,6 @@
-from . import COMFORT, EXTENDED, NS_RAM, NS_RSM
+from . import COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import DirectDateTimeField, StringField, Field, BinaryObjectField
+from .fields import DirectDateTimeField, StringField, BinaryObjectField
 
 
 class ProcuringProjectType(Element):

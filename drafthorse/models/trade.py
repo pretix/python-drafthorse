@@ -10,7 +10,7 @@ from .accounting import (
 )
 from .delivery import TradeDelivery
 from .elements import Element
-from .fields import DecimalField, Field, MultiField, StringField, IDField
+from .fields import DecimalField, Field, MultiField, StringField
 from .party import (
     BuyerTradeParty,
     EndUserTradeParty,

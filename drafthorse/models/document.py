@@ -1,7 +1,6 @@
 import xml.etree.cElementTree as ET
 
 from drafthorse.models.note import IncludedNote
-
 from . import BASIC, EXTENDED, NS_RAM, NS_UDT, NS_RSM, NS_QDT, NS_A
 from .elements import Element
 from .fields import (
