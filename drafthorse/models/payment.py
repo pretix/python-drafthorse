@@ -5,12 +5,12 @@ from .fields import (
     DateTimeField,
     DecimalField,
     Field,
-    MultiDecimalField,
     MultiStringField,
     QuantityField,
     StringField,
     DirectDateTimeField,
     IDField,
+    MultiCurrencyField,
 )
 
 
@@ -184,7 +184,7 @@ class PaymentTerms(Element):
     debit_mandate_id = StringField(
         NS_RAM, "DirectDebitMandateID", required=False, profile=BASIC
     )
-    partial_amount = MultiDecimalField(
+    partial_amount = MultiCurrencyField(
         NS_RAM,
         "PartialPaymentAmount",
         profile=EXTENDED,

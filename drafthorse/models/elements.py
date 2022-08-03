@@ -181,7 +181,7 @@ class QuantityElement(StringElement):
 
 
 class CurrencyElement(StringElement):
-    def __init__(self, namespace, tag, amount="", currency="EUR"):
+    def __init__(self, namespace, tag, amount="", currency=None):
         super().__init__(namespace, tag)
         self.amount = amount
         self.currency = currency
@@ -189,12 +189,15 @@ class CurrencyElement(StringElement):
     def to_etree(self):
         node = self._etree_node()
         node.text = str(self.amount)
-        node.attrib["currencyID"] = self.currency
+        if self.currency is not None:
+            node.attrib["currencyID"] = self.currency
+        elif "currencyID" in node.attrib:
+            del node.attrib["currencyID"]
         return node
 
     def from_etree(self, root):
         self.amount = Decimal(root.text)
-        self.currency = root.attrib.get("currencyID", "EUR")
+        self.currency = root.attrib.get("currencyID") or None
         self.set_on_input = True
         return self
 

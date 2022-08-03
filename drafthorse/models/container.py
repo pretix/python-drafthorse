@@ -61,7 +61,10 @@ class CurrencyContainer(SimpleContainer):
         el.currency = child[1]
 
     def add_from_etree(self, root):
-        self.add((root.text, root.attrib["currencyID"]))
+        if root.attrib.get("currencyID"):
+            self.add((root.text, root.attrib["currencyID"]))
+        else:
+            self.add(root.text)
 
 
 class IDContainer(SimpleContainer):

@@ -2,14 +2,13 @@ from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (
     CurrencyField,
-    Field,
     DateTimeField,
     DecimalField,
     IndicatorField,
     MultiField,
     QuantityField,
     StringField,
-    MultiDecimalField,
+    MultiCurrencyField,
 )
 
 
@@ -170,17 +169,20 @@ class MonetarySummation(Element):
         profile=BASIC,
         _d="Gesamtbetrag der Abschläge",
     )
-    tax_basis_total = DecimalField(
+    tax_basis_total = CurrencyField(
         NS_RAM,
         "TaxBasisTotalAmount",
         required=True,
         profile=BASIC,
         _d="Steuerbasisbetrag",
     )
-    tax_total = DecimalField(
+    tax_total = CurrencyField(
         NS_RAM, "TaxTotalAmount", required=True, profile=BASIC, _d="Steuergesamtbetrag"
     )
-    grand_total = DecimalField(
+    tax_total_other_currency = MultiCurrencyField(
+        NS_RAM, "TaxTotalAmount", profile=EXTENDED, _d="Steuergesamtbetrag"
+    )
+    grand_total = CurrencyField(
         NS_RAM, "GrandTotalAmount", required=True, profile=BASIC, _d="Bruttosumme"
     )
     prepaid_total = DecimalField(
