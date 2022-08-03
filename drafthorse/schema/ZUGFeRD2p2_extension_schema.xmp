@@ -1,0 +1,68 @@
+<!--
+(c) PDFlib GmbH 2019
+
+Sample Factur-X XMP with the required PDF/A extension schema description
+for the XMP properties of the Factur-X schema and the actual Factur-X properties.
+
+Schema name: Factur-X PDFA Extension Schema
+Preferred schema namespace prefix: fx
+Schema namespace URI: urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#
+
+Based on the Factur-X specification published at http://fnfe-mpe.org/factur-x/factur-x_en/
+-->
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+  <!-- The actual Factur-X properties; adjust if required -->
+  <rdf:Description rdf:about="" xmlns:fx="urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#">
+  	 <fx:ConformanceLevel>BASIC</fx:ConformanceLevel>
+  	 <fx:DocumentFileName>factur-x.xml</fx:DocumentFileName>
+  	 <fx:DocumentType>INVOICE</fx:DocumentType>
+	 <fx:Version>1.0</fx:Version>
+  </rdf:Description>
+
+  <!-- PDF/A extension schema description for the Factur-X schema.  -->
+  <rdf:Description rdf:about=""
+		xmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/"
+		xmlns:pdfaSchema="http://www.aiim.org/pdfa/ns/schema#"
+		xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#">
+
+	 <pdfaExtension:schemas>
+		<rdf:Bag>
+		   <rdf:li rdf:parseType="Resource">
+			  <pdfaSchema:schema>Factur-X PDF/A Extension Schema</pdfaSchema:schema>
+			  <pdfaSchema:namespaceURI>urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#</pdfaSchema:namespaceURI>
+			  <pdfaSchema:prefix>fx</pdfaSchema:prefix>
+			  <pdfaSchema:property>
+				 <rdf:Seq>
+					<rdf:li rdf:parseType="Resource">
+					   <pdfaProperty:name>DocumentFileName</pdfaProperty:name>
+					   <pdfaProperty:valueType>Text</pdfaProperty:valueType>
+					   <pdfaProperty:category>external</pdfaProperty:category>
+					   <pdfaProperty:description>name of the embedded XML invoice file</pdfaProperty:description>
+					</rdf:li>
+					<rdf:li rdf:parseType="Resource">
+					   <pdfaProperty:name>DocumentType</pdfaProperty:name>
+					   <pdfaProperty:valueType>Text</pdfaProperty:valueType>
+					   <pdfaProperty:category>external</pdfaProperty:category>
+					   <pdfaProperty:description>INVOICE</pdfaProperty:description>
+					</rdf:li>
+					<rdf:li rdf:parseType="Resource">
+					   <pdfaProperty:name>Version</pdfaProperty:name>
+					   <pdfaProperty:valueType>Text</pdfaProperty:valueType>
+					   <pdfaProperty:category>external</pdfaProperty:category>
+					   <pdfaProperty:description>The actual version of the Factur-X XML schema</pdfaProperty:description>
+					</rdf:li>
+					<rdf:li rdf:parseType="Resource">
+					   <pdfaProperty:name>ConformanceLevel</pdfaProperty:name>
+					   <pdfaProperty:valueType>Text</pdfaProperty:valueType>
+					   <pdfaProperty:category>external</pdfaProperty:category>
+					   <pdfaProperty:description>The conformance level of the embedded Factur-X data</pdfaProperty:description>
+					</rdf:li>
+				 </rdf:Seq>
+			  </pdfaSchema:property>
+		   </rdf:li>
+		</rdf:Bag>
+	 </pdfaExtension:schemas>
+  </rdf:Description>
+</rdf:RDF>

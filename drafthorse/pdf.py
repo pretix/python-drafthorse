@@ -47,8 +47,6 @@ def attach_xml(original_pdf, xml_data, level="BASIC"):
 
     reader = PdfReader(BytesIO(original_pdf))
     output = PdfWriter()
-    # for page in reader.pages:
-    #    output.addPage(page)
 
     output._header = "%PDF-1.6\r\n%\xc7\xec\x8f\xa2".encode()
     output.append_pages_from_reader(reader)
@@ -105,7 +103,7 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     nsmap_pdf = {"pdf": "http://ns.adobe.com/pdf/1.3/"}
     nsmap_xmp = {"xmp": "http://ns.adobe.com/xap/1.0/"}
     nsmap_pdfaid = {"pdfaid": "http://www.aiim.org/pdfa/ns/id/"}
-    nsmap_zf = {"zf": "urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#"}
+    nsmap_zf = {"zf": "urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#"}
     ns_x = "{%s}" % nsmap_x["x"]
     ns_dc = "{%s}" % nsmap_dc["dc"]
     ns_rdf = "{%s}" % nsmap_rdf["rdf"]
@@ -158,7 +156,7 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     fx_doc_filename = etree.SubElement(
         zugferd_desc, ns_zf + "DocumentFileName", nsmap=nsmap_zf
     )
-    fx_doc_filename.text = "{}.xml".format(level)
+    fx_doc_filename.text = "factur-x.xml"
     fx_doc_version = etree.SubElement(zugferd_desc, ns_zf + "Version", nsmap=nsmap_zf)
     fx_doc_version.text = "1.0"
     fx_conformance_level = etree.SubElement(
@@ -167,7 +165,7 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     fx_conformance_level.text = level
 
     xmp_file = os.path.join(
-        os.path.dirname(__file__), "schema", "ZUGFeRD2p2_extension_schema_{}.xmp".format(level)
+        os.path.dirname(__file__), "schema", "ZUGFeRD2p2_extension_schema.xmp".format(level)
     )
     # Reason for defining a parser below:
     # http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output
@@ -219,10 +217,10 @@ def _facturx_update_metadata_add_attachment(
         {NameObject("/F"): file_entry_obj, NameObject("/UF"): file_entry_obj}
     )
 
-    fname_obj = createStringObject(facturx_level + ".xml")
+    fname_obj = createStringObject("factur-x.xml")
     filespec_dict = DictionaryObject(
         {
-            NameObject("/AFRelationship"): NameObject("/Alternative"),
+            NameObject("/AFRelationship"): NameObject("/Data" if facturx_level in ("BASIC-WL", "MINIMUM") else "/Alternative"),
             NameObject("/Desc"): createStringObject(
                 "Invoice metadata conforming to ZUGFeRD standard (http://www.ferd-net.de/front_content.php?idcat=231&lang=4)"
             ),
