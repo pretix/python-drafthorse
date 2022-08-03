@@ -29,7 +29,7 @@ import os
 from io import BytesIO
 
 from lxml import etree
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 from PyPDF2.generic import (
     ArrayObject,
     DecodedStreamObject,
@@ -45,13 +45,13 @@ def attach_xml(original_pdf, xml_data, level="BASIC"):
     if not isinstance(xml_data, bytes):
         raise TypeError("Please supply XML data as bytes.")
 
-    reader = PdfFileReader(BytesIO(original_pdf))
-    output = PdfFileWriter()
+    reader = PdfReader(BytesIO(original_pdf))
+    output = PdfWriter()
     # for page in reader.pages:
     #    output.addPage(page)
 
     output._header = "%PDF-1.6\r\n%\xc7\xec\x8f\xa2".encode()
-    output.appendPagesFromReader(reader)
+    output.append_pages_from_reader(reader)
 
     original_pdf_id = reader.trailer.get("/ID")
     if original_pdf_id:
@@ -204,7 +204,7 @@ def _facturx_update_metadata_add_attachment(
         }
     )
     file_entry = DecodedStreamObject()
-    file_entry.setData(facturx_xml_str)  # here we integrate the file itself
+    file_entry.set_data(facturx_xml_str)  # here we integrate the file itself
     file_entry.update(
         {
             NameObject("/Type"): NameObject("/EmbeddedFile"),
@@ -213,7 +213,7 @@ def _facturx_update_metadata_add_attachment(
             NameObject("/Subtype"): NameObject("/text#2Fxml"),
         }
     )
-    file_entry_obj = pdf_filestream._addObject(file_entry)
+    file_entry_obj = pdf_filestream._add_object(file_entry)
     # The Filespec entry
     ef_dict = DictionaryObject(
         {NameObject("/F"): file_entry_obj, NameObject("/UF"): file_entry_obj}
@@ -232,7 +232,7 @@ def _facturx_update_metadata_add_attachment(
             NameObject("/UF"): fname_obj,
         }
     )
-    filespec_obj = pdf_filestream._addObject(filespec_dict)
+    filespec_obj = pdf_filestream._add_object(filespec_dict)
     name_arrayobj_cdict = {fname_obj: filespec_obj}
     name_arrayobj_content_sort = list(
         sorted(name_arrayobj_cdict.items(), key=lambda x: x[0])
@@ -252,13 +252,13 @@ def _facturx_update_metadata_add_attachment(
     )
     res_output_intents = []
     for output_intent_dict, dest_output_profile_dict in output_intents:
-        dest_output_profile_obj = pdf_filestream._addObject(dest_output_profile_dict)
+        dest_output_profile_obj = pdf_filestream._add_object(dest_output_profile_dict)
         # TODO detect if there are no other objects in output_intent_dest_obj
         # than /DestOutputProfile
         output_intent_dict.update(
             {NameObject("/DestOutputProfile"): dest_output_profile_obj}
         )
-        output_intent_obj = pdf_filestream._addObject(output_intent_dict)
+        output_intent_obj = pdf_filestream._add_object(output_intent_dict)
         res_output_intents.append(output_intent_obj)
     # Update the root
     metadata_xml_str = _prepare_pdf_metadata_xml(facturx_level, pdf_metadata)
@@ -270,8 +270,8 @@ def _facturx_update_metadata_add_attachment(
             NameObject("/Type"): NameObject("/Metadata"),
         }
     )
-    metadata_obj = pdf_filestream._addObject(metadata_file_entry)
-    af_value_obj = pdf_filestream._addObject(ArrayObject(af_list))
+    metadata_obj = pdf_filestream._add_object(metadata_file_entry)
+    af_value_obj = pdf_filestream._add_object(ArrayObject(af_list))
     pdf_filestream._root_object.update(
         {
             NameObject("/AF"): af_value_obj,
