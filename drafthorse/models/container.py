@@ -57,8 +57,8 @@ class CurrencyContainer(SimpleContainer):
         return CurrencyElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):
-        el.amount = child[0]
-        el.currency = child[1]
+        el._amount = child[0]
+        el._currency = child[1]
 
     def add_from_etree(self, root):
         if root.attrib.get("currencyID"):
@@ -74,8 +74,8 @@ class IDContainer(SimpleContainer):
         return IDElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):
-        el.text = child[1]
-        el.scheme_id = child[0]
+        el._text = child[1]
+        el._scheme_id = child[0]
 
     def add_from_etree(self, root):
         self.add((root.attrib["schemeID"], root.text))
@@ -88,7 +88,7 @@ class StringContainer(SimpleContainer):
         return StringElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):
-        el.text = child
+        el._text = child
 
     def add_from_etree(self, root):
         self.add(root.text)

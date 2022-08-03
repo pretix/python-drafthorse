@@ -47,7 +47,7 @@ class StringField(Field):
     def __set__(self, instance, value):
         if instance._data.get(self.name, None) is None:
             instance._data[self.name] = self.initialize()
-        instance._data[self.name].text = value
+        instance._data[self.name]._text = value
 
 
 class AgencyIDField(Field):
@@ -69,8 +69,8 @@ class AgencyIDField(Field):
 
         if not isinstance(value, (tuple, list)):
             raise TypeError("Please pass a 2-tuple of scheme agency ID and ID.")
-        instance._data[self.name].text = value[1]
-        instance._data[self.name].scheme_id = value[0]
+        instance._data[self.name]._text = value[1]
+        instance._data[self.name]._scheme_id = value[0]
 
 
 class ClassificationField(Field):
@@ -92,9 +92,9 @@ class ClassificationField(Field):
 
         if not isinstance(value, (tuple, list)):
             raise TypeError("Please pass a 3-tuple of list ID, list version and ID.")
-        instance._data[self.name].text = value[2]
-        instance._data[self.name].list_id = value[0]
-        instance._data[self.name].list_version_id = value[1]
+        instance._data[self.name]._text = value[2]
+        instance._data[self.name]._list_id = value[0]
+        instance._data[self.name]._list_version_id = value[1]
 
 
 class IDField(Field):
@@ -116,8 +116,8 @@ class IDField(Field):
 
         if not isinstance(value, (tuple, list)):
             raise TypeError("Please pass a 2-tuple of including scheme ID and ID.")
-        instance._data[self.name].text = value[1]
-        instance._data[self.name].scheme_id = value[0]
+        instance._data[self.name]._text = value[1]
+        instance._data[self.name]._scheme_id = value[0]
 
 
 class CurrencyField(Field):
@@ -139,8 +139,8 @@ class CurrencyField(Field):
         if not isinstance(value, (tuple, list)):
             raise TypeError("Please pass a 2-tuple of including amount and currency.")
 
-        instance._data[self.name].amount = value[0]
-        instance._data[self.name].currency = value[1]
+        instance._data[self.name]._amount = value[0]
+        instance._data[self.name]._currency = value[1]
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)
@@ -159,7 +159,7 @@ class DecimalField(Field):
     def __set__(self, instance, value):
         if instance._data.get(self.name, None) is None:
             instance._data[self.name] = self.initialize()
-        instance._data[self.name].value = value
+        instance._data[self.name]._value = value
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)
@@ -181,8 +181,8 @@ class QuantityField(Field):
 
         if not isinstance(value, (tuple, list)):
             raise TypeError("Please pass a 2-tuple of including amount and unit code.")
-        instance._data[self.name].amount = value[0]
-        instance._data[self.name].unit_code = value[1]
+        instance._data[self.name]._amount = value[0]
+        instance._data[self.name]._unit_code = value[1]
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)
@@ -204,9 +204,9 @@ class BinaryObjectField(Field):
 
         if not isinstance(value, (tuple, list)):
             raise TypeError("Please pass a 2-tuple of including amount and unit code.")
-        instance._data[self.name].text = value[2]
-        instance._data[self.name].mime_code = value[0]
-        instance._data[self.name].filename = value[1]
+        instance._data[self.name]._text = value[2]
+        instance._data[self.name]._mime_code = value[0]
+        instance._data[self.name]._filename = value[1]
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)
@@ -225,7 +225,7 @@ class IndicatorField(Field):
     def __set__(self, instance, value):
         if instance._data.get(self.name, None) is None:
             instance._data[self.name] = self.initialize()
-        instance._data[self.name].value = value
+        instance._data[self.name]._value = value
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)
@@ -244,7 +244,7 @@ class DateTimeField(Field):
     def __set__(self, instance, value):
         if instance._data.get(self.name, None) is None:
             instance._data[self.name] = self.initialize()
-        instance._data[self.name].value = value
+        instance._data[self.name]._value = value
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)
@@ -263,7 +263,7 @@ class DirectDateTimeField(Field):
     def __set__(self, instance, value):
         if instance._data.get(self.name, None) is None:
             instance._data[self.name] = self.initialize()
-        instance._data[self.name].value = value
+        instance._data[self.name]._value = value
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)
