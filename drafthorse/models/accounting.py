@@ -60,8 +60,8 @@ class LineApplicableTradeTax(Element):
         profile=COMFORT,
         _d="Steuerkategorie (Wert)",
     )
-    applicable_percent = DecimalField(
-        NS_RAM, "ApplicablePercent", required=True, profile=BASIC
+    rate_applicable_percent = DecimalField(
+        NS_RAM, "RateApplicablePercent", required=True, profile=BASIC
     )
 
     class Meta:
@@ -89,6 +89,18 @@ class ApplicableTradeTax(Element):
         required=False,
         profile=EXTENDED,
         _d="Grund der Steuerbefreiung (Code)",
+    )
+    tax_point_date = DateTimeField(
+        NS_RAM,
+        "TaxPointDate",
+        required=False,
+        profile=COMFORT
+    )
+    due_date_type_code = StringField(
+        NS_RAM,
+        "DueDateTypeCode",
+        required=False,
+        profile=BASIC,
     )
     basis_amount = DecimalField(
         NS_RAM,
@@ -141,6 +153,9 @@ class ReceivableAccountingAccount(Element):
     id = StringField(
         NS_RAM, "ID", required=True, profile=EXTENDED, _d="Buchungsreferenz"
     )
+    type_code = StringField(
+        NS_RAM, "TypeCode", required=True, profile=EXTENDED
+    )
 
     class Meta:
         namespace = NS_RAM
@@ -182,6 +197,9 @@ class MonetarySummation(Element):
     tax_total_other_currency = MultiCurrencyField(
         NS_RAM, "TaxTotalAmount", profile=EXTENDED, _d="Steuergesamtbetrag"
     )
+    rounding_amount = DecimalField(
+        NS_RAM, "RoundingAmount", required=False, profile=COMFORT,
+    )
     grand_total = CurrencyField(
         NS_RAM, "GrandTotalAmount", required=True, profile=BASIC, _d="Bruttosumme"
     )
@@ -204,7 +222,7 @@ class MonetarySummation(Element):
 class AppliedTradeTax(Element):
     type_code = StringField(NS_RAM, "TypeCode", required=True, profile=COMFORT)
     category_code = StringField(NS_RAM, "CategoryCode", required=True, profile=COMFORT)
-    rate_applicable_percent = StringField(
+    rate_applicable_percent = DecimalField(
         NS_RAM, "RateApplicablePercent", required=True, profile=COMFORT
     )
 
@@ -234,14 +252,14 @@ class TradeAllowanceCharge(Element):
         profile=EXTENDED,
         _d="Berechnungsreihenfolge",
     )
-    calculation_percent = DecimalField(
+    calculation_percent = DecimalField(  # TODO: Should be deprecated?
         NS_RAM,
         "CalculationPercent",
         required=False,
         profile=EXTENDED,
         _d="Rabatt in Prozent",
     )
-    basis_amount = DecimalField(
+    basis_amount = DecimalField(  # TODO: Should be deprecated?
         NS_RAM,
         "BasisAmount",
         required=False,

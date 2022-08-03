@@ -10,23 +10,22 @@ from .accounting import (
 )
 from .delivery import TradeDelivery
 from .elements import Element
-from .fields import DecimalField, Field, MultiField, StringField
+from .fields import DecimalField, Field, MultiField, StringField, DateTimeField
 from .party import (
     BuyerTradeParty,
     EndUserTradeParty,
     InvoiceeTradeParty,
     PayeeTradeParty,
     SellerTradeParty,
-    SellerTaxRepresentativeTradeParty,
+    SellerTaxRepresentativeTradeParty, InvoicerTradeParty,
 )
 from .payment import PaymentMeans, PaymentTerms, TaxApplicableTradeCurrencyExchange
 from .references import (
     AdditionalReferencedDocument,
-    BuyerOrderReferencedDocument,
     ContractReferencedDocument,
     UltimateCustomerOrderReferencedDocument,
     ProcuringProjectType,
-    InvoiceReferencedDocument,
+    InvoiceReferencedDocument, BuyerOrderReferencedDocument,
 )
 from .tradelines import LineItem
 
@@ -61,12 +60,12 @@ class TradeAgreement(Element):
         EndUserTradeParty, required=False, _d="Abweichender Endverbraucher"
     )
     delivery_terms = Field(DeliveryTerms, required=False, profile=EXTENDED)
-    buyer_order = Field(BuyerOrderReferencedDocument, required=False, profile=COMFORT)
+    seller_order = Field(SellerOrderReferencedDocument, required=False, profile=COMFORT)
+    buyer_order = Field(BuyerOrderReferencedDocument, required=False)
     customer_order = Field(
         UltimateCustomerOrderReferencedDocument, required=False, profile=COMFORT
     )
     contract = Field(ContractReferencedDocument, required=False, profile=COMFORT)
-    order_document = Field(SellerOrderReferencedDocument, required=False)
     additional_references = MultiField(
         AdditionalReferencedDocument, required=False, profile=COMFORT
     )
@@ -103,13 +102,64 @@ class LogisticsServiceCharge(Element):
         tag = "SpecifiedLogisticsServiceCharge"
 
 
+class IncludedTradeTax(Element):
+    calculated_amount = DecimalField(
+        NS_RAM, "CalculatedAmount", required=True, profile=BASIC, _d="Steuerbetrag"
+    )
+    type_code = StringField(
+        NS_RAM, "TypeCode", required=True, profile=BASIC, _d="Steuerart (Code)"
+    )
+    exemption_reason = StringField(
+        NS_RAM,
+        "ExemptionReason",
+        required=False,
+        profile=COMFORT,
+        _d="Grund der Steuerbefreiung (Freitext)",
+    )
+    exemption_reason_code = StringField(
+        NS_RAM,
+        "ExemptionReasonCode",
+        required=False,
+        profile=EXTENDED,
+        _d="Grund der Steuerbefreiung (Code)",
+    )
+    category_code = StringField(
+        NS_RAM,
+        "CategoryCode",
+        required=False,
+        profile=COMFORT,
+        _d="Steuerkategorie (Wert)",
+    )
+    rate_applicable_percent = DecimalField(
+        NS_RAM, "RateApplicablePercent", required=True, profile=BASIC
+    )
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "IncludedTradeTax"
+
+
+class AdvancePayment(Element):
+    paid_amount = DecimalField(NS_RAM, "PaidAmount")
+    received_date = DateTimeField(NS_RAM, "FormattedReceivedDateTime")
+    included_trade_tax = MultiField(IncludedTradeTax)
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "SpecifiedAdvancePayment"
+
+
 class TradeSettlement(Element):
-    creditor_reference_ID = StringField(NS_RAM, "CreditorReferenceID")
+    creditor_reference_id = StringField(NS_RAM, "CreditorReferenceID")
     payment_reference = StringField(NS_RAM, "PaymentReference")
     tax_currency_code = StringField(
         NS_RAM, "TaxCurrencyCode", required=False, profile=COMFORT
     )
     currency_code = StringField(NS_RAM, "InvoiceCurrencyCode")
+    issuer_reference = StringField(NS_RAM, "InvoiceIssuerReference", profile=EXTENDED)
+    invoicer = Field(
+        InvoicerTradeParty, required=False, profile=COMFORT, _d="Rechnungsaussteller"
+    )
     invoicee = Field(
         InvoiceeTradeParty, required=False, profile=COMFORT, _d="Rechnungsempfänger"
     )
@@ -139,6 +189,9 @@ class TradeSettlement(Element):
         required=False,
         profile=EXTENDED,
         _d="Detailinformationen zur Buchungsreferenz",
+    )
+    advance_payment = MultiField(
+        AdvancePayment, required=False, profile=EXTENDED
     )
     invoice_referenced_document = Field(
         InvoiceReferencedDocument, required=False, profile=BASIC

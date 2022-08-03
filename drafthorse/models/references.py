@@ -123,13 +123,21 @@ class LineAdditionalReferencedDocument(Element):
     issuer_assigned_id = StringField(
         NS_RAM, "IssuerAssignedID", required=False, profile=COMFORT
     )
+    uri_id = StringField(NS_RAM, "URIID", required=False, profile=EXTENDED)
     line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
+    type_code = StringField(
+        NS_RAM, "TypeCode", required=False, profile=EXTENDED
+    )
+    name = StringField(
+        NS_RAM, "Name", required=False, profile=EXTENDED
+    )
     date_time_string = DirectDateTimeField(
-        NS_RAM, "DateTimeString", required=False, profile=COMFORT
+        NS_RAM, "FormattedIssueDateTime", required=False, profile=COMFORT
     )
     reference_type_code = StringField(
         NS_RAM, "ReferenceTypeCode", profile=EXTENDED, required=True
     )
+    # todo: AttachmentBinaryObject
 
     class Meta:
         namespace = NS_RAM

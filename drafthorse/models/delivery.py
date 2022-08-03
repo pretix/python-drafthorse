@@ -27,7 +27,7 @@ class LogisticsTransportMovement(Element):
         tag = "SpecifiedLogisticsTransportMovement"
 
 
-class SupplyChainConsignment(Element):
+class SupplyChainConsignment(Element):  # TODO: Deprecated?
     movement = Field(LogisticsTransportMovement, required=False, profile=EXTENDED)
 
     class Meta:

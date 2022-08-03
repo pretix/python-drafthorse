@@ -8,7 +8,7 @@ from .accounting import (
 )
 from .delivery import SupplyChainEvent
 from .elements import Element
-from .fields import DecimalField, Field, MultiField, QuantityField, StringField
+from .fields import DecimalField, Field, MultiField, QuantityField, StringField, DateTimeField
 from .note import IncludedNote
 from .party import ShipToTradeParty, UltimateShipToTradeParty
 from .product import TradeProduct
@@ -49,6 +49,7 @@ class NetPrice(Element):
     basis_quantity = QuantityField(
         NS_RAM, "BasisQuantity", required=False, profile=COMFORT, _d="Preisbasismenge"
     )
+    # TODO: IncludedTradeTax missing
 
     class Meta:
         namespace = NS_RAM
@@ -57,6 +58,8 @@ class NetPrice(Element):
 
 class LineDocument(Element):
     line_id = StringField(NS_RAM, "LineID")
+    line_status_code = StringField(NS_RAM, "LineStatusCode")
+    line_status_reason_code = StringField(NS_RAM, "LineStatusReasonCode")
     notes = MultiField(IncludedNote)
 
     class Meta:
@@ -143,9 +146,6 @@ class LineSummation(Element):
 
 class LineSettlement(Element):
     trade_tax = Field(ApplicableTradeTax, required=False, profile=COMFORT)
-    accounting_account = Field(
-        AccountingAccount, required=False, profile=EXTENDED, _d="Kostenstelle"
-    )
     period = Field(BillingSpecifiedPeriod, required=False, profile=COMFORT)
     allowance_charge = MultiField(
         TradeAllowanceCharge,
@@ -156,6 +156,9 @@ class LineSettlement(Element):
     monetary_summation = Field(LineSummation, required=False, profile=COMFORT)
     invoice_referenced_document = Field(
         InvoiceReferencedDocument, required=False, profile=EXTENDED
+    )
+    additional_referenced_document = Field(
+        LineAdditionalReferencedDocument, required=False, profile=EXTENDED
     )
     accounting_account = Field(
         ReceivableAccountingAccount,

@@ -11,6 +11,15 @@ from .fields import (
 )
 
 
+class FinancialCard(Element):
+    id = StringField(NS_RAM, "ID")
+    cardholder_name = StringField(NS_RAM, "CardholderName")
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "ApplicableTradeSettlementFinancialCard"
+
+
 class PayerFinancialAccount(Element):
     iban = StringField(NS_RAM, "IBANID")
 
@@ -29,14 +38,6 @@ class PayeeFinancialAccount(Element):
         tag = "PayeePartyCreditorFinancialAccount"
 
 
-class PayerFinancialInstitution(Element):
-    bic = StringField(NS_RAM, "BICID")
-
-    class Meta:
-        namespace = NS_RAM
-        tag = "PayerSpecifiedDebtorFinancialInstitution"
-
-
 class PayeeFinancialInstitution(Element):
     bic = StringField(NS_RAM, "BICID")
 
@@ -50,8 +51,8 @@ class PaymentMeans(Element):
     information = MultiStringField(
         NS_RAM, "Information", required=False, profile=COMFORT
     )
+    financial_card = Field(FinancialCard)
     payer_account = Field(PayerFinancialAccount)
-    payer_institution = Field(PayerFinancialInstitution)
     payee_account = Field(PayeeFinancialAccount)
     payee_institution = Field(PayeeFinancialInstitution)
 
