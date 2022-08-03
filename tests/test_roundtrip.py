@@ -1,5 +1,4 @@
 import os
-import sys
 from difflib import unified_diff
 
 import pytest
@@ -8,7 +7,7 @@ import lxml.etree
 from drafthorse.models.document import Document
 from drafthorse.utils import prettify, validate_xml
 
-samples = os.listdir(os.path.join(os.path.dirname(__file__), "samples"))
+samples = [f for f in os.listdir(os.path.join(os.path.dirname(__file__), "samples")) if f.endswith(".xml")]
 
 
 def _diff_xml(a, b):
