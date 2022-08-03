@@ -1,8 +1,14 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (
-    CurrencyField, DateTimeField, DecimalField, IndicatorField,
-    MultiCurrencyField, MultiField, QuantityField, StringField,
+    CurrencyField,
+    DateTimeField,
+    DecimalField,
+    IndicatorField,
+    MultiCurrencyField,
+    MultiField,
+    QuantityField,
+    StringField,
 )
 
 

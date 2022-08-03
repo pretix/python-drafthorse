@@ -2,7 +2,10 @@ from decimal import Decimal
 
 from . import BASIC
 from .container import (
-    Container, CurrencyContainer, IDContainer, StringContainer,
+    Container,
+    CurrencyContainer,
+    IDContainer,
+    StringContainer,
 )
 
 

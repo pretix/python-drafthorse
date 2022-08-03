@@ -2,10 +2,13 @@ from . import BASIC, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import DateTimeField, Field, StringField
 from .party import (
-    ShipFromTradeParty, ShipToTradeParty, UltimateShipToTradeParty,
+    ShipFromTradeParty,
+    ShipToTradeParty,
+    UltimateShipToTradeParty,
 )
 from .references import (
-    DeliveryNoteReferencedDocument, DespatchAdviceReferencedDocument,
+    DeliveryNoteReferencedDocument,
+    DespatchAdviceReferencedDocument,
 )
 
 

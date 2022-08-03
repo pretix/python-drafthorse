@@ -30,7 +30,10 @@ from io import BytesIO
 from lxml import etree
 from PyPDF2 import PdfReader, PdfWriter
 from PyPDF2.generic import (
-    ArrayObject, DecodedStreamObject, DictionaryObject, NameObject,
+    ArrayObject,
+    DecodedStreamObject,
+    DictionaryObject,
+    NameObject,
     createStringObject,
 )
 

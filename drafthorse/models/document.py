@@ -5,7 +5,11 @@ from drafthorse.models.note import IncludedNote
 from . import BASIC, EXTENDED, NS_A, NS_QDT, NS_RAM, NS_RSM, NS_UDT
 from .elements import Element
 from .fields import (
-    DateTimeField, Field, IndicatorField, MultiField, MultiStringField,
+    DateTimeField,
+    Field,
+    IndicatorField,
+    MultiField,
+    MultiStringField,
     StringField,
 )
 from .trade import TradeTransaction
