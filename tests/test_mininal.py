@@ -11,7 +11,9 @@ from drafthorse.pdf import attach_xml
 
 def test_readme_construction_example():
     doc = Document()
-    doc.context.guideline_parameter.id = "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended"
+    doc.context.guideline_parameter.id = (
+        "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended"
+    )
     doc.header.id = "RE1337"
     doc.header.type_code = "380"
     doc.header.name = "RECHNUNG"
@@ -62,5 +64,7 @@ def test_readme_construction_example():
     doc.trade.settlement.monetary_summation.due_amount = Decimal("999.00")
 
     xml = doc.serialize(schema="FACTUR-X_EXTENDED")
-    with open(os.path.join(os.path.dirname(__file__), "samples", "Empty.pdf"), "rb") as original_file:
-        assert attach_xml(original_file.read(), xml, 'EXTENDED')
+    with open(
+        os.path.join(os.path.dirname(__file__), "samples", "Empty.pdf"), "rb"
+    ) as original_file:
+        assert attach_xml(original_file.read(), xml, "EXTENDED")

@@ -1,31 +1,23 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_RSM
 from .accounting import (
-    ApplicableTradeTax,
-    AppliedTradeTax,
-    MonetarySummation,
-    ReceivableAccountingAccount,
-    TradeAllowanceCharge,
-    BillingSpecifiedPeriod,
-    SellerOrderReferencedDocument,
+    ApplicableTradeTax, AppliedTradeTax, BillingSpecifiedPeriod,
+    MonetarySummation, ReceivableAccountingAccount,
+    SellerOrderReferencedDocument, TradeAllowanceCharge,
 )
 from .delivery import TradeDelivery
 from .elements import Element
-from .fields import DecimalField, Field, MultiField, StringField, DateTimeField
+from .fields import DateTimeField, DecimalField, Field, MultiField, StringField
 from .party import (
-    BuyerTradeParty,
-    EndUserTradeParty,
-    InvoiceeTradeParty,
-    PayeeTradeParty,
-    SellerTradeParty,
-    SellerTaxRepresentativeTradeParty, InvoicerTradeParty,
+    BuyerTradeParty, EndUserTradeParty, InvoiceeTradeParty, InvoicerTradeParty,
+    PayeeTradeParty, SellerTaxRepresentativeTradeParty, SellerTradeParty,
 )
-from .payment import PaymentMeans, PaymentTerms, TaxApplicableTradeCurrencyExchange
+from .payment import (
+    PaymentMeans, PaymentTerms, TaxApplicableTradeCurrencyExchange,
+)
 from .references import (
-    AdditionalReferencedDocument,
-    ContractReferencedDocument,
-    UltimateCustomerOrderReferencedDocument,
-    ProcuringProjectType,
-    InvoiceReferencedDocument, BuyerOrderReferencedDocument,
+    AdditionalReferencedDocument, BuyerOrderReferencedDocument,
+    ContractReferencedDocument, InvoiceReferencedDocument,
+    ProcuringProjectType, UltimateCustomerOrderReferencedDocument,
 )
 from .tradelines import LineItem
 
@@ -190,9 +182,7 @@ class TradeSettlement(Element):
         profile=EXTENDED,
         _d="Detailinformationen zur Buchungsreferenz",
     )
-    advance_payment = MultiField(
-        AdvancePayment, required=False, profile=EXTENDED
-    )
+    advance_payment = MultiField(AdvancePayment, required=False, profile=EXTENDED)
     invoice_referenced_document = Field(
         InvoiceReferencedDocument, required=False, profile=BASIC
     )

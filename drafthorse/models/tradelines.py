@@ -1,26 +1,22 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .accounting import (
-    AccountingAccount,
-    ApplicableTradeTax,
-    BillingSpecifiedPeriod,
-    TradeAllowanceCharge,
-    ReceivableAccountingAccount,
+    AccountingAccount, ApplicableTradeTax, BillingSpecifiedPeriod,
+    ReceivableAccountingAccount, TradeAllowanceCharge,
 )
 from .delivery import SupplyChainEvent
 from .elements import Element
-from .fields import DecimalField, Field, MultiField, QuantityField, StringField, DateTimeField
+from .fields import (
+    DateTimeField, DecimalField, Field, MultiField, QuantityField, StringField,
+)
 from .note import IncludedNote
 from .party import ShipToTradeParty, UltimateShipToTradeParty
 from .product import TradeProduct
 from .references import (
-    LineAdditionalReferencedDocument,
-    LineBuyerOrderReferencedDocument,
-    LineContractReferencedDocument,
-    LineUltimateCustomerOrderReferencedDocument,
-    LineDeliveryNoteReferencedDocument,
-    LineDespatchAdviceReferencedDocument,
+    InvoiceReferencedDocument, LineAdditionalReferencedDocument,
+    LineBuyerOrderReferencedDocument, LineContractReferencedDocument,
+    LineDeliveryNoteReferencedDocument, LineDespatchAdviceReferencedDocument,
     LineReceivingAdviceReferencedDocument,
-    InvoiceReferencedDocument,
+    LineUltimateCustomerOrderReferencedDocument,
 )
 
 

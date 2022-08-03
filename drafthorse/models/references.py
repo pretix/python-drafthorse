@@ -1,6 +1,6 @@
 from . import COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import DirectDateTimeField, StringField, BinaryObjectField
+from .fields import BinaryObjectField, DirectDateTimeField, StringField
 
 
 class ProcuringProjectType(Element):
@@ -125,12 +125,8 @@ class LineAdditionalReferencedDocument(Element):
     )
     uri_id = StringField(NS_RAM, "URIID", required=False, profile=EXTENDED)
     line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
-    type_code = StringField(
-        NS_RAM, "TypeCode", required=False, profile=EXTENDED
-    )
-    name = StringField(
-        NS_RAM, "Name", required=False, profile=EXTENDED
-    )
+    type_code = StringField(NS_RAM, "TypeCode", required=False, profile=EXTENDED)
+    name = StringField(NS_RAM, "Name", required=False, profile=EXTENDED)
     date_time_string = DirectDateTimeField(
         NS_RAM, "FormattedIssueDateTime", required=False, profile=COMFORT
     )

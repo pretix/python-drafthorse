@@ -1,14 +1,8 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (
-    CurrencyField,
-    DateTimeField,
-    DecimalField,
-    IndicatorField,
-    MultiField,
-    QuantityField,
-    StringField,
-    MultiCurrencyField,
+    CurrencyField, DateTimeField, DecimalField, IndicatorField,
+    MultiCurrencyField, MultiField, QuantityField, StringField,
 )
 
 
@@ -91,10 +85,7 @@ class ApplicableTradeTax(Element):
         _d="Grund der Steuerbefreiung (Code)",
     )
     tax_point_date = DateTimeField(
-        NS_RAM,
-        "TaxPointDate",
-        required=False,
-        profile=COMFORT
+        NS_RAM, "TaxPointDate", required=False, profile=COMFORT
     )
     due_date_type_code = StringField(
         NS_RAM,
@@ -153,9 +144,7 @@ class ReceivableAccountingAccount(Element):
     id = StringField(
         NS_RAM, "ID", required=True, profile=EXTENDED, _d="Buchungsreferenz"
     )
-    type_code = StringField(
-        NS_RAM, "TypeCode", required=True, profile=EXTENDED
-    )
+    type_code = StringField(NS_RAM, "TypeCode", required=True, profile=EXTENDED)
 
     class Meta:
         namespace = NS_RAM
@@ -198,7 +187,10 @@ class MonetarySummation(Element):
         NS_RAM, "TaxTotalAmount", profile=EXTENDED, _d="Steuergesamtbetrag"
     )
     rounding_amount = DecimalField(
-        NS_RAM, "RoundingAmount", required=False, profile=COMFORT,
+        NS_RAM,
+        "RoundingAmount",
+        required=False,
+        profile=COMFORT,
     )
     grand_total = CurrencyField(
         NS_RAM, "GrandTotalAmount", required=True, profile=BASIC, _d="Bruttosumme"

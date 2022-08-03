@@ -27,14 +27,10 @@
 import datetime
 import os
 from io import BytesIO
-
 from lxml import etree
 from PyPDF2 import PdfReader, PdfWriter
 from PyPDF2.generic import (
-    ArrayObject,
-    DecodedStreamObject,
-    DictionaryObject,
-    NameObject,
+    ArrayObject, DecodedStreamObject, DictionaryObject, NameObject,
     createStringObject,
 )
 
@@ -165,7 +161,9 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     fx_conformance_level.text = level
 
     xmp_file = os.path.join(
-        os.path.dirname(__file__), "schema", "ZUGFeRD2p2_extension_schema.xmp".format(level)
+        os.path.dirname(__file__),
+        "schema",
+        "ZUGFeRD2p2_extension_schema.xmp".format(level),
     )
     # Reason for defining a parser below:
     # http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output
@@ -181,8 +179,8 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     xml_str = etree.tostring(
         root, pretty_print=True, encoding="UTF-8", xml_declaration=False
     )
-    head = u'<?xpacket begin="\ufeff" id="W5M0MpCehiHzreSzNTczkc9d"?>'.encode("utf-8")
-    tail = u'<?xpacket end="w"?>'.encode("utf-8")
+    head = '<?xpacket begin="\ufeff" id="W5M0MpCehiHzreSzNTczkc9d"?>'.encode("utf-8")
+    tail = '<?xpacket end="w"?>'.encode("utf-8")
     xml_final_str = head + xml_str + tail
     return xml_final_str
 
@@ -220,7 +218,9 @@ def _facturx_update_metadata_add_attachment(
     fname_obj = createStringObject("factur-x.xml")
     filespec_dict = DictionaryObject(
         {
-            NameObject("/AFRelationship"): NameObject("/Data" if facturx_level in ("BASIC-WL", "MINIMUM") else "/Alternative"),
+            NameObject("/AFRelationship"): NameObject(
+                "/Data" if facturx_level in ("BASIC-WL", "MINIMUM") else "/Alternative"
+            ),
             NameObject("/Desc"): createStringObject(
                 "Invoice metadata conforming to ZUGFeRD standard (http://www.ferd-net.de/front_content.php?idcat=231&lang=4)"
             ),

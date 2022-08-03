@@ -6,6 +6,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from drafthorse.utils import validate_xml
+
 from . import NS_UDT
 from .container import Container
 from .fields import Field
@@ -70,10 +71,16 @@ class Element(metaclass=BaseElementMeta):
             self.to_etree(), "utf-8"
         )
         return validate_xml(xmlout=xml, schema=schema)
-    
+
     def __setattr__(self, key, value):
-        if not hasattr(self, key) and not key.startswith("_") and not key in ("required",):
-            raise AttributeError(f"Element {type(self)} has no attribute '{key}'. If you set it, it would not be included in the output.")
+        if (
+            not hasattr(self, key)
+            and not key.startswith("_")
+            and not key in ("required",)
+        ):
+            raise AttributeError(
+                f"Element {type(self)} has no attribute '{key}'. If you set it, it would not be included in the output."
+            )
         return super().__setattr__(key, value)
 
     def from_etree(self, root):
