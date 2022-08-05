@@ -7,12 +7,24 @@ class PostalTradeAddress(Element):
     postcode = StringField(NS_RAM, "PostcodeCode", required=False, profile=BASIC)
     line_one = StringField(NS_RAM, "LineOne", required=False, profile=BASIC)
     line_two = StringField(NS_RAM, "LineTwo", required=False, profile=BASIC)
+    line_three = StringField(NS_RAM, "LineThree", required=False, profile=BASIC)
     city_name = StringField(NS_RAM, "CityName", required=False, profile=BASIC)
+    country_subdivision = StringField(
+        NS_RAM, "CountrySubDivisionName", required=False, profile=EXTENDED
+    )
     country_id = StringField(NS_RAM, "CountryID", required=False, profile=BASIC)
 
     class Meta:
         namespace = NS_RAM
         tag = "PostalTradeAddress"
+
+
+class URIUniversalCommunication(Element):
+    uri_ID = IDField(NS_RAM, "URIID", required=False, profile=BASIC)
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "URIUniversalCommunication"
 
 
 class TaxRegistration(Element):
@@ -24,8 +36,7 @@ class TaxRegistration(Element):
 
 
 class PhoneNumber(Element):
-    number = StringField(NS_RAM, "CompleteNumber", required=False,
-                         profile=EXTENDED)
+    number = StringField(NS_RAM, "CompleteNumber", required=False, profile=EXTENDED)
 
     class Meta:
         namespace = NS_RAM
@@ -33,8 +44,7 @@ class PhoneNumber(Element):
 
 
 class FaxNumber(Element):
-    number = StringField(NS_RAM, "CompleteNumber", required=False,
-                         profile=EXTENDED)
+    number = StringField(NS_RAM, "CompleteNumber", required=False, profile=EXTENDED)
 
     class Meta:
         namespace = NS_RAM
@@ -42,8 +52,7 @@ class FaxNumber(Element):
 
 
 class EmailURI(Element):
-    address = StringField(NS_RAM, "URIID", required=False,
-                          profile=EXTENDED)
+    address = StringField(NS_RAM, "URIID", required=False, profile=EXTENDED)
 
     class Meta:
         namespace = NS_RAM
@@ -51,10 +60,10 @@ class EmailURI(Element):
 
 
 class TradeContact(Element):
-    person_name = StringField(NS_RAM, "PersonName", required=False,
-                              profile=EXTENDED)
-    department_name = StringField(NS_RAM, "DepartmentName", required=False,
-                                  profile=EXTENDED)
+    person_name = StringField(NS_RAM, "PersonName", required=False, profile=EXTENDED)
+    department_name = StringField(
+        NS_RAM, "DepartmentName", required=False, profile=EXTENDED
+    )
     telephone = Field(PhoneNumber, required=False, profile=EXTENDED)
     fax = Field(FaxNumber, required=False, profile=EXTENDED)
     email = Field(EmailURI, required=False, profile=EXTENDED)
@@ -65,22 +74,53 @@ class TradeContact(Element):
 
 
 class TradeParty(Element):
-    id = StringField(NS_RAM, "ID", required=False, profile=COMFORT,
-                     _d="Identifier des Verkäufers")
-    global_id = MultiIDField(NS_RAM, "GlobalID", required=False, profile=COMFORT,
-                             _d="Globaler Identifier des Verkäufers")
+    id = StringField(
+        NS_RAM, "ID", required=False, profile=COMFORT, _d="Identifier des Verkäufers"
+    )
+    global_id = MultiIDField(
+        NS_RAM,
+        "GlobalID",
+        required=False,
+        profile=COMFORT,
+        _d="Globaler Identifier des Verkäufers",
+    )
     name = StringField(NS_RAM, "Name", required=False, profile=BASIC)
-    contact = Field(TradeContact, required=False, profile=EXTENDED,
-                    _d="Ansprechpartner des Käufers")
-    address = Field(PostalTradeAddress, required=False, profile=BASIC,
-                    _d="Anschrift des Käufers")
+    # TODO: SpecifiedLegalOrganization
+    description = StringField(
+        NS_RAM,
+        "Description",
+        required=True,
+        profile=COMFORT,
+        _d="Freitext der Zahlungsbedingungen",
+    )
+    contact = Field(
+        TradeContact, required=False, profile=EXTENDED, _d="Ansprechpartner des Käufers"
+    )
+    address = Field(
+        PostalTradeAddress, required=False, profile=BASIC, _d="Anschrift des Käufers"
+    )
+    electronic_adress = MultiField(
+        URIUniversalCommunication, required=False, profile=BASIC
+    )
     tax_registrations = MultiField(TaxRegistration, required=False, profile=BASIC)
+
+
+class SellerTaxRepresentativeTradeParty(TradeParty):
+    class Meta:
+        namespace = NS_RAM
+        tag = "SellerTaxRepresentativeTradeParty"
 
 
 class PayeeTradeParty(TradeParty):
     class Meta:
         namespace = NS_RAM
         tag = "PayeeTradeParty"
+
+
+class InvoicerTradeParty(TradeParty):
+    class Meta:
+        namespace = NS_RAM
+        tag = "InvoicerTradeParty"
 
 
 class InvoiceeTradeParty(TradeParty):

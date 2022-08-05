@@ -14,7 +14,7 @@ class Container:
             child.append_to(node)
 
     def get_tag(self):
-        return '{%s}%s' % (self.child_type.Meta.namespace, self.child_type.Meta.tag)
+        return "{%s}%s" % (self.child_type.Meta.namespace, self.child_type.Meta.tag)
 
     def empty_element(self):
         return self.child_type()
@@ -32,7 +32,7 @@ class SimpleContainer(Container):
         self.tag = tag
 
     def get_tag(self):
-        return '{%s}%s' % (self.namespace, self.tag)
+        return "{%s}%s" % (self.namespace, self.tag)
 
     def empty_element(self):
         raise NotImplementedError()
@@ -51,40 +51,44 @@ class SimpleContainer(Container):
 
 
 class CurrencyContainer(SimpleContainer):
-
     def empty_element(self):
         from .elements import CurrencyElement
+
         return CurrencyElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):
-        el.amount = child[0]
-        el.currency = child[1]
+        el._amount = child[0]
+        el._currency = child[1]
 
     def add_from_etree(self, root):
-        self.add((root.text, root.attrib['currencyID']))
+        if root.attrib.get("currencyID"):
+            self.add((root.text, root.attrib["currencyID"]))
+        else:
+            self.add(root.text)
 
 
 class IDContainer(SimpleContainer):
     def empty_element(self):
         from .elements import IDElement
+
         return IDElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):
-        el.text = child[1]
-        el.scheme_id = child[0]
+        el._text = child[1]
+        el._scheme_id = child[0]
 
     def add_from_etree(self, root):
-        self.add((root.attrib['schemeID'], root.text))
+        self.add((root.attrib["schemeID"], root.text))
 
 
 class StringContainer(SimpleContainer):
-
     def empty_element(self):
         from .elements import StringElement
+
         return StringElement(namespace=self.namespace, tag=self.tag)
 
     def set_element(self, el, child):
-        el.text = child
+        el._text = child
 
     def add_from_etree(self, root):
         self.add(root.text)
