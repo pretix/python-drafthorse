@@ -264,7 +264,7 @@ def _facturx_update_metadata_add_attachment(
     # Update the root
     metadata_xml_str = _prepare_pdf_metadata_xml(facturx_level, pdf_metadata)
     metadata_file_entry = DecodedStreamObject()
-    metadata_file_entry.setData(metadata_xml_str)
+    metadata_file_entry.set_data(metadata_xml_str)
     metadata_file_entry.update(
         {
             NameObject("/Subtype"): NameObject("/XML"),
@@ -287,4 +287,4 @@ def _facturx_update_metadata_add_attachment(
             {NameObject("/OutputIntents"): ArrayObject(res_output_intents)}
         )
     metadata_txt_dict = _prepare_pdf_metadata_txt(pdf_metadata)
-    pdf_filestream.addMetadata(metadata_txt_dict)
+    pdf_filestream.add_metadata(metadata_txt_dict)
