@@ -25,17 +25,20 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import datetime
+import logging
 import os
 from io import BytesIO
 from lxml import etree
-from PyPDF2 import PdfReader, PdfWriter
-from PyPDF2.generic import (
+from pypdf import PdfReader, PdfWriter
+from pypdf.generic import (
     ArrayObject,
     DecodedStreamObject,
     DictionaryObject,
     NameObject,
-    createStringObject,
+    create_string_object,
 )
+
+logger = logging.getLogger("drafthorse")
 
 
 def attach_xml(original_pdf, xml_data, level="BASIC"):
@@ -71,13 +74,13 @@ def _get_original_output_intents(original_pdf):
         pdf_root = original_pdf.trailer["/Root"]
         ori_output_intents = pdf_root["/OutputIntents"]
         for ori_output_intent in ori_output_intents:
-            ori_output_intent_dict = ori_output_intent.getObject()
+            ori_output_intent_dict = ori_output_intent.get_object()
             dest_output_profile_dict = ori_output_intent_dict[
                 "/DestOutputProfile"
-            ].getObject()
+            ].get_object()
             output_intents.append((ori_output_intent_dict, dest_output_profile_dict))
-    except:  # noqa
-        pass
+    except Exception as ex:
+        logger.error(ex)
     return output_intents
 
 
@@ -138,7 +141,7 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     desc_adobe = etree.SubElement(rdf, ns_rdf + "Description", nsmap=nsmap_pdf)
     desc_adobe.set(ns_rdf + "about", "")
     producer = etree.SubElement(desc_adobe, ns_pdf + "Producer")
-    producer.text = "PyPDF2"
+    producer.text = "pypdf"
     desc_xmp = etree.SubElement(rdf, ns_rdf + "Description", nsmap=nsmap_xmp)
     desc_xmp.set(ns_rdf + "about", "")
     creator = etree.SubElement(desc_xmp, ns_xmp + "CreatorTool")
@@ -192,14 +195,14 @@ def _facturx_update_metadata_add_attachment(
     pdf_filestream, facturx_xml_str, pdf_metadata, facturx_level, output_intents
 ):
     # md5sum = hashlib.md5(facturx_xml_str).hexdigest()
-    # md5sum_obj = createStringObject(md5sum)
+    # md5sum_obj = create_string_object(md5sum)
     pdf_date = datetime.datetime.utcnow().strftime("D:%Y%m%d%H%M%SZ")
     params_dict = DictionaryObject(
         {
             # NameObject('/CheckSum'): md5sum_obj,
-            NameObject("/ModDate"): createStringObject(pdf_date),
-            NameObject("/CreationDate"): createStringObject(pdf_date),
-            NameObject("/Size"): NameObject(str(len(facturx_xml_str))),
+            NameObject("/ModDate"): create_string_object(pdf_date),
+            NameObject("/CreationDate"): create_string_object(pdf_date),
+            NameObject("/Size"): create_string_object(str(len(facturx_xml_str))),
         }
     )
     file_entry = DecodedStreamObject()
@@ -218,13 +221,13 @@ def _facturx_update_metadata_add_attachment(
         {NameObject("/F"): file_entry_obj, NameObject("/UF"): file_entry_obj}
     )
 
-    fname_obj = createStringObject("factur-x.xml")
+    fname_obj = create_string_object("factur-x.xml")
     filespec_dict = DictionaryObject(
         {
             NameObject("/AFRelationship"): NameObject(
                 "/Data" if facturx_level in ("BASIC-WL", "MINIMUM") else "/Alternative"
             ),
-            NameObject("/Desc"): createStringObject(
+            NameObject("/Desc"): create_string_object(
                 "Invoice metadata conforming to ZUGFeRD standard (http://www.ferd-net.de/front_content.php?idcat=231&lang=4)"
             ),
             NameObject("/Type"): NameObject("/Filespec"),
@@ -240,7 +243,7 @@ def _facturx_update_metadata_add_attachment(
     )
     name_arrayobj_content_final = []
     af_list = []
-    for (fname_obj, filespec_obj) in name_arrayobj_content_sort:
+    for fname_obj, filespec_obj in name_arrayobj_content_sort:
         name_arrayobj_content_final += [fname_obj, filespec_obj]
         af_list.append(filespec_obj)
     embedded_files_names_dict = DictionaryObject(
