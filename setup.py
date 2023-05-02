@@ -33,7 +33,7 @@ setup(
         "Programming Language :: Python :: 3.10",
     ],
     keywords="xml banking sepa",
-    install_requires=["lxml", "PyPDF2"],
+    install_requires=["lxml", "pypdf"],
     packages=find_packages(include=["drafthorse", "drafthorse.*"]),
     include_package_data=True,
 )
