@@ -1,5 +1,5 @@
 lxml
-PyPDF2
+pypdf
 pytest
 flake8
 isort
