@@ -67,4 +67,4 @@ def test_readme_construction_example():
     with open(
         os.path.join(os.path.dirname(__file__), "samples", "Empty.pdf"), "rb"
     ) as original_file:
-        assert attach_xml(original_file.read(), xml, "EXTENDED")
+        assert attach_xml(original_file.read(), xml)
