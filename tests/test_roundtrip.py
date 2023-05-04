@@ -30,8 +30,6 @@ def prettify(xml, **kwargs):
         return etree.tostring(etree.fromstring(xml, parser), pretty_print=True)
 
 
-
-
 @pytest.mark.parametrize("filename", samples)
 def test_sample_roundtrip(filename):
     origxml = prettify(
