@@ -25,7 +25,6 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import logging
-
 from datetime import datetime
 from io import BytesIO
 from lxml import etree
@@ -39,7 +38,6 @@ from pypdf.generic import (
 )
 
 from drafthorse.xmp_schema import XMP_SCHEMA
-
 
 logging.basicConfig()
 logger = logging.getLogger("drafthorse")
@@ -301,7 +299,7 @@ def _extract_xml_info(xml_data):
     doc_type = doc_type_xpath[0].text
     if doc_type != INVOICE_TYPE_CODE:
         raise Exception(
-            "Invalid doc type! XML value for TypeCode shall be 380 for an invoice. "
+            "Invalid doc type! XML value for TypeCode shall be 380 for an invoice."
         )
 
     doc_type_name = "Invoice"
