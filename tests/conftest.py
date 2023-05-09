@@ -74,3 +74,13 @@ def pdf_file_bytes():
     ).read()
 
     return pdf_file
+
+
+@pytest.fixture
+def sample_invoice_pdf17():
+    pdf_file = open(
+        os.path.join(os.path.dirname(__file__), "samples", "sample_invoice_pdf17.pdf"),
+        "rb",
+    ).read()
+
+    return pdf_file

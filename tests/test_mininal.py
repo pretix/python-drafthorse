@@ -12,13 +12,26 @@ def test_readme_construction_example(invoice_document, pdf_file_bytes):
 
 
 @pytest.mark.parametrize("invoice_document", ["220"], indirect=True)
-def test_invalid_invoice_xml_order(invoice_document, pdf_file_bytes):
-    # set order type code (220) instead of invoice (380)
+def test_invalid_invoice_xml(invoice_document, sample_invoice_pdf17):
     xml = invoice_document.serialize(schema="FACTUR-X_EXTENDED")
+
+    # set order type code (220) instead of invoice (380)
     with pytest.raises(Exception) as exc_info:
-        attach_xml(pdf_file_bytes, xml)
+        attach_xml(sample_invoice_pdf17, xml)
 
     assert (
         str(exc_info.value)
         == "Invalid doc type! XML value for TypeCode shall be 380 for an invoice."
     )
+
+    # invalid pdf type
+    with pytest.raises(Exception) as exc_info:
+        attach_xml("invalid_pdf_type", xml)
+
+    assert str(exc_info.value) == "Please supply original PDF as bytes."
+
+    # invalid xml type
+    with pytest.raises(Exception) as exc_info:
+        attach_xml(sample_invoice_pdf17, "invalid_xml_type")
+
+    assert str(exc_info.value) == "Please supply XML data as bytes."
