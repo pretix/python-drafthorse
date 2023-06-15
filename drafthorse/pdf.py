@@ -211,8 +211,7 @@ def _facturx_update_metadata_add_attachment(
         {
             NameObject("/Type"): NameObject("/EmbeddedFile"),
             NameObject("/Params"): params_dict,
-            # 2F is '/' in hexadecimal
-            NameObject("/Subtype"): NameObject("/text#2Fxml"),
+            NameObject("/Subtype"): NameObject("/text/xml"),
         }
     )
     file_entry_obj = pdf_filestream._add_object(file_entry)
