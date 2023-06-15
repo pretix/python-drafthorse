@@ -2,9 +2,10 @@ import lxml.etree
 import os
 import pytest
 from difflib import unified_diff
+from xml.dom import minidom
 
 from drafthorse.models.document import Document
-from drafthorse.utils import prettify, validate_xml
+from drafthorse.utils import validate_xml
 
 samples = [
     f
@@ -13,9 +14,20 @@ samples = [
 ]
 
 
-def _diff_xml(a, b):
+def diff_xml(a, b):
     for line in unified_diff(a.splitlines(), b.splitlines()):
         print(line)
+
+
+def prettify(xml, **kwargs):
+    try:
+        from lxml import etree
+    except ImportError:
+        reparsed = minidom.parseString(xml)
+        return reparsed.toprettyxml(indent="\t")
+    else:
+        parser = etree.XMLParser(remove_blank_text=True, **kwargs)
+        return etree.tostring(etree.fromstring(xml, parser), pretty_print=True)
 
 
 @pytest.mark.parametrize("filename", samples)
@@ -41,11 +53,11 @@ def test_sample_roundtrip(filename):
     try:
         generatedxml = prettify(doc.serialize(schema))
         generatedxml = b"\n".join(generatedxml.split(b"\n")[1:]).decode().strip()
-        _diff_xml(origxml, generatedxml)
+        diff_xml(origxml, generatedxml)
     except lxml.etree.XMLSyntaxError:
         generatedxml = prettify(doc.serialize(None))
         generatedxml = b"\n".join(generatedxml.split(b"\n")[1:]).decode().strip()
-        _diff_xml(origxml, generatedxml)
+        diff_xml(origxml, generatedxml)
         raise
 
     # Compare output XML

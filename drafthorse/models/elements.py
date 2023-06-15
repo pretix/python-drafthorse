@@ -67,10 +67,14 @@ class Element(metaclass=BaseElementMeta):
             node.append(el)
 
     def serialize(self, schema="FACTUR-X_BASIC"):
-        xml = b'<?xml version="1.0" encoding="UTF-8"?>' + ET.tostring(
-            self.to_etree(), "utf-8"
-        )
-        return validate_xml(xmlout=xml, schema=schema)
+        """
+        Create XML from ZUGFeRD data model
+        :param schema: XML schema
+        :return: ZUGFeRD XML
+        """
+        xml = ET.tostring(self.to_etree(), "utf-8")
+
+        return validate_xml(xml, schema)
 
     def __setattr__(self, key, value):
         if (
