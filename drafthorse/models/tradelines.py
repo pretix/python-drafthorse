@@ -1,6 +1,6 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .accounting import (
-    AccountingAccount,
+#    AccountingAccount, # unused
     ApplicableTradeTax,
     BillingSpecifiedPeriod,
     ReceivableAccountingAccount,
@@ -9,7 +9,7 @@ from .accounting import (
 from .delivery import SupplyChainEvent
 from .elements import Element
 from .fields import (
-    DateTimeField,
+#    DateTimeField, # unused
     DecimalField,
     Field,
     MultiField,
