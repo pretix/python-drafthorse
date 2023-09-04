@@ -169,7 +169,7 @@ def _prepare_pdf_metadata_xml(level, pdf_metadata):
     xmp_file = os.path.join(
         os.path.dirname(__file__),
         "schema",
-        "ZUGFeRD2p2_extension_schema.xmp".format(level),
+        "ZUGFeRD2p2_extension_schema.xmp",
     )
     # Reason for defining a parser below:
     # http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output

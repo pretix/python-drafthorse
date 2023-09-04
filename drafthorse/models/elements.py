@@ -106,7 +106,7 @@ class Element(metaclass=BaseElementMeta):
             if child.tag == ET.Comment:
                 continue
             if child.tag in field_index:
-                name, childel = field_index[child.tag]
+                name, _childel = field_index[child.tag]
                 if isinstance(getattr(self, name), Container):
                     getattr(self, name).add_from_etree(child)
                 else:
@@ -135,7 +135,7 @@ class StringElement(Element):
         return "<{}: {}>".format(type(self).__name__, str(self))
 
     def __str__(self):
-        return str(self.text)
+        return str(self._text)
 
     def is_empty(self, el):
         return super().is_empty(el) and not self._set_on_input
@@ -165,7 +165,7 @@ class DecimalElement(StringElement):
         return node
 
     def __str__(self):
-        return self.value
+        return self._value
 
     def from_etree(self, root):
         self._value = Decimal(root.text)
@@ -217,7 +217,7 @@ class CurrencyElement(StringElement):
         return self
 
     def __str__(self):
-        return "{} {}".format(self.amount, self.currency)
+        return "{} {}".format(self._amount, self._currency)
 
 
 class ClassificationElement(StringElement):
@@ -229,7 +229,7 @@ class ClassificationElement(StringElement):
 
     def to_etree(self):
         node = self._etree_node()
-        node.text = self.text
+        node.text = self._text
         node.attrib["listID"] = self._list_id
         node.attrib["listVersionID"] = self._list_version_id
         return node
@@ -267,7 +267,7 @@ class BinaryObjectElement(StringElement):
         return self
 
     def __str__(self):
-        return "{} ({} {})".format(self._text, self._mime_code)
+        return "{} ({} {})".format(self._text, self._filename, self._mime_code)
 
 
 class AgencyIDElement(StringElement):
