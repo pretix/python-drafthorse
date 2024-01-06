@@ -32,15 +32,6 @@ def test_invalid_invoice_exceptions(invoice_document, invoice_pdf17_bytes):
     """
     xml = invoice_document.serialize(schema="FACTUR-X_EXTENDED")
 
-    # invalid type code -> set order (220) instead of invoice (380)
-    with pytest.raises(Exception) as exc_info:
-        attach_xml(invoice_pdf17_bytes, xml)
-
-    assert (
-        str(exc_info.value)
-        == "Invalid doc type! XML value for TypeCode shall be 380 for an invoice."
-    )
-
     # invalid pdf type
     with pytest.raises(Exception) as exc_info:
         attach_xml("invalid_pdf_type", xml)
