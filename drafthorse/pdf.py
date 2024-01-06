@@ -316,6 +316,6 @@ def _extract_xml_info(xml_data, level=None):
         profile = level
 
     profile = profile.upper()
-    logger.info(f"Factur-X profile dectected from XML: {profile}")
+    logger.info("Factur-X profile dectected from XML: %s", profile)
 
     return pdf_metadata, profile

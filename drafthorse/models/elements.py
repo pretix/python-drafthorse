@@ -15,6 +15,7 @@ from .fields import Field
 class BaseElementMeta(type):
     @classmethod
     def __prepare__(self, name, bases):
+        del name, bases
         return collections.OrderedDict()
 
     def __new__(mcls, name, bases, attrs):
@@ -50,7 +51,7 @@ class Element(metaclass=BaseElementMeta):
 
     def to_etree(self):
         node = self._etree_node()
-        for k, v in self._data.items():
+        for _, v in self._data.items():
             if v is not None:
                 v.append_to(node)
         return node
