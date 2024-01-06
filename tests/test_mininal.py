@@ -23,6 +23,34 @@ def test_readme_construction_example_pdf17(invoice_document, invoice_pdf17_bytes
     output_pdf = attach_xml(invoice_pdf17_bytes, xml)
 
     assert output_pdf
+    
+@pytest.mark.parametrize("invoice_document", ["380"], indirect=True)
+def test_readme_construction_example_pdf17_xrechnung2(invoice_document, invoice_pdf17_bytes):
+    """
+    Test using a PDF 1.7 version in order to cover the output intents handling
+    """
+    doc = invoice_document
+    doc.context.guideline_parameter.id = (
+        "urn:cen.eu:en16931:2017#compliant#urn:xoev-de:kosit:standard:xrechnung_2.3"
+    )
+    xml = doc.serialize(schema="FACTUR-X_EXTENDED")
+    output_pdf = attach_xml(invoice_pdf17_bytes, xml)
+
+    assert output_pdf
+    
+@pytest.mark.parametrize("invoice_document", ["380"], indirect=True)
+def test_readme_construction_example_pdf17_xrechnung3(invoice_document, invoice_pdf17_bytes):
+    """
+    Test using a PDF 1.7 version in order to cover the output intents handling
+    """
+    doc = invoice_document
+    doc.context.guideline_parameter.id = (
+        "urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0"
+    )
+    xml = doc.serialize(schema="FACTUR-X_EXTENDED")
+    output_pdf = attach_xml(invoice_pdf17_bytes, xml)
+
+    assert output_pdf
 
 
 @pytest.mark.parametrize("invoice_document", ["220"], indirect=True)
