@@ -44,12 +44,15 @@ logger = logging.getLogger("drafthorse")
 logger.setLevel(logging.INFO)
 
 
-def attach_xml(original_pdf, xml_data):
+def attach_xml(original_pdf, xml_data, level=None):
     """
     Create the ZUGFeRD invoice by attaching
     the input XML and proper metadata
     :param original_pdf: Input PDF
     :param xml_data: Input XML
+    :param level: optional Factur-X profile level 
+       one of {MINIMUM, BASIC WL, BASIC, EN 16931, EXTENDED, XRECHNUNG}
+       if omitted autodetection is performed
     :return: Output PDF containing the metadata and XML
     """
     if not isinstance(original_pdf, bytes):
@@ -69,7 +72,7 @@ def attach_xml(original_pdf, xml_data):
         # else : generate some ?
 
     # Extract metadata from XML
-    pdf_metadata, profile = _extract_xml_info(xml_data)
+    pdf_metadata, profile = _extract_xml_info(xml_data, level)
 
     # Extract output intents from input PDF
     output_intents = _get_original_output_intents(reader)
@@ -260,7 +263,7 @@ def _update_metadata_add_attachment(
     pdf_filestream.add_metadata(metadata_txt_dict)
 
 
-def _extract_xml_info(xml_data):
+def _extract_xml_info(xml_data, level=None):
     """
     Extract metadata and profile from XML further added to the PDF
     :param xml_data: XML data
@@ -297,16 +300,22 @@ def _extract_xml_info(xml_data):
     )
     doc_id = doc_id_xpath[0].text
 
-    profile = doc_id.split(":")[-1]
-    if doc_id.split(":")[-1] in ["basic", "extended"]:
+    if level is None:
+        # autodetection of Factur-X profile
         profile = doc_id.split(":")[-1]
-    elif doc_id.split(":")[-2] == "en16931":
-        profile = doc_id.split(":")[-2]
-        profile = profile[:2] + " " + profile[2:]
+        if doc_id.split(":")[-1] in ["basic", "extended"]:
+            profile = doc_id.split(":")[-1]
+        elif doc_id.split(":")[-1].startswith("xrechnung"):
+            profile = "xrechnung"
+        elif doc_id.split(":")[-2] == "en16931":
+            profile = doc_id.split(":")[-2]
+            profile = profile[:2] + " " + profile[2:]
+        else:
+            raise Exception("Invalid XML profile!")
     else:
-        raise Exception("Invalid XML profile!")
+        profile = level
 
     profile = profile.upper()
-    logger.info(f"Invoide profile dectected from XML: {profile}")
+    logger.info(f"Factur-X profile dectected from XML: {profile}")
 
     return pdf_metadata, profile
