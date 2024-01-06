@@ -282,23 +282,11 @@ def _extract_xml_info(xml_data):
     )
     seller = seller_xpath[0].text
 
-    doc_type_xpath = xml_etree.xpath(
-        "//rsm:ExchangedDocument/ram:TypeCode", namespaces=namespaces
-    )
-    doc_type = doc_type_xpath[0].text
-    if doc_type != INVOICE_TYPE_CODE:
-        raise Exception(
-            "Invalid doc type! XML value for TypeCode shall be 380 for an invoice."
-        )
-
-    doc_type_name = "Invoice"
     pdf_metadata = {
         "author": seller,
-        "keywords": "{}, {}".format(doc_type_name, "Factur-X"),
-        "title": "{}: {} {}".format(seller, doc_type_name, number),
-        "subject": "{} {}".format(
-            doc_type_name, number
-        ),
+        "keywords": "Factur-X",
+        "title": number,
+        "subject": number
     }
 
     # get profile
