@@ -272,17 +272,6 @@ def _extract_xml_info(xml_data):
     namespaces = xml_etree.nsmap
 
     # get metadata
-    date_xpath = xml_etree.xpath(
-        "//rsm:ExchangedDocument/ram:IssueDateTime/udt:DateTimeString",
-        namespaces=namespaces,
-    )
-    date = date_xpath[0].text
-    date_format = date_xpath[0].attrib and date_xpath[0].attrib.get("format") or "102"
-    format_map = {
-        "102": "%Y%m%d",
-        "203": "%Y%m%d%H%M",
-    }
-    date_dt = datetime.strptime(date, format_map.get(date_format, format_map["102"]))
     number_xpath = xml_etree.xpath(
         "//rsm:ExchangedDocument/ram:ID", namespaces=namespaces
     )
@@ -303,13 +292,12 @@ def _extract_xml_info(xml_data):
         )
 
     doc_type_name = "Invoice"
-    date_str = datetime.strftime(date_dt, "%Y-%m-%d")
     pdf_metadata = {
         "author": seller,
         "keywords": "{}, {}".format(doc_type_name, "Factur-X"),
         "title": "{}: {} {}".format(seller, doc_type_name, number),
-        "subject": "{} {} dated {} issued by {}".format(
-            doc_type_name, number, date_str, seller
+        "subject": "{} {}".format(
+            doc_type_name, number
         ),
     }
 
