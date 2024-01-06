@@ -75,8 +75,8 @@ XMP_SCHEMA = """
       </pdfaExtension:schemas>
     </rdf:Description>
     <rdf:Description xmlns:fx="{urn}" rdf:about="">
-      <fx:DocumentType>{documenttype}</fx:DocumentType>
       <fx:DocumentFileName>{xml_filename}</fx:DocumentFileName>
+      <fx:DocumentType>{documenttype}</fx:DocumentType>
       <fx:Version>{version}</fx:Version>
       <fx:ConformanceLevel>{xmp_level}</fx:ConformanceLevel>
     </rdf:Description>
