@@ -309,7 +309,7 @@ class IDElement(StringElement):
         self._text = root.text
         try:
             self._scheme_id = root.attrib["schemeID"]
-        except:
+        except Exception:
             root.attrib["schemeID"] = ""
             self._scheme_id = root.attrib["schemeID"]
         self._set_on_input = True
@@ -386,7 +386,7 @@ class DirectDateTimeElement(StringElement):
     def from_etree(self, root):
         try:
             self._value = datetime.strptime(root.text, "%Y-%m-%dT%H:%M:%S").date()
-        except:
+        except Exception:
             self._value = ""
         self._set_on_input = True
         return self

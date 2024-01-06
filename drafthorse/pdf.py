@@ -266,7 +266,6 @@ def _extract_xml_info(xml_data):
     :param xml_data: XML data
     :return: Metadata and profile
     """
-    INVOICE_TYPE_CODE = "380"
 
     xml_etree = etree.fromstring(xml_data)
     namespaces = xml_etree.nsmap
