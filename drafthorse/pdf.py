@@ -50,7 +50,7 @@ def attach_xml(original_pdf, xml_data, level=None):
     the input XML and proper metadata
     :param original_pdf: Input PDF
     :param xml_data: Input XML
-    :param level: optional Factur-X profile level 
+    :param level: optional Factur-X profile level
        one of {MINIMUM, BASIC WL, BASIC, EN 16931, EXTENDED, XRECHNUNG}
        if omitted autodetection is performed
     :return: Output PDF containing the metadata and XML
@@ -288,7 +288,7 @@ def _extract_xml_info(xml_data, level=None):
         "author": seller,
         "keywords": "Factur-X",
         "title": number,
-        "subject": number
+        "subject": number,
     }
 
     # get profile
