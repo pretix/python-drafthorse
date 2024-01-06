@@ -137,9 +137,9 @@ To validate files using mustang::
 
     git clone https://github.com/ZUGFeRD/mustangproject.git
     cd mustangproject
-    git checkout core-2.5.1
+    git checkout core-2.9.0
     ./mvnw clean package
-    java -jar Mustang-CLI/target/Mustang-CLI-2.5.1-SNAPSHOT.jar --action validate --source invoice.pdf
+    java -jar Mustang-CLI/target/Mustang-CLI-2.7.4-SNAPSHOT.jar --action validate --source invoice.pdf
 
 
 Credits and License
