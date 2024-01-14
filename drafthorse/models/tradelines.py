@@ -1,7 +1,7 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .accounting import (
     ApplicableTradeTax,
-    BillingSpecifiedPeriod,
+    LineBillingSpecifiedPeriod,
     ReceivableAccountingAccount,
     TradeAllowanceCharge,
 )
@@ -151,7 +151,7 @@ class LineSummation(Element):
 
 class LineSettlement(Element):
     trade_tax = Field(ApplicableTradeTax, required=False, profile=COMFORT)
-    period = Field(BillingSpecifiedPeriod, required=False, profile=COMFORT)
+    period = Field(LineBillingSpecifiedPeriod, required=False, profile=COMFORT)
     allowance_charge = MultiField(
         TradeAllowanceCharge,
         required=False,

@@ -12,6 +12,16 @@ from .fields import (
 )
 
 
+# added as in lines there is no period description and in BillingSpecifiedPeriod it is mandatory
+class LineBillingSpecifiedPeriod(Element):
+    start = DateTimeField(NS_RAM, "StartDateTime", required=True, profile=COMFORT)
+    end = DateTimeField(NS_RAM, "EndDateTime", required=True, profile=COMFORT)
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "BillingSpecifiedPeriod"
+
+
 class BillingSpecifiedPeriod(Element):
     description = StringField(
         NS_RAM,
