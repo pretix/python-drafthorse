@@ -52,7 +52,7 @@ def test_readme_construction_example():
     trade_tax.basis_amount = Decimal("999.00")
     trade_tax.type_code = "VAT"
     trade_tax.category_code = "AE"
-    trade_tax.exemption_reason_code = 'VATEX-EU-AE'
+    trade_tax.exemption_reason_code = "VATEX-EU-AE"
     trade_tax.rate_applicable_percent = Decimal("0.00")
     doc.trade.settlement.trade_tax.add(trade_tax)
 
