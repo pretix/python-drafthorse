@@ -66,6 +66,9 @@ Generating::
     doc.trade.settlement.currency_code = "EUR"
     doc.trade.settlement.payment_means.type_code = "ZZZ"
 
+    doc.trade.agreement.seller_order.issue_date_time = datetime.now()
+    doc.trade.settlement.advance_payment.received_date = datetime.now()
+
     li = LineItem()
     li.document.line_id = "1"
     li.product.name = "Rainbow"

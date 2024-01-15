@@ -255,6 +255,25 @@ class DateTimeField(Field):
         return self.cls(self.namespace, self.tag)
 
 
+class FormattedDateTimeField(Field):
+    def __init__(
+        self, namespace, tag, default=False, required=False, profile=BASIC, _d=None
+    ):
+        from .elements import FormattedDateTimeElement
+
+        super().__init__(FormattedDateTimeElement, default, required, profile, _d)
+        self.namespace = namespace
+        self.tag = tag
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+        instance._data[self.name]._value = value
+
+    def initialize(self):
+        return self.cls(self.namespace, self.tag)
+
+
 class DirectDateTimeField(Field):
     def __init__(
         self, namespace, tag, default=False, required=False, profile=BASIC, _d=None

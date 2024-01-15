@@ -3,6 +3,7 @@ from .elements import Element
 from .fields import (
     CurrencyField,
     DateTimeField,
+    FormattedDateTimeField,
     DecimalField,
     IndicatorField,
     MultiCurrencyField,
@@ -30,7 +31,7 @@ class BillingSpecifiedPeriod(Element):
 
 class SellerOrderReferencedDocument(Element):
     issuer_ID = StringField(NS_RAM, "IssuerAssignedID", profile=COMFORT)
-    issue_date_time = DateTimeField(
+    issue_date_time = FormattedDateTimeField(
         NS_RAM, "FormattedIssueDateTime", required=True, profile=EXTENDED
     )
 

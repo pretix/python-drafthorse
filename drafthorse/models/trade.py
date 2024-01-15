@@ -10,7 +10,7 @@ from .accounting import (
 )
 from .delivery import TradeDelivery
 from .elements import Element
-from .fields import DateTimeField, DecimalField, Field, MultiField, StringField
+from .fields import DateTimeField, FormattedDateTimeField, DecimalField, Field, MultiField, StringField
 from .party import (
     BuyerTradeParty,
     EndUserTradeParty,
@@ -147,7 +147,7 @@ class IncludedTradeTax(Element):
 
 class AdvancePayment(Element):
     paid_amount = DecimalField(NS_RAM, "PaidAmount")
-    received_date = DateTimeField(NS_RAM, "FormattedReceivedDateTime")
+    received_date = FormattedDateTimeField(NS_RAM, "FormattedReceivedDateTime")
     included_trade_tax = MultiField(IncludedTradeTax)
 
     class Meta:
