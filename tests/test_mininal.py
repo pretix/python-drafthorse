@@ -1,5 +1,5 @@
 import os
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 
 from drafthorse.models.accounting import ApplicableTradeTax
@@ -32,6 +32,8 @@ def test_readme_construction_example():
 
     doc.trade.settlement.currency_code = "EUR"
     doc.trade.settlement.payment_means.type_code = "ZZZ"
+
+    doc.trade.agreement.buyer_order.issue_date_time = datetime.now()
 
     li = LineItem()
     li.document.line_id = "1"

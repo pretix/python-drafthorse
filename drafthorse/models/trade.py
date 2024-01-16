@@ -5,6 +5,7 @@ from .accounting import (
     BillingSpecifiedPeriod,
     MonetarySummation,
     ReceivableAccountingAccount,
+    BuyerOrderReferencedDocument,
     SellerOrderReferencedDocument,
     TradeAllowanceCharge,
 )
@@ -27,7 +28,6 @@ from .payment import (
 )
 from .references import (
     AdditionalReferencedDocument,
-    BuyerOrderReferencedDocument,
     ContractReferencedDocument,
     InvoiceReferencedDocument,
     ProcuringProjectType,

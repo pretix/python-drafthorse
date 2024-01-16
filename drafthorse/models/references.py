@@ -21,12 +21,6 @@ class ReferencedDocument(Element):
     )
 
 
-class BuyerOrderReferencedDocument(ReferencedDocument):
-    class Meta:
-        namespace = NS_RAM
-        tag = "BuyerOrderReferencedDocument"
-
-
 class ContractReferencedDocument(ReferencedDocument):
     class Meta:
         namespace = NS_RAM
