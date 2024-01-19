@@ -9,10 +9,10 @@ class PostalTradeAddress(Element):
     line_two = StringField(NS_RAM, "LineTwo", required=False, profile=BASIC)
     line_three = StringField(NS_RAM, "LineThree", required=False, profile=BASIC)
     city_name = StringField(NS_RAM, "CityName", required=False, profile=BASIC)
+    country_id = StringField(NS_RAM, "CountryID", required=True, profile=BASIC)
     country_subdivision = StringField(
-        NS_RAM, "CountrySubDivisionName", required=False, profile=EXTENDED
+        NS_RAM, "CountrySubDivisionName", required=False, profile=BASIC
     )
-    country_id = StringField(NS_RAM, "CountryID", required=False, profile=BASIC)
 
     class Meta:
         namespace = NS_RAM

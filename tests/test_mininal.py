@@ -32,6 +32,9 @@ def test_readme_construction_example():
 
     doc.trade.settlement.currency_code = "EUR"
     doc.trade.settlement.payment_means.type_code = "ZZZ"
+    
+    doc.trade.agreement.seller.address.country_id = "DE"
+    doc.trade.agreement.seller.address.country_subdivision = "Bayern"
 
     li = LineItem()
     li.document.line_id = "1"
