@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from . import BASIC
+from . import BASIC, NS_UDT
 from .container import (
     Container,
     CurrencyContainer,
@@ -238,13 +238,21 @@ class IndicatorField(Field):
 
 class DateTimeField(Field):
     def __init__(
-        self, namespace, tag, default=False, required=False, profile=BASIC, _d=None
+        self,
+        namespace,
+        tag,
+        default=False,
+        required=False,
+        profile=BASIC,
+        _d=None,
+        date_time_namespace=NS_UDT,
     ):
         from .elements import DateTimeElement
 
         super().__init__(DateTimeElement, default, required, profile, _d)
         self.namespace = namespace
         self.tag = tag
+        self._date_time_namespace = date_time_namespace
 
     def __set__(self, instance, value):
         if instance._data.get(self.name, None) is None:
@@ -252,7 +260,9 @@ class DateTimeField(Field):
         instance._data[self.name]._value = value
 
     def initialize(self):
-        return self.cls(self.namespace, self.tag)
+        return self.cls(
+            self.namespace, self.tag, date_time_namespace=self._date_time_namespace
+        )
 
 
 class DirectDateTimeField(Field):

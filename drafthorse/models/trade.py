@@ -1,11 +1,10 @@
-from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_RSM
+from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_RSM, NS_QDT
 from .accounting import (
     ApplicableTradeTax,
     AppliedTradeTax,
     BillingSpecifiedPeriod,
     MonetarySummation,
     ReceivableAccountingAccount,
-    SellerOrderReferencedDocument,
     TradeAllowanceCharge,
 )
 from .delivery import TradeDelivery
@@ -27,6 +26,7 @@ from .payment import (
 )
 from .references import (
     AdditionalReferencedDocument,
+    SellerOrderReferencedDocument,
     BuyerOrderReferencedDocument,
     ContractReferencedDocument,
     InvoiceReferencedDocument,
@@ -147,7 +147,9 @@ class IncludedTradeTax(Element):
 
 class AdvancePayment(Element):
     paid_amount = DecimalField(NS_RAM, "PaidAmount")
-    received_date = DateTimeField(NS_RAM, "FormattedReceivedDateTime")
+    received_date = DateTimeField(
+        NS_RAM, "FormattedReceivedDateTime", date_time_namespace=NS_QDT
+    )
     included_trade_tax = MultiField(IncludedTradeTax)
 
     class Meta:

@@ -1,6 +1,6 @@
-from . import COMFORT, EXTENDED, NS_RAM
+from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_QDT
 from .elements import Element
-from .fields import BinaryObjectField, DirectDateTimeField, StringField
+from .fields import BinaryObjectField, DateTimeField, StringField
 
 
 class ProcuringProjectType(Element):
@@ -13,12 +13,22 @@ class ProcuringProjectType(Element):
 
 
 class ReferencedDocument(Element):
-    date_time_string = DirectDateTimeField(
-        NS_RAM, "DateTimeString", required=False, profile=COMFORT
-    )
     issuer_assigned_id = StringField(
-        NS_RAM, "IssuerAssignedID", required=False, profile=COMFORT
+        NS_RAM, "IssuerAssignedID", required=False, profile=BASIC
     )
+    issue_date_time = DateTimeField(
+        NS_RAM,
+        "FormattedIssueDateTime",
+        required=True,
+        profile=BASIC,
+        date_time_namespace=NS_QDT,
+    )
+
+
+class SellerOrderReferencedDocument(ReferencedDocument):
+    class Meta:
+        namespace = NS_RAM
+        tag = "SellerOrderReferencedDocument"
 
 
 class BuyerOrderReferencedDocument(ReferencedDocument):
@@ -33,18 +43,12 @@ class ContractReferencedDocument(ReferencedDocument):
         tag = "ContractReferencedDocument"
 
 
-class AdditionalReferencedDocument(Element):
-    issuer_assigned_id = StringField(
-        NS_RAM, "IssuerAssignedID", required=False, profile=COMFORT
-    )
-    uri_id = StringField(NS_RAM, "URIID", required=False, profile=EXTENDED)
-    date_time_string = DirectDateTimeField(
-        NS_RAM, "DateTimeString", required=False, profile=COMFORT
-    )
-    type_code = StringField(NS_RAM, "TypeCode", profile=EXTENDED, required=True)
+class AdditionalReferencedDocument(ReferencedDocument):
+    uri_id = StringField(NS_RAM, "URIID", required=False, profile=COMFORT)
+    type_code = StringField(NS_RAM, "TypeCode", profile=COMFORT, required=True)
     name = StringField(NS_RAM, "Name", profile=COMFORT, required=False)
     attached_object = BinaryObjectField(
-        NS_RAM, "AttachmentBinaryObject", required=False, profile=EXTENDED
+        NS_RAM, "AttachmentBinaryObject", required=False, profile=COMFORT
     )
 
     class Meta:
@@ -52,15 +56,8 @@ class AdditionalReferencedDocument(Element):
         tag = "AdditionalReferencedDocument"
 
 
-class InvoiceReferencedDocument(Element):
-    issuer_assigned_id = StringField(
-        NS_RAM, "IssuerAssignedID", required=False, profile=COMFORT
-    )
-
-    date_time_string = DirectDateTimeField(
-        NS_RAM, "DateTimeString", required=True, profile=COMFORT
-    )
-    type_code = StringField(NS_RAM, "TypeCode", profile=EXTENDED, required=False)
+class InvoiceReferencedDocument(ReferencedDocument):
+    type_code = StringField(NS_RAM, "TypeCode", profile=COMFORT, required=False)
 
     class Meta:
         namespace = NS_RAM
@@ -80,7 +77,7 @@ class DespatchAdviceReferencedDocument(ReferencedDocument):
 
 
 class LineUltimateCustomerOrderReferencedDocument(ReferencedDocument):
-    line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
+    line_id = StringField(NS_RAM, "LineID", required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
@@ -88,7 +85,7 @@ class LineUltimateCustomerOrderReferencedDocument(ReferencedDocument):
 
 
 class LineBuyerOrderReferencedDocument(ReferencedDocument):
-    line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
+    line_id = StringField(NS_RAM, "LineID", required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
@@ -96,7 +93,7 @@ class LineBuyerOrderReferencedDocument(ReferencedDocument):
 
 
 class LineContractReferencedDocument(ReferencedDocument):
-    line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
+    line_id = StringField(NS_RAM, "LineID", required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
@@ -104,7 +101,7 @@ class LineContractReferencedDocument(ReferencedDocument):
 
 
 class LineDespatchAdviceReferencedDocument(ReferencedDocument):
-    line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
+    line_id = StringField(NS_RAM, "LineID", required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
@@ -112,28 +109,24 @@ class LineDespatchAdviceReferencedDocument(ReferencedDocument):
 
 
 class LineReceivingAdviceReferencedDocument(ReferencedDocument):
-    line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
+    line_id = StringField(NS_RAM, "LineID", required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
         tag = "ReceivingAdviceReferencedDocument"
 
 
-class LineAdditionalReferencedDocument(Element):
-    issuer_assigned_id = StringField(
-        NS_RAM, "IssuerAssignedID", required=False, profile=COMFORT
-    )
-    uri_id = StringField(NS_RAM, "URIID", required=False, profile=EXTENDED)
-    line_id = StringField(NS_RAM, "LineID", required=False, profile=EXTENDED)
-    type_code = StringField(NS_RAM, "TypeCode", required=False, profile=EXTENDED)
+class LineAdditionalReferencedDocument(ReferencedDocument):
+    uri_id = StringField(NS_RAM, "URIID", required=False, profile=COMFORT)
+    line_id = StringField(NS_RAM, "LineID", required=False, profile=COMFORT)
+    type_code = StringField(NS_RAM, "TypeCode", required=False, profile=COMFORT)
     name = StringField(NS_RAM, "Name", required=False, profile=EXTENDED)
-    date_time_string = DirectDateTimeField(
-        NS_RAM, "FormattedIssueDateTime", required=False, profile=COMFORT
-    )
     reference_type_code = StringField(
-        NS_RAM, "ReferenceTypeCode", profile=EXTENDED, required=True
+        NS_RAM, "ReferenceTypeCode", profile=COMFORT, required=True
     )
-    # todo: AttachmentBinaryObject
+    attached_object = BinaryObjectField(
+        NS_RAM, "AttachmentBinaryObject", required=False, profile=COMFORT
+    )
 
     class Meta:
         namespace = NS_RAM

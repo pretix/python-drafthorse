@@ -28,17 +28,6 @@ class BillingSpecifiedPeriod(Element):
         tag = "BillingSpecifiedPeriod"
 
 
-class SellerOrderReferencedDocument(Element):
-    issuer_ID = StringField(NS_RAM, "IssuerAssignedID", profile=COMFORT)
-    issue_date_time = DateTimeField(
-        NS_RAM, "FormattedIssueDateTime", required=True, profile=EXTENDED
-    )
-
-    class Meta:
-        namespace = NS_RAM
-        tag = "SellerOrderReferencedDocument"
-
-
 class LineApplicableTradeTax(Element):
     calculated_amount = DecimalField(
         NS_RAM, "CalculatedAmount", required=True, profile=BASIC, _d="Steuerbetrag"
