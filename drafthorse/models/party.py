@@ -59,6 +59,22 @@ class EmailURI(Element):
         tag = "EmailURIUniversalCommunication"
 
 
+class LegalOrganization(Element):
+    id = StringField(NS_RAM, "ID", required=False, profile=BASIC)
+    trade_name = StringField(
+        NS_RAM,
+        "TradingBusinessName",
+        required=False,
+        profile=BASIC,
+        _d="Name, unter dem der Käufers bekannt ist",
+    )
+    trade_address = Field(PostalTradeAddress, required=False, profile=EXTENDED)
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "SpecifiedLegalOrganization"
+
+
 class TradeContact(Element):
     person_name = StringField(NS_RAM, "PersonName", required=False, profile=EXTENDED)
     department_name = StringField(
@@ -85,7 +101,12 @@ class TradeParty(Element):
         _d="Globaler Identifier des Verkäufers",
     )
     name = StringField(NS_RAM, "Name", required=False, profile=BASIC)
-    # TODO: SpecifiedLegalOrganization
+    legal_organization = Field(
+        LegalOrganization,
+        required=False,
+        profile=BASIC,
+        _d="Handelsinformationen des Käufers",
+    )
     description = StringField(
         NS_RAM,
         "Description",
