@@ -66,7 +66,7 @@ class LegalOrganization(Element):
         "TradingBusinessName",
         required=False,
         profile=BASIC,
-        _d="Name, unter dem der Käufer bekannt ist",
+        _d="Firmenname, sofern abweichend vom Name",
     )
     trade_address = Field(PostalTradeAddress, required=False, profile=EXTENDED)
 
