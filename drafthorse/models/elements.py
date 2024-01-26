@@ -301,7 +301,8 @@ class IDElement(StringElement):
     def to_etree(self):
         node = self._etree_node()
         node.text = self._text
-        node.attrib["schemeID"] = self._scheme_id
+        if self._scheme_id != "":
+            node.attrib["schemeID"] = self._scheme_id
         return node
 
     def from_etree(self, root):

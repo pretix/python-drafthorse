@@ -150,25 +150,24 @@ class LineSummation(Element):
 
 
 class LineSettlement(Element):
-    trade_tax = Field(ApplicableTradeTax, required=False, profile=COMFORT)
-    period = Field(BillingSpecifiedPeriod, required=False, profile=COMFORT)
+    trade_tax = Field(ApplicableTradeTax, required=False)
+    period = Field(BillingSpecifiedPeriod, required=False)
     allowance_charge = MultiField(
         TradeAllowanceCharge,
         required=False,
-        profile=COMFORT,
         _d="Schalter für Zu-/Abschlag",
     )
-    monetary_summation = Field(LineSummation, required=False, profile=COMFORT)
+    monetary_summation = Field(LineSummation, required=False, profile=BASIC)
     invoice_referenced_document = Field(
         InvoiceReferencedDocument, required=False, profile=EXTENDED
     )
     additional_referenced_document = Field(
-        LineAdditionalReferencedDocument, required=False, profile=EXTENDED
+        LineAdditionalReferencedDocument, required=False, profile=COMFORT
     )
     accounting_account = Field(
         ReceivableAccountingAccount,
         required=False,
-        profile=EXTENDED,
+        profile=COMFORT,
         _d="Detailinformationen zur Buchungsreferenz",
     )
 

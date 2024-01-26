@@ -1,6 +1,6 @@
-from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_QDT
+from . import BASIC, COMFORT, NS_RAM, NS_QDT
 from .elements import Element
-from .fields import BinaryObjectField, DateTimeField, StringField
+from .fields import BinaryObjectField, DateTimeField, StringField, IDField
 
 
 class ProcuringProjectType(Element):
@@ -13,7 +13,7 @@ class ProcuringProjectType(Element):
 
 
 class ReferencedDocument(Element):
-    issuer_assigned_id = StringField(
+    issuer_assigned_id = IDField(
         NS_RAM, "IssuerAssignedID", required=False, profile=BASIC
     )
     issue_date_time = DateTimeField(
@@ -120,7 +120,7 @@ class LineAdditionalReferencedDocument(ReferencedDocument):
     uri_id = StringField(NS_RAM, "URIID", required=False, profile=COMFORT)
     line_id = StringField(NS_RAM, "LineID", required=False, profile=COMFORT)
     type_code = StringField(NS_RAM, "TypeCode", required=False, profile=COMFORT)
-    name = StringField(NS_RAM, "Name", required=False, profile=EXTENDED)
+    name = StringField(NS_RAM, "Name", required=False, profile=COMFORT)
     reference_type_code = StringField(
         NS_RAM, "ReferenceTypeCode", profile=COMFORT, required=True
     )

@@ -119,10 +119,16 @@ class IDField(Field):
         if instance._data.get(self.name, None) is None:
             instance._data[self.name] = self.initialize()
 
-        if not isinstance(value, (tuple, list)):
-            raise TypeError("Please pass a 2-tuple of including scheme ID and ID.")
-        instance._data[self.name]._text = value[1]
-        instance._data[self.name]._scheme_id = value[0]
+        if isinstance(value, (tuple, list)):
+            if len(value) == 2:
+                instance._data[self.name]._text = value[1]
+                instance._data[self.name]._scheme_id = value[0]
+            else:
+                raise TypeError(
+                    "Please pass a 2-tuple of including scheme ID and ID, or just an ID."
+                )
+        else:
+            instance._data[self.name]._text = value
 
 
 class CurrencyField(Field):
@@ -208,7 +214,9 @@ class BinaryObjectField(Field):
             instance._data[self.name] = self.initialize()
 
         if not isinstance(value, (tuple, list)):
-            raise TypeError("Please pass a 2-tuple of including amount and unit code.")
+            raise TypeError(
+                "Please pass a 3-tuple of mimeCode, filename and base64-encoded binary."
+            )
         instance._data[self.name]._text = value[2]
         instance._data[self.name]._mime_code = value[0]
         instance._data[self.name]._filename = value[1]

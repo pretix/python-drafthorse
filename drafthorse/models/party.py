@@ -117,6 +117,12 @@ class PayeeTradeParty(TradeParty):
         tag = "PayeeTradeParty"
 
 
+class PayerTradeParty(TradeParty):
+    class Meta:
+        namespace = NS_RAM
+        tag = "PayerTradeParty"
+
+
 class InvoicerTradeParty(TradeParty):
     class Meta:
         namespace = NS_RAM
