@@ -25,7 +25,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from io import BytesIO
 from lxml import etree
 from pypdf import PdfReader, PdfWriter
@@ -44,15 +44,32 @@ logger = logging.getLogger("drafthorse")
 logger.setLevel(logging.INFO)
 
 
-def attach_xml(original_pdf, xml_data, level=None):
+def attach_xml(original_pdf, xml_data, level=None, metadata=None, lang=None):
     """
     Create the ZUGFeRD invoice by attaching
     the input XML and proper metadata
     :param original_pdf: Input PDF
     :param xml_data: Input XML
-    :param level: optional Factur-X profile level
-       one of {MINIMUM, BASIC WL, BASIC, EN 16931, EXTENDED, XRECHNUNG}
-       if omitted autodetection is performed
+    :param level: optional Factur-X profile level 
+    one of {'MINIMUM', 'BASIC WL', 'BASIC', 'EN 16931', 'EXTENDED', 'XRECHNUNG'}
+    if omitted autodetection is performed
+    :type level: string
+    :param metadata: optional dict with user defined PDF metadata
+    for fields "author", "keywords", "title" and "subject". If metadata is None (default value),
+    this lib will generate some metadata by extracting relevant info from the Factur-X/Order-X XML.
+    Here is an example for the metadata argument:
+    pdf_metadata = {
+        'author': 'MyCompany',
+        'keywords': 'Factur-X, Invoice',
+        'title': 'MyCompany: Invoice I1242',
+        'subject':
+          'Factur-X invoice I1242 dated 2017-08-17 issued by MyCompany',
+    }
+    :type metadata: dict
+    :param lang: Language identifier in RFC 3066 format to specify the
+    natural language of the PDF document. Used by PDF readers for blind people.
+    Example: en-US or fr-FR
+    :type lang: string    
     :return: Output PDF containing the metadata and XML
     """
     if not isinstance(original_pdf, bytes):
@@ -72,13 +89,13 @@ def attach_xml(original_pdf, xml_data, level=None):
         # else : generate some ?
 
     # Extract metadata from XML
-    pdf_metadata, profile = _extract_xml_info(xml_data, level)
+    pdf_metadata, profile = _extract_xml_info(xml_data, level, metadata)
 
     # Extract output intents from input PDF
     output_intents = _get_original_output_intents(reader)
 
     _update_metadata_add_attachment(
-        output, xml_data, pdf_metadata, profile, output_intents
+        output, xml_data, pdf_metadata, profile, output_intents, lang
     )
 
     outbuffer = BytesIO()
@@ -114,8 +131,8 @@ def _prepare_pdf_metadata_txt(pdf_metadata):
     :param pdf_metadata: Metadata
     :return: PDF info
     """
-    pdf_date = datetime.utcnow().strftime("D:%Y%m%d%H%M%SZ")
-    info_dict = {
+    pdf_date = datetime.now(tz=timezone.utc).strftime("D:%Y%m%d%H%M%SZ")
+    return {
         "/Author": pdf_metadata.get("author", ""),
         "/CreationDate": pdf_date,
         "/Creator": "python-drafthorse",
@@ -124,7 +141,6 @@ def _prepare_pdf_metadata_txt(pdf_metadata):
         "/Subject": pdf_metadata.get("subject", ""),
         "/Title": pdf_metadata.get("title", ""),
     }
-    return info_dict
 
 
 def _prepare_xmp_metadata(profile, pdf_metadata):
@@ -140,20 +156,18 @@ def _prepare_xmp_metadata(profile, pdf_metadata):
         subject=pdf_metadata.get("subject", ""),
         producer="pypdf",
         creator_tool="python-drafthorse",
-        timestamp=datetime.now().strftime("%Y-%m-%dT%H:%M:%S+00:00"),
+        timestamp=datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00"),
         urn="urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#",
         documenttype="INVOICE",
         xml_filename="factur-x.xml",
         version="1.0",
         xmp_level=profile,
     )
-    xml_byte = xml_str.encode("utf-8")
-
-    return xml_byte
+    return xml_str.encode("utf-8")
 
 
 def _update_metadata_add_attachment(
-    pdf_filestream, facturx_xml_str, pdf_metadata, facturx_level, output_intents
+    pdf_filestream, facturx_xml_str, pdf_metadata, facturx_level, output_intents, lang=None
 ):
     """
     Update PDF metadata and attach XML file
@@ -162,11 +176,12 @@ def _update_metadata_add_attachment(
     :param pdf_metadata: PDF metadata
     :param facturx_level: Invoice profile
     :param output_intents: Output intents from input PDF
+    :param lang: Language identifier in RFC 3066 format
     """
     # Disable encoding
     # md5sum = hashlib.md5(facturx_xml_str).hexdigest()
     # md5sum_obj = create_string_object(md5sum)
-    pdf_date = datetime.utcnow().strftime("D:%Y%m%d%H%M%SZ")
+    pdf_date = datetime.now(tz=timezone.utc).strftime("D:%Y%m%d%H%M%SZ")
     params_dict = DictionaryObject(
         {
             # NameObject('/CheckSum'): md5sum_obj,
@@ -207,9 +222,7 @@ def _update_metadata_add_attachment(
     )
     filespec_obj = pdf_filestream._add_object(filespec_dict)
     name_arrayobj_cdict = {fname_obj: filespec_obj}
-    name_arrayobj_content_sort = list(
-        sorted(name_arrayobj_cdict.items(), key=lambda x: x[0])
-    )
+    name_arrayobj_content_sort = sorted(name_arrayobj_cdict.items(), key=lambda x: x[0])
     name_arrayobj_content_final = []
     af_list = []
     for fname_obj, filespec_obj in name_arrayobj_content_sort:
@@ -258,14 +271,23 @@ def _update_metadata_add_attachment(
         pdf_filestream._root_object.update(
             {NameObject("/OutputIntents"): ArrayObject(res_output_intents)}
         )
+    if lang:
+        pdf_filestream._root_object.update({
+            NameObject("/Lang"): create_string_object(lang.replace('_', '-')),
+            })
     metadata_txt_dict = _prepare_pdf_metadata_txt(pdf_metadata)
     pdf_filestream.add_metadata(metadata_txt_dict)
 
 
-def _extract_xml_info(xml_data, level=None):
+def _extract_xml_info(xml_data, level=None, metadata=None):
     """
     Extract metadata and profile from XML further added to the PDF
     :param xml_data: XML data
+    :param level: optional Factur-X profile level 
+       one of {MINIMUM, BASIC WL, BASIC, EN 16931, EXTENDED, XRECHNUNG}
+       if omitted autodetection is performed
+    :param metadata: optional dict with user defined pdf_metadata
+        for fields "author", "keywords", "title" and "subject"
     :return: Metadata and profile
     """
 
@@ -283,11 +305,13 @@ def _extract_xml_info(xml_data, level=None):
     )
     seller = seller_xpath[0].text
 
+    if metadata is None:
+        metadata = {}
     pdf_metadata = {
-        "author": seller,
-        "keywords": "Factur-X",
-        "title": number,
-        "subject": number,
+        "author": metadata.get("author", seller),
+        "keywords": metadata.get("keywords", "Factur-X"),
+        "title": metadata.get("title", number),
+        "subject": metadata.get("subject", number)
     }
 
     # get profile
