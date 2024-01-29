@@ -105,14 +105,14 @@ class TradeParty(Element):
         LegalOrganization,
         required=False,
         profile=BASIC,
-        _d="Handelsinformationen des Käufers",
+        _d="Handelsinformationen des Handelspartners",
     )
     description = StringField(
         NS_RAM,
         "Description",
         required=True,
         profile=COMFORT,
-        _d="Freitext der Zahlungsbedingungen",
+        _d="Zusätzliche rechliche Informationen des Handelspartners",
     )
     contact = Field(
         TradeContact,
