@@ -9,10 +9,10 @@ class PostalTradeAddress(Element):
     line_two = StringField(NS_RAM, "LineTwo", required=False, profile=BASIC)
     line_three = StringField(NS_RAM, "LineThree", required=False, profile=BASIC)
     city_name = StringField(NS_RAM, "CityName", required=False, profile=BASIC)
+    country_id = StringField(NS_RAM, "CountryID", required=True, profile=BASIC)
     country_subdivision = StringField(
-        NS_RAM, "CountrySubDivisionName", required=False, profile=EXTENDED
+        NS_RAM, "CountrySubDivisionName", required=False, profile=BASIC
     )
-    country_id = StringField(NS_RAM, "CountryID", required=False, profile=BASIC)
 
     class Meta:
         namespace = NS_RAM
@@ -60,7 +60,7 @@ class EmailURI(Element):
 
 
 class LegalOrganization(Element):
-    id = StringField(NS_RAM, "ID", required=False, profile=BASIC)
+    id = IDField(NS_RAM, "ID", required=False, profile=BASIC)
     trade_name = StringField(
         NS_RAM,
         "TradingBusinessName",
@@ -91,14 +91,14 @@ class TradeContact(Element):
 
 class TradeParty(Element):
     id = StringField(
-        NS_RAM, "ID", required=False, profile=COMFORT, _d="Identifier des Verkäufers"
+        NS_RAM, "ID", required=False, profile=COMFORT, _d="Kennung des Handelspartners"
     )
     global_id = MultiIDField(
         NS_RAM,
         "GlobalID",
         required=False,
         profile=COMFORT,
-        _d="Globaler Identifier des Verkäufers",
+        _d="Globaler Kennung des Handelspartners",
     )
     name = StringField(NS_RAM, "Name", required=False, profile=BASIC)
     legal_organization = Field(
@@ -115,12 +115,12 @@ class TradeParty(Element):
         _d="Freitext der Zahlungsbedingungen",
     )
     contact = Field(
-        TradeContact, required=False, profile=EXTENDED, _d="Ansprechpartner des Käufers"
+        TradeContact, required=False, profile=EXTENDED, _d="Ansprechpartner des Handelspartners"
     )
     address = Field(
-        PostalTradeAddress, required=False, profile=BASIC, _d="Anschrift des Käufers"
+        PostalTradeAddress, required=False, profile=BASIC, _d="Anschrift des Handelspartners"
     )
-    electronic_adress = MultiField(
+    electronic_address = MultiField(
         URIUniversalCommunication, required=False, profile=BASIC
     )
     tax_registrations = MultiField(TaxRegistration, required=False, profile=BASIC)
@@ -136,6 +136,12 @@ class PayeeTradeParty(TradeParty):
     class Meta:
         namespace = NS_RAM
         tag = "PayeeTradeParty"
+
+
+class PayerTradeParty(TradeParty):
+    class Meta:
+        namespace = NS_RAM
+        tag = "PayerTradeParty"
 
 
 class InvoicerTradeParty(TradeParty):
