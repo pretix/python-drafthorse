@@ -101,18 +101,18 @@ class TradeParty(Element):
         _d="Globaler Kennung des Handelspartners",
     )
     name = StringField(NS_RAM, "Name", required=False, profile=BASIC)
-    legal_organization = Field(
-        LegalOrganization,
-        required=False,
-        profile=BASIC,
-        _d="Handelsinformationen des Handelspartners",
-    )
     description = StringField(
         NS_RAM,
         "Description",
         required=True,
         profile=COMFORT,
         _d="Zusätzliche rechliche Informationen des Handelspartners",
+    )
+    legal_organization = Field(
+        LegalOrganization,
+        required=False,
+        profile=BASIC,
+        _d="Handelsinformationen des Handelspartners",
     )
     contact = Field(
         TradeContact,
