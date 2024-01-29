@@ -50,7 +50,7 @@ def attach_xml(original_pdf, xml_data, level=None, metadata=None, lang=None):
     the input XML and proper metadata
     :param original_pdf: Input PDF
     :param xml_data: Input XML
-    :param level: optional Factur-X profile level 
+    :param level: optional Factur-X profile level
     one of {'MINIMUM', 'BASIC WL', 'BASIC', 'EN 16931', 'EXTENDED', 'XRECHNUNG'}
     if omitted autodetection is performed
     :type level: string
@@ -69,7 +69,7 @@ def attach_xml(original_pdf, xml_data, level=None, metadata=None, lang=None):
     :param lang: Language identifier in RFC 3066 format to specify the
     natural language of the PDF document. Used by PDF readers for blind people.
     Example: en-US or fr-FR
-    :type lang: string    
+    :type lang: string
     :return: Output PDF containing the metadata and XML
     """
     if not isinstance(original_pdf, bytes):
@@ -167,7 +167,12 @@ def _prepare_xmp_metadata(profile, pdf_metadata):
 
 
 def _update_metadata_add_attachment(
-    pdf_filestream, facturx_xml_str, pdf_metadata, facturx_level, output_intents, lang=None
+    pdf_filestream,
+    facturx_xml_str,
+    pdf_metadata,
+    facturx_level,
+    output_intents,
+    lang=None,
 ):
     """
     Update PDF metadata and attach XML file
@@ -272,9 +277,11 @@ def _update_metadata_add_attachment(
             {NameObject("/OutputIntents"): ArrayObject(res_output_intents)}
         )
     if lang:
-        pdf_filestream._root_object.update({
-            NameObject("/Lang"): create_string_object(lang.replace('_', '-')),
-            })
+        pdf_filestream._root_object.update(
+            {
+                NameObject("/Lang"): create_string_object(lang.replace("_", "-")),
+            }
+        )
     metadata_txt_dict = _prepare_pdf_metadata_txt(pdf_metadata)
     pdf_filestream.add_metadata(metadata_txt_dict)
 
@@ -283,7 +290,7 @@ def _extract_xml_info(xml_data, level=None, metadata=None):
     """
     Extract metadata and profile from XML further added to the PDF
     :param xml_data: XML data
-    :param level: optional Factur-X profile level 
+    :param level: optional Factur-X profile level
        one of {MINIMUM, BASIC WL, BASIC, EN 16931, EXTENDED, XRECHNUNG}
        if omitted autodetection is performed
     :param metadata: optional dict with user defined pdf_metadata
@@ -311,7 +318,7 @@ def _extract_xml_info(xml_data, level=None, metadata=None):
         "author": metadata.get("author", seller),
         "keywords": metadata.get("keywords", "Factur-X"),
         "title": metadata.get("title", number),
-        "subject": metadata.get("subject", number)
+        "subject": metadata.get("subject", number),
     }
 
     # get profile
