@@ -115,10 +115,16 @@ class TradeParty(Element):
         _d="Freitext der Zahlungsbedingungen",
     )
     contact = Field(
-        TradeContact, required=False, profile=EXTENDED, _d="Ansprechpartner des Handelspartners"
+        TradeContact,
+        required=False,
+        profile=EXTENDED,
+        _d="Ansprechpartner des Handelspartners",
     )
     address = Field(
-        PostalTradeAddress, required=False, profile=BASIC, _d="Anschrift des Handelspartners"
+        PostalTradeAddress,
+        required=False,
+        profile=BASIC,
+        _d="Anschrift des Handelspartners",
     )
     electronic_address = MultiField(
         URIUniversalCommunication, required=False, profile=BASIC
