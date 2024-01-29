@@ -83,13 +83,6 @@ class ApplicableTradeTax(Element):
         profile=COMFORT,
         _d="Grund der Steuerbefreiung (Freitext)",
     )
-    exemption_reason_code = StringField(
-        NS_RAM,
-        "ExemptionReasonCode",
-        required=False,
-        profile=EXTENDED,
-        _d="Grund der Steuerbefreiung (Code)",
-    )
     tax_point_date = DateTimeField(
         NS_RAM, "TaxPointDate", required=False, profile=COMFORT
     )
@@ -126,6 +119,13 @@ class ApplicableTradeTax(Element):
         required=False,
         profile=COMFORT,
         _d="Steuerkategorie (Wert)",
+    )
+    exemption_reason_code = StringField(
+        NS_RAM,
+        "ExemptionReasonCode",
+        required=False,
+        profile=EXTENDED,
+        _d="Grund der Steuerbefreiung (Code)",
     )
     rate_applicable_percent = DecimalField(
         NS_RAM, "RateApplicablePercent", required=True, profile=BASIC
