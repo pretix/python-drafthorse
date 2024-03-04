@@ -213,14 +213,14 @@ class TradeAllowanceCharge(Element):
         NS_RAM,
         "CalculationPercent",
         required=False,
-        profile=EXTENDED,
+        profile=COMFORT,
         _d="Rabatt in Prozent",
     )
     basis_amount = DecimalField(  # TODO: Should be deprecated?
         NS_RAM,
         "BasisAmount",
         required=False,
-        profile=EXTENDED,
+        profile=COMFORT,
         _d="Basisbetrag des Rabatts",
     )
     basis_quantity = QuantityField(
