@@ -237,7 +237,7 @@ class TradeAllowanceCharge(Element):
         profile=COMFORT,
         _d="Betrag des Zu-/Abschlags",
     )
-    reason_code = StringField(NS_RAM, "ReasonCode", required=False, profile=EXTENDED)
+    reason_code = StringField(NS_RAM, "ReasonCode", required=False, profile=COMFORT)
     reason = StringField(NS_RAM, "Reason", required=False, profile=COMFORT)
     trade_tax = MultiField(CategoryTradeTax, required=False, profile=COMFORT)
 
