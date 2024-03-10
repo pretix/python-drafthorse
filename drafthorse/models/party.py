@@ -98,7 +98,7 @@ class TradeParty(Element):
         "GlobalID",
         required=False,
         profile=COMFORT,
-        _d="Globaler Kennung des Handelspartners",
+        _d="Globale Kennung des Handelspartners",
     )
     name = StringField(NS_RAM, "Name", required=False, profile=BASIC)
     description = StringField(
