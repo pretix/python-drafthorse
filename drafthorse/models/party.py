@@ -59,6 +59,22 @@ class EmailURI(Element):
         tag = "EmailURIUniversalCommunication"
 
 
+class LegalOrganization(Element):
+    id = IDField(NS_RAM, "ID", required=False, profile=BASIC)
+    trade_name = StringField(
+        NS_RAM,
+        "TradingBusinessName",
+        required=False,
+        profile=BASIC,
+        _d="Firmenname, sofern abweichend vom Namen",
+    )
+    trade_address = Field(PostalTradeAddress, required=False, profile=EXTENDED)
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "SpecifiedLegalOrganization"
+
+
 class TradeContact(Element):
     person_name = StringField(NS_RAM, "PersonName", required=False, profile=EXTENDED)
     department_name = StringField(
@@ -75,31 +91,42 @@ class TradeContact(Element):
 
 class TradeParty(Element):
     id = StringField(
-        NS_RAM, "ID", required=False, profile=COMFORT, _d="Identifier des Verkäufers"
+        NS_RAM, "ID", required=False, profile=COMFORT, _d="Kennung des Handelspartners"
     )
     global_id = MultiIDField(
         NS_RAM,
         "GlobalID",
         required=False,
         profile=COMFORT,
-        _d="Globaler Identifier des Verkäufers",
+        _d="Globale Kennung des Handelspartners",
     )
     name = StringField(NS_RAM, "Name", required=False, profile=BASIC)
-    # TODO: SpecifiedLegalOrganization
     description = StringField(
         NS_RAM,
         "Description",
         required=True,
         profile=COMFORT,
-        _d="Freitext der Zahlungsbedingungen",
+        _d="Zusätzliche rechliche Informationen des Handelspartners",
+    )
+    legal_organization = Field(
+        LegalOrganization,
+        required=False,
+        profile=BASIC,
+        _d="Handelsinformationen des Handelspartners",
     )
     contact = Field(
-        TradeContact, required=False, profile=EXTENDED, _d="Ansprechpartner des Käufers"
+        TradeContact,
+        required=False,
+        profile=EXTENDED,
+        _d="Ansprechpartner des Handelspartners",
     )
     address = Field(
-        PostalTradeAddress, required=False, profile=BASIC, _d="Anschrift des Käufers"
+        PostalTradeAddress,
+        required=False,
+        profile=BASIC,
+        _d="Anschrift des Handelspartners",
     )
-    electronic_adress = MultiField(
+    electronic_address = MultiField(
         URIUniversalCommunication, required=False, profile=BASIC
     )
     tax_registrations = MultiField(TaxRegistration, required=False, profile=BASIC)
