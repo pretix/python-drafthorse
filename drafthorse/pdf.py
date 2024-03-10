@@ -51,13 +51,14 @@ def attach_xml(original_pdf, xml_data, level=None, metadata=None, lang=None):
     :param original_pdf: Input PDF
     :param xml_data: Input XML
     :param level: optional Factur-X profile level
-    one of {'MINIMUM', 'BASIC WL', 'BASIC', 'EN 16931', 'EXTENDED', 'XRECHNUNG'}
-    if omitted autodetection is performed
+    one of ``{'MINIMUM', 'BASIC WL', 'BASIC', 'EN 16931', 'EXTENDED', 'XRECHNUNG'}``.
+    If omitted, autodetection is performed
     :type level: string
     :param metadata: optional dict with user defined PDF metadata
     for fields "author", "keywords", "title" and "subject". If metadata is None (default value),
     this lib will generate some metadata by extracting relevant info from the Factur-X/Order-X XML.
     Here is an example for the metadata argument:
+    ```
     pdf_metadata = {
         'author': 'MyCompany',
         'keywords': 'Factur-X, Invoice',
@@ -65,6 +66,7 @@ def attach_xml(original_pdf, xml_data, level=None, metadata=None, lang=None):
         'subject':
           'Factur-X invoice I1242 dated 2017-08-17 issued by MyCompany',
     }
+    ```
     :type metadata: dict
     :param lang: Language identifier in RFC 3066 format to specify the
     natural language of the PDF document. Used by PDF readers for blind people.
