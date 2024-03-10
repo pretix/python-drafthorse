@@ -37,7 +37,7 @@ Parsing::
 Generating::
 
     import os
-    from datetime import date
+    from datetime import date, datetime, timezone
     from decimal import Decimal
 
     from drafthorse.models.accounting import ApplicableTradeTax
