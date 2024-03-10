@@ -28,47 +28,6 @@ class BillingSpecifiedPeriod(Element):
         tag = "BillingSpecifiedPeriod"
 
 
-class SellerOrderReferencedDocument(Element):
-    issuer_ID = StringField(NS_RAM, "IssuerAssignedID", profile=COMFORT)
-    issue_date_time = DateTimeField(
-        NS_RAM, "FormattedIssueDateTime", required=True, profile=EXTENDED
-    )
-
-    class Meta:
-        namespace = NS_RAM
-        tag = "SellerOrderReferencedDocument"
-
-
-class LineApplicableTradeTax(Element):
-    calculated_amount = DecimalField(
-        NS_RAM, "CalculatedAmount", required=True, profile=BASIC, _d="Steuerbetrag"
-    )
-    type_code = StringField(
-        NS_RAM, "TypeCode", required=True, profile=BASIC, _d="Steuerart (Code)"
-    )
-    exemption_reason = StringField(
-        NS_RAM,
-        "ExemptionReason",
-        required=False,
-        profile=COMFORT,
-        _d="Grund der Steuerbefreiung (Freitext)",
-    )
-    category_code = StringField(
-        NS_RAM,
-        "CategoryCode",
-        required=False,
-        profile=COMFORT,
-        _d="Steuerkategorie (Wert)",
-    )
-    rate_applicable_percent = DecimalField(
-        NS_RAM, "RateApplicablePercent", required=True, profile=BASIC
-    )
-
-    class Meta:
-        namespace = NS_RAM
-        tag = "ApplicableTradeTax"
-
-
 class ApplicableTradeTax(Element):
     calculated_amount = DecimalField(
         NS_RAM, "CalculatedAmount", required=True, profile=BASIC, _d="Steuerbetrag"
@@ -80,17 +39,8 @@ class ApplicableTradeTax(Element):
         NS_RAM,
         "ExemptionReason",
         required=False,
-        profile=COMFORT,
-        _d="Grund der Steuerbefreiung (Freitext)",
-    )
-    tax_point_date = DateTimeField(
-        NS_RAM, "TaxPointDate", required=False, profile=COMFORT
-    )
-    due_date_type_code = StringField(
-        NS_RAM,
-        "DueDateTypeCode",
-        required=False,
         profile=BASIC,
+        _d="Grund der Steuerbefreiung (Freitext)",
     )
     basis_amount = DecimalField(
         NS_RAM,
@@ -117,15 +67,24 @@ class ApplicableTradeTax(Element):
         NS_RAM,
         "CategoryCode",
         required=False,
-        profile=COMFORT,
+        profile=BASIC,
         _d="Steuerkategorie (Wert)",
     )
     exemption_reason_code = StringField(
         NS_RAM,
         "ExemptionReasonCode",
         required=False,
-        profile=EXTENDED,
+        profile=BASIC,
         _d="Grund der Steuerbefreiung (Code)",
+    )
+    tax_point_date = DateTimeField(
+        NS_RAM, "TaxPointDate", required=False, profile=COMFORT
+    )
+    due_date_type_code = StringField(
+        NS_RAM,
+        "DueDateTypeCode",
+        required=False,
+        profile=BASIC,
     )
     rate_applicable_percent = DecimalField(
         NS_RAM, "RateApplicablePercent", required=True, profile=BASIC
@@ -254,14 +213,14 @@ class TradeAllowanceCharge(Element):
         NS_RAM,
         "CalculationPercent",
         required=False,
-        profile=EXTENDED,
+        profile=COMFORT,
         _d="Rabatt in Prozent",
     )
     basis_amount = DecimalField(  # TODO: Should be deprecated?
         NS_RAM,
         "BasisAmount",
         required=False,
-        profile=EXTENDED,
+        profile=COMFORT,
         _d="Basisbetrag des Rabatts",
     )
     basis_quantity = QuantityField(
@@ -278,7 +237,7 @@ class TradeAllowanceCharge(Element):
         profile=COMFORT,
         _d="Betrag des Zu-/Abschlags",
     )
-    reason_code = StringField(NS_RAM, "ReasonCode", required=False, profile=EXTENDED)
+    reason_code = StringField(NS_RAM, "ReasonCode", required=False, profile=COMFORT)
     reason = StringField(NS_RAM, "Reason", required=False, profile=COMFORT)
     trade_tax = MultiField(CategoryTradeTax, required=False, profile=COMFORT)
 

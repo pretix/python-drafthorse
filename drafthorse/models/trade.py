@@ -1,11 +1,10 @@
-from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_RSM
+from . import BASIC, COMFORT, EXTENDED, NS_RAM, NS_RSM, NS_QDT
 from .accounting import (
     ApplicableTradeTax,
     AppliedTradeTax,
     BillingSpecifiedPeriod,
     MonetarySummation,
     ReceivableAccountingAccount,
-    SellerOrderReferencedDocument,
     TradeAllowanceCharge,
 )
 from .delivery import TradeDelivery
@@ -17,6 +16,7 @@ from .party import (
     InvoiceeTradeParty,
     InvoicerTradeParty,
     PayeeTradeParty,
+    PayerTradeParty,
     SellerTaxRepresentativeTradeParty,
     SellerTradeParty,
 )
@@ -28,6 +28,7 @@ from .payment import (
 from .references import (
     AdditionalReferencedDocument,
     BuyerOrderReferencedDocument,
+    SellerOrderReferencedDocument,
     ContractReferencedDocument,
     InvoiceReferencedDocument,
     ProcuringProjectType,
@@ -147,7 +148,9 @@ class IncludedTradeTax(Element):
 
 class AdvancePayment(Element):
     paid_amount = DecimalField(NS_RAM, "PaidAmount")
-    received_date = DateTimeField(NS_RAM, "FormattedReceivedDateTime")
+    received_date = DateTimeField(
+        NS_RAM, "FormattedReceivedDateTime", date_time_namespace=NS_QDT
+    )
     included_trade_tax = MultiField(IncludedTradeTax)
 
     class Meta:
@@ -159,47 +162,52 @@ class TradeSettlement(Element):
     creditor_reference_id = StringField(NS_RAM, "CreditorReferenceID")
     payment_reference = StringField(NS_RAM, "PaymentReference")
     tax_currency_code = StringField(
-        NS_RAM, "TaxCurrencyCode", required=False, profile=COMFORT
+        NS_RAM, "TaxCurrencyCode", required=False, profile=BASIC
     )
     currency_code = StringField(NS_RAM, "InvoiceCurrencyCode")
     issuer_reference = StringField(NS_RAM, "InvoiceIssuerReference", profile=EXTENDED)
     invoicer = Field(
-        InvoicerTradeParty, required=False, profile=COMFORT, _d="Rechnungsaussteller"
+        InvoicerTradeParty, required=False, profile=EXTENDED, _d="Rechnungsaussteller"
     )
     invoicee = Field(
-        InvoiceeTradeParty, required=False, profile=COMFORT, _d="Rechnungsempfänger"
+        InvoiceeTradeParty, required=False, profile=EXTENDED, _d="Rechnungsempfänger"
     )
     payee = Field(
-        PayeeTradeParty, required=False, profile=COMFORT, _d="Zahlungsempfänger"
+        PayeeTradeParty, required=False, profile=BASIC, _d="Zahlungsempfänger"
     )
-    invoice_currency = Field(TaxApplicableTradeCurrencyExchange)
+    payer = Field(
+        PayerTradeParty, required=False, profile=EXTENDED, _d="Zahlungspflichtiger"
+    )
+    invoice_currency = Field(TaxApplicableTradeCurrencyExchange, profile=EXTENDED)
     payment_means = Field(PaymentMeans)
     trade_tax = MultiField(ApplicableTradeTax)
     period = Field(BillingSpecifiedPeriod, required=False, profile=BASIC)
     allowance_charge = MultiField(
         TradeAllowanceCharge,
         required=False,
-        profile=COMFORT,
+        profile=BASIC,
         _d="Schalter für Zu-/Abschlag",
     )
-    service_charge = MultiField(LogisticsServiceCharge, required=False, profile=COMFORT)
-    terms = MultiField(PaymentTerms, required=False, profile=COMFORT)
+    service_charge = MultiField(
+        LogisticsServiceCharge, required=False, profile=EXTENDED
+    )
+    terms = MultiField(PaymentTerms, required=False, profile=BASIC)
     monetary_summation = Field(
         MonetarySummation,
         required=True,
         profile=BASIC,
         _d="Detailinformation zu Belegsummen",
     )
-    accounting_account = Field(
-        ReceivableAccountingAccount,
-        required=False,
-        profile=EXTENDED,
-        _d="Detailinformationen zur Buchungsreferenz",
-    )
-    advance_payment = MultiField(AdvancePayment, required=False, profile=EXTENDED)
     invoice_referenced_document = Field(
         InvoiceReferencedDocument, required=False, profile=BASIC
     )
+    accounting_account = Field(
+        ReceivableAccountingAccount,
+        required=False,
+        profile=BASIC,
+        _d="Detailinformationen zur Buchungsreferenz",
+    )
+    advance_payment = MultiField(AdvancePayment, required=False, profile=EXTENDED)
 
     class Meta:
         namespace = NS_RAM
