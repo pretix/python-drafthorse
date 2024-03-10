@@ -17,12 +17,23 @@ attach it to a PDF. We do not support parsing PDF files (for now).
 
 By low-level, we mean that this library tries to model the ZUGFeRD data model 1:1 without any
 further abstractions or simplifications. You can set and parse all parameters defined in ZUGFeRD
-2.2.
+2.2. To see which parameters are defined, please refer to the official ZUGFeRD specification,
+there is no documentation for this library that reiterates it.
 
 All output is validated against the official XSDs, but no validation of profile levels
 (basic, comfort, extended) is performed.
 
 The profile level is detected automatically based on the XML data and added to the PDF metadata.
+
+Maintenance note
+----------------
+
+With the possibly upcoming legal obligation to use digital formats for all B2B invoices in
+Germany, interest in this library is increasing. We built this library to ble able to use it
+in the [pretix-zugferd](https://github.com/pretix/pretix-zugferd) module and we are planning
+to keep maintaining the library. However, it is not our core business and turnaround time on
+issus or PR reviews might be longer than usual due to other priorities. We do not offer paid
+consulting services around this library.
 
 Usage
 -----
@@ -149,7 +160,7 @@ Maintainer: Raphael Michel <michel@rami.io>
 
 License of the Python code: Apache License 2.0
 
-The PDF handling (drafthorse/pdf.py) is based on the code of factur-x, Copyright 2016-2018, Alexis de Lattre <alexis.delattre@akretion.com>,
+The PDF handling (drafthorse/pdf.py) was originally based on the code of factur-x, Copyright 2016-2018, Alexis de Lattre <alexis.delattre@akretion.com>,
 released under a BSD license.
 
 The packages includes schemas and samples of the ZUGFeRD specification (.xsd and .xml files) which are owned by the *Forum für elektronische Rechnungen bei der AWV e.V („FeRD“)* and are released under a proprietary license that allows bundling them together with other software for free.
