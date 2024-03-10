@@ -36,7 +36,7 @@ def invoice_document(request):
 
     doc.trade.agreement.seller.address.country_id = "DE"
     doc.trade.agreement.seller.address.country_subdivision = "Bayern"
- 
+
     doc.trade.agreement.seller_order.issue_date_time = datetime.now(timezone.utc)
     doc.trade.agreement.buyer_order.issue_date_time = datetime.now(timezone.utc)
     doc.trade.settlement.advance_payment.received_date = datetime.now(timezone.utc)
