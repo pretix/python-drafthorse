@@ -24,9 +24,8 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-import datetime
 import logging
-import os
+from datetime import datetime, timezone
 from io import BytesIO
 from lxml import etree
 from pypdf import PdfReader, PdfWriter
@@ -38,10 +37,43 @@ from pypdf.generic import (
     create_string_object,
 )
 
+from drafthorse.xmp_schema import XMP_SCHEMA
+
+logging.basicConfig()
 logger = logging.getLogger("drafthorse")
+logger.setLevel(logging.INFO)
 
 
-def attach_xml(original_pdf, xml_data, level="BASIC"):
+def attach_xml(original_pdf, xml_data, level=None, metadata=None, lang=None):
+    """
+    Create the ZUGFeRD invoice by attaching
+    the input XML and proper metadata
+    :param original_pdf: Input PDF
+    :param xml_data: Input XML
+    :param level: optional Factur-X profile level
+    one of ``{'MINIMUM', 'BASIC WL', 'BASIC', 'EN 16931', 'EXTENDED', 'XRECHNUNG'}``.
+    If omitted, autodetection is performed
+    :type level: string
+    :param metadata: optional dict with user defined PDF metadata
+    for fields "author", "keywords", "title" and "subject". If metadata is None (default value),
+    this lib will generate some metadata by extracting relevant info from the Factur-X/Order-X XML.
+    Here is an example for the metadata argument:
+    ```
+    pdf_metadata = {
+        'author': 'MyCompany',
+        'keywords': 'Factur-X, Invoice',
+        'title': 'MyCompany: Invoice I1242',
+        'subject':
+          'Factur-X invoice I1242 dated 2017-08-17 issued by MyCompany',
+    }
+    ```
+    :type metadata: dict
+    :param lang: Language identifier in RFC 3066 format to specify the
+    natural language of the PDF document. Used by PDF readers for blind people.
+    Example: en-US or fr-FR
+    :type lang: string
+    :return: Output PDF containing the metadata and XML
+    """
     if not isinstance(original_pdf, bytes):
         raise TypeError("Please supply original PDF as bytes.")
     if not isinstance(xml_data, bytes):
@@ -58,8 +90,14 @@ def attach_xml(original_pdf, xml_data, level="BASIC"):
         output._ID = original_pdf_id
         # else : generate some ?
 
-    _facturx_update_metadata_add_attachment(
-        output, xml_data, {}, level, output_intents=_get_original_output_intents(reader)
+    # Extract metadata from XML
+    pdf_metadata, profile = _extract_xml_info(xml_data, level, metadata)
+
+    # Extract output intents from input PDF
+    output_intents = _get_original_output_intents(reader)
+
+    _update_metadata_add_attachment(
+        output, xml_data, pdf_metadata, profile, output_intents, lang
     )
 
     outbuffer = BytesIO()
@@ -69,6 +107,11 @@ def attach_xml(original_pdf, xml_data, level="BASIC"):
 
 
 def _get_original_output_intents(original_pdf):
+    """
+    Get output intents from input PDF
+    :param original_pdf: Input PDF
+    :return: Output PDF metadata information
+    """
     output_intents = []
     try:
         pdf_root = original_pdf.trailer["/Root"]
@@ -85,8 +128,13 @@ def _get_original_output_intents(original_pdf):
 
 
 def _prepare_pdf_metadata_txt(pdf_metadata):
-    pdf_date = datetime.datetime.utcnow().strftime("D:%Y%m%d%H%M%SZ")
-    info_dict = {
+    """
+    Create PDF info for the Document Properties section
+    :param pdf_metadata: Metadata
+    :return: PDF info
+    """
+    pdf_date = datetime.now(tz=timezone.utc).strftime("D:%Y%m%d%H%M%SZ")
+    return {
         "/Author": pdf_metadata.get("author", ""),
         "/CreationDate": pdf_date,
         "/Creator": "python-drafthorse",
@@ -95,108 +143,52 @@ def _prepare_pdf_metadata_txt(pdf_metadata):
         "/Subject": pdf_metadata.get("subject", ""),
         "/Title": pdf_metadata.get("title", ""),
     }
-    return info_dict
 
 
-def _prepare_pdf_metadata_xml(level, pdf_metadata):
-    nsmap_x = {"x": "adobe:ns:meta/"}
-    nsmap_rdf = {"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"}
-    nsmap_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
-    nsmap_pdf = {"pdf": "http://ns.adobe.com/pdf/1.3/"}
-    nsmap_xmp = {"xmp": "http://ns.adobe.com/xap/1.0/"}
-    nsmap_pdfaid = {"pdfaid": "http://www.aiim.org/pdfa/ns/id/"}
-    nsmap_zf = {"zf": "urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#"}
-    ns_x = "{%s}" % nsmap_x["x"]
-    ns_dc = "{%s}" % nsmap_dc["dc"]
-    ns_rdf = "{%s}" % nsmap_rdf["rdf"]
-    ns_pdf = "{%s}" % nsmap_pdf["pdf"]
-    ns_xmp = "{%s}" % nsmap_xmp["xmp"]
-    ns_pdfaid = "{%s}" % nsmap_pdfaid["pdfaid"]
-    ns_zf = "{%s}" % nsmap_zf["zf"]
-    ns_xml = "{http://www.w3.org/XML/1998/namespace}"
-
-    root = etree.Element(ns_x + "xmpmeta", nsmap=nsmap_x)
-    rdf = etree.SubElement(root, ns_rdf + "RDF", nsmap=nsmap_rdf)
-    desc_pdfaid = etree.SubElement(rdf, ns_rdf + "Description", nsmap=nsmap_pdfaid)
-    desc_pdfaid.set(ns_rdf + "about", "")
-    etree.SubElement(desc_pdfaid, ns_pdfaid + "part").text = "3"
-    etree.SubElement(desc_pdfaid, ns_pdfaid + "conformance").text = "B"
-    desc_dc = etree.SubElement(rdf, ns_rdf + "Description", nsmap=nsmap_dc)
-    desc_dc.set(ns_rdf + "about", "")
-    dc_title = etree.SubElement(desc_dc, ns_dc + "title")
-    dc_title_alt = etree.SubElement(dc_title, ns_rdf + "Alt")
-    dc_title_alt_li = etree.SubElement(dc_title_alt, ns_rdf + "li")
-    dc_title_alt_li.text = pdf_metadata.get("title", "")
-    dc_title_alt_li.set(ns_xml + "lang", "x-default")
-    dc_creator = etree.SubElement(desc_dc, ns_dc + "creator")
-    dc_creator_seq = etree.SubElement(dc_creator, ns_rdf + "Seq")
-    etree.SubElement(dc_creator_seq, ns_rdf + "li").text = pdf_metadata.get(
-        "author", ""
+def _prepare_xmp_metadata(profile, pdf_metadata):
+    """
+    Prepare pdf metadata using the FACTUR-X XMP extension schema
+    :param profile: Invoice profile
+    :param pdf_metadata: PDF metadata
+    :return: metadata XML
+    """
+    xml_str = XMP_SCHEMA.format(
+        title=pdf_metadata.get("title", ""),
+        author=pdf_metadata.get("author", ""),
+        subject=pdf_metadata.get("subject", ""),
+        producer="pypdf",
+        creator_tool="python-drafthorse",
+        timestamp=datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00"),
+        urn="urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#",
+        documenttype="INVOICE",
+        xml_filename="factur-x.xml",
+        version="1.0",
+        xmp_level=profile,
     )
-    dc_desc = etree.SubElement(desc_dc, ns_dc + "description")
-    dc_desc_alt = etree.SubElement(dc_desc, ns_rdf + "Alt")
-    dc_desc_alt_li = etree.SubElement(dc_desc_alt, ns_rdf + "li")
-    dc_desc_alt_li.text = pdf_metadata.get("subject", "")
-    dc_desc_alt_li.set(ns_xml + "lang", "x-default")
-    desc_adobe = etree.SubElement(rdf, ns_rdf + "Description", nsmap=nsmap_pdf)
-    desc_adobe.set(ns_rdf + "about", "")
-    producer = etree.SubElement(desc_adobe, ns_pdf + "Producer")
-    producer.text = "pypdf"
-    desc_xmp = etree.SubElement(rdf, ns_rdf + "Description", nsmap=nsmap_xmp)
-    desc_xmp.set(ns_rdf + "about", "")
-    creator = etree.SubElement(desc_xmp, ns_xmp + "CreatorTool")
-    creator.text = "python-drafthorse"
-    xmp_date = datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "+00:00"
-    etree.SubElement(desc_xmp, ns_xmp + "CreateDate").text = xmp_date
-    etree.SubElement(desc_xmp, ns_xmp + "ModifyDate").text = xmp_date
-
-    # Now is the ZUGFeRD description tag
-    zugferd_desc = etree.SubElement(rdf, ns_rdf + "Description", nsmap=nsmap_zf)
-    zugferd_desc.set(ns_rdf + "about", "")
-    fx_doc_type = etree.SubElement(zugferd_desc, ns_zf + "DocumentType", nsmap=nsmap_zf)
-    fx_doc_type.text = "INVOICE"
-    fx_doc_filename = etree.SubElement(
-        zugferd_desc, ns_zf + "DocumentFileName", nsmap=nsmap_zf
-    )
-    fx_doc_filename.text = "factur-x.xml"
-    fx_doc_version = etree.SubElement(zugferd_desc, ns_zf + "Version", nsmap=nsmap_zf)
-    fx_doc_version.text = "1.0"
-    fx_conformance_level = etree.SubElement(
-        zugferd_desc, ns_zf + "ConformanceLevel", nsmap=nsmap_zf
-    )
-    fx_conformance_level.text = level
-
-    xmp_file = os.path.join(
-        os.path.dirname(__file__),
-        "schema",
-        "ZUGFeRD2p2_extension_schema.xmp",
-    )
-    # Reason for defining a parser below:
-    # http://lxml.de/FAQ.html#why-doesn-t-the-pretty-print-option-reformat-my-xml-output
-    parser = etree.XMLParser(remove_blank_text=True)
-    facturx_ext_schema_root = etree.parse(open(xmp_file), parser)
-    # The Factur-X extension schema must be embedded into each PDF document
-    facturx_ext_schema_desc_xpath = facturx_ext_schema_root.xpath(
-        "//rdf:Description", namespaces=nsmap_rdf
-    )
-    rdf.append(facturx_ext_schema_desc_xpath[1])
-
-    # TODO: should be UTF-16be ??
-    xml_str = etree.tostring(
-        root, pretty_print=True, encoding="UTF-8", xml_declaration=False
-    )
-    head = '<?xpacket begin="\ufeff" id="W5M0MpCehiHzreSzNTczkc9d"?>'.encode("utf-8")
-    tail = '<?xpacket end="w"?>'.encode("utf-8")
-    xml_final_str = head + xml_str + tail
-    return xml_final_str
+    return xml_str.encode("utf-8")
 
 
-def _facturx_update_metadata_add_attachment(
-    pdf_filestream, facturx_xml_str, pdf_metadata, facturx_level, output_intents
+def _update_metadata_add_attachment(
+    pdf_filestream,
+    facturx_xml_str,
+    pdf_metadata,
+    facturx_level,
+    output_intents,
+    lang=None,
 ):
+    """
+    Update PDF metadata and attach XML file
+    :param pdf_filestream: PDF data
+    :param facturx_xml_str: XML data
+    :param pdf_metadata: PDF metadata
+    :param facturx_level: Invoice profile
+    :param output_intents: Output intents from input PDF
+    :param lang: Language identifier in RFC 3066 format
+    """
+    # Disable encoding
     # md5sum = hashlib.md5(facturx_xml_str).hexdigest()
     # md5sum_obj = create_string_object(md5sum)
-    pdf_date = datetime.datetime.utcnow().strftime("D:%Y%m%d%H%M%SZ")
+    pdf_date = datetime.now(tz=timezone.utc).strftime("D:%Y%m%d%H%M%SZ")
     params_dict = DictionaryObject(
         {
             # NameObject('/CheckSum'): md5sum_obj,
@@ -206,7 +198,7 @@ def _facturx_update_metadata_add_attachment(
         }
     )
     file_entry = DecodedStreamObject()
-    file_entry.set_data(facturx_xml_str)  # here we integrate the file itself
+    file_entry.set_data(facturx_xml_str)
     file_entry.update(
         {
             NameObject("/Type"): NameObject("/EmbeddedFile"),
@@ -227,7 +219,7 @@ def _facturx_update_metadata_add_attachment(
                 "/Data" if facturx_level in ("BASIC-WL", "MINIMUM") else "/Alternative"
             ),
             NameObject("/Desc"): create_string_object(
-                "Invoice metadata conforming to ZUGFeRD standard (http://www.ferd-net.de/front_content.php?idcat=231&lang=4)"
+                "Invoice metadata conforming to ZUGFeRD standard (http://www.ferd-net.de/)"
             ),
             NameObject("/Type"): NameObject("/Filespec"),
             NameObject("/F"): fname_obj,
@@ -237,9 +229,7 @@ def _facturx_update_metadata_add_attachment(
     )
     filespec_obj = pdf_filestream._add_object(filespec_dict)
     name_arrayobj_cdict = {fname_obj: filespec_obj}
-    name_arrayobj_content_sort = list(
-        sorted(name_arrayobj_cdict.items(), key=lambda x: x[0])
-    )
+    name_arrayobj_content_sort = sorted(name_arrayobj_cdict.items(), key=lambda x: x[0])
     name_arrayobj_content_final = []
     af_list = []
     for fname_obj, filespec_obj in name_arrayobj_content_sort:
@@ -264,7 +254,7 @@ def _facturx_update_metadata_add_attachment(
         output_intent_obj = pdf_filestream._add_object(output_intent_dict)
         res_output_intents.append(output_intent_obj)
     # Update the root
-    metadata_xml_str = _prepare_pdf_metadata_xml(facturx_level, pdf_metadata)
+    metadata_xml_str = _prepare_xmp_metadata(facturx_level, pdf_metadata)
     metadata_file_entry = DecodedStreamObject()
     metadata_file_entry.set_data(metadata_xml_str)
     metadata_file_entry.update(
@@ -288,5 +278,76 @@ def _facturx_update_metadata_add_attachment(
         pdf_filestream._root_object.update(
             {NameObject("/OutputIntents"): ArrayObject(res_output_intents)}
         )
+    if lang:
+        pdf_filestream._root_object.update(
+            {
+                NameObject("/Lang"): create_string_object(lang.replace("_", "-")),
+            }
+        )
     metadata_txt_dict = _prepare_pdf_metadata_txt(pdf_metadata)
     pdf_filestream.add_metadata(metadata_txt_dict)
+
+
+def _extract_xml_info(xml_data, level=None, metadata=None):
+    """
+    Extract metadata and profile from XML further added to the PDF
+    :param xml_data: XML data
+    :param level: optional Factur-X profile level
+       one of {MINIMUM, BASIC WL, BASIC, EN 16931, EXTENDED, XRECHNUNG}
+       if omitted autodetection is performed
+    :param metadata: optional dict with user defined pdf_metadata
+        for fields "author", "keywords", "title" and "subject"
+    :return: Metadata and profile
+    """
+
+    xml_etree = etree.fromstring(xml_data)
+    namespaces = xml_etree.nsmap
+
+    # get metadata
+    number_xpath = xml_etree.xpath(
+        "//rsm:ExchangedDocument/ram:ID", namespaces=namespaces
+    )
+    number = number_xpath[0].text
+    seller_xpath = xml_etree.xpath(
+        "//ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:Name",
+        namespaces=namespaces,
+    )
+    seller = seller_xpath[0].text
+
+    if metadata is None:
+        metadata = {}
+    pdf_metadata = {
+        "author": metadata.get("author", seller),
+        "keywords": metadata.get("keywords", "Factur-X"),
+        "title": metadata.get("title", number),
+        "subject": metadata.get("subject", number),
+    }
+
+    # get profile
+    doc_id_xpath = xml_etree.xpath(
+        "//rsm:ExchangedDocumentContext"
+        "/ram:GuidelineSpecifiedDocumentContextParameter"
+        "/ram:ID",
+        namespaces=namespaces,
+    )
+    doc_id = doc_id_xpath[0].text
+
+    if level is None:
+        # autodetection of Factur-X profile
+        profile = doc_id.split(":")[-1]
+        if doc_id.split(":")[-1] in ["basic", "extended"]:
+            profile = doc_id.split(":")[-1]
+        elif doc_id.split(":")[-1].startswith("xrechnung"):
+            profile = "xrechnung"
+        elif doc_id.split(":")[-2] == "en16931":
+            profile = doc_id.split(":")[-2]
+            profile = profile[:2] + " " + profile[2:]
+        else:
+            raise Exception("Invalid XML profile!")
+    else:
+        profile = level
+
+    profile = profile.upper()
+    logger.info("Factur-X profile detected from XML: %s", profile)
+
+    return pdf_metadata, profile

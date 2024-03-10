@@ -22,6 +22,8 @@ further abstractions or simplifications. You can set and parse all parameters de
 All output is validated against the official XSDs, but no validation of profile levels
 (basic, comfort, extended) is performed.
 
+The profile level is detected automatically based on the XML data and added to the PDF metadata.
+
 Usage
 -----
 
@@ -112,7 +114,7 @@ Generating::
     # Note that the existing PDF should be compliant to PDF/A-3!
     # You can validate this here: https://www.pdf-online.com/osa/validate.aspx
     with open("input.pdf", "rb") as original_file:
-        new_pdf_bytes = attach_xml(original_file.read(), xml, 'EXTENDED')
+        new_pdf_bytes = attach_xml(original_file.read(), xml)
 
     with open("output.pdf", "wb") as f:
         f.write(new_pdf_bytes)
@@ -135,9 +137,9 @@ To validate files using mustang::
 
     git clone https://github.com/ZUGFeRD/mustangproject.git
     cd mustangproject
-    git checkout core-2.5.1
+    git checkout core-2.9.0
     ./mvnw clean package
-    java -jar Mustang-CLI/target/Mustang-CLI-2.5.1-SNAPSHOT.jar --action validate --source invoice.pdf
+    java -jar Mustang-CLI/target/Mustang-CLI-2.7.4-SNAPSHOT.jar --action validate --source invoice.pdf
 
 
 Credits and License
