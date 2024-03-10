@@ -66,7 +66,7 @@ class LegalOrganization(Element):
         "TradingBusinessName",
         required=False,
         profile=BASIC,
-        _d="Firmenname, sofern abweichend vom Name",
+        _d="Firmenname, sofern abweichend vom Namen",
     )
     trade_address = Field(PostalTradeAddress, required=False, profile=EXTENDED)
 
