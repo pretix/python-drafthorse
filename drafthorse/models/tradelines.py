@@ -5,6 +5,7 @@ from .accounting import (
     ReceivableAccountingAccount,
     TradeAllowanceCharge,
 )
+from .container import Container
 from .delivery import SupplyChainEvent
 from .elements import Element
 from .fields import (
@@ -42,7 +43,7 @@ class GrossPrice(Element):
     basis_quantity = QuantityField(
         NS_RAM, "BasisQuantity", required=False, profile=COMFORT, _d="Preisbasismenge"
     )
-    charge = MultiField(AllowanceCharge, required=False, profile=COMFORT)
+    charge: Container = MultiField(AllowanceCharge, required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
@@ -65,7 +66,7 @@ class LineDocument(Element):
     line_id = StringField(NS_RAM, "LineID")
     line_status_code = StringField(NS_RAM, "LineStatusCode")
     line_status_reason_code = StringField(NS_RAM, "LineStatusReasonCode")
-    notes = MultiField(IncludedNote)
+    notes: Container = MultiField(IncludedNote)
 
     class Meta:
         namespace = NS_RAM
@@ -73,18 +74,20 @@ class LineDocument(Element):
 
 
 class LineAgreement(Element):
-    buyer_order = Field(
+    buyer_order: LineBuyerOrderReferencedDocument = Field(
         LineBuyerOrderReferencedDocument, required=False, profile=EXTENDED
     )
-    contract = Field(LineContractReferencedDocument, required=False, profile=EXTENDED)
-    customer_order = Field(
+    contract: LineContractReferencedDocument = Field(
+        LineContractReferencedDocument, required=False, profile=EXTENDED
+    )
+    customer_order: LineUltimateCustomerOrderReferencedDocument = Field(
         LineUltimateCustomerOrderReferencedDocument, required=False, profile=EXTENDED
     )
-    additional_references = MultiField(
+    additional_references: Container = MultiField(
         LineAdditionalReferencedDocument, required=False, profile=COMFORT
     )
-    gross = Field(GrossPrice, required=False, profile=COMFORT)
-    net = Field(NetPrice)
+    gross: GrossPrice = Field(GrossPrice, required=False, profile=COMFORT)
+    net: NetPrice = Field(NetPrice)
 
     class Meta:
         namespace = NS_RAM
@@ -109,21 +112,23 @@ class LineDelivery(Element):
         profile=EXTENDED,
         _d="Anzahl Packstücke",
     )
-    ship_to = Field(ShipToTradeParty, required=False, profile=EXTENDED)
-    ultimate_ship_to = Field(UltimateShipToTradeParty, required=False, profile=EXTENDED)
-    event = Field(
+    ship_to: ShipToTradeParty = Field(ShipToTradeParty, required=False, profile=EXTENDED)
+    ultimate_ship_to: UltimateShipToTradeParty = Field(
+        UltimateShipToTradeParty, required=False, profile=EXTENDED
+    )
+    event: SupplyChainEvent = Field(
         SupplyChainEvent,
         required=False,
         profile=EXTENDED,
         _d="Detailinformationen zur tatsächlichen Lieferung",
     )
-    despatch_advice = Field(
+    despatch_advice: LineDespatchAdviceReferencedDocument = Field(
         LineDespatchAdviceReferencedDocument, required=False, profile=EXTENDED
     )
-    receiving_advice = Field(
+    receiving_advice: LineReceivingAdviceReferencedDocument = Field(
         LineReceivingAdviceReferencedDocument, required=False, profile=EXTENDED
     )
-    delivery_note = Field(
+    delivery_note: LineDeliveryNoteReferencedDocument = Field(
         LineDeliveryNoteReferencedDocument, required=False, profile=EXTENDED
     )
 
@@ -150,21 +155,21 @@ class LineSummation(Element):
 
 
 class LineSettlement(Element):
-    trade_tax = Field(ApplicableTradeTax, required=False)
-    period = Field(BillingSpecifiedPeriod, required=False)
-    allowance_charge = MultiField(
+    trade_tax: ApplicableTradeTax = Field(ApplicableTradeTax, required=False)
+    period: BillingSpecifiedPeriod = Field(BillingSpecifiedPeriod, required=False)
+    allowance_charge: Container = MultiField(
         TradeAllowanceCharge,
         required=False,
         _d="Schalter für Zu-/Abschlag",
     )
-    monetary_summation = Field(LineSummation, required=False, profile=BASIC)
-    invoice_referenced_document = Field(
+    monetary_summation: LineSummation = Field(LineSummation, required=False, profile=BASIC)
+    invoice_referenced_document: InvoiceReferencedDocument = Field(
         InvoiceReferencedDocument, required=False, profile=EXTENDED
     )
-    additional_referenced_document = Field(
+    additional_referenced_document: LineAdditionalReferencedDocument = Field(
         LineAdditionalReferencedDocument, required=False, profile=COMFORT
     )
-    accounting_account = Field(
+    accounting_account: ReceivableAccountingAccount = Field(
         ReceivableAccountingAccount,
         required=False,
         profile=COMFORT,
@@ -177,11 +182,11 @@ class LineSettlement(Element):
 
 
 class LineItem(Element):
-    document = Field(LineDocument, required=True)
-    product = Field(TradeProduct)
-    agreement = Field(LineAgreement)
-    delivery = Field(LineDelivery)
-    settlement = Field(LineSettlement, required=True)
+    document: LineDocument = Field(LineDocument, required=True)
+    product: TradeProduct = Field(TradeProduct)
+    agreement: LineAgreement = Field(LineAgreement)
+    delivery: LineDelivery = Field(LineDelivery)
+    settlement: LineSettlement = Field(LineSettlement, required=True)
 
     class Meta:
         namespace = NS_RAM

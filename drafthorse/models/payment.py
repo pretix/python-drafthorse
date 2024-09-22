@@ -1,5 +1,6 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
+from .container import StringContainer, CurrencyContainer
 from .fields import (
     DateTimeField,
     DecimalField,
@@ -48,13 +49,13 @@ class PayeeFinancialInstitution(Element):
 
 class PaymentMeans(Element):
     type_code = StringField(NS_RAM, "TypeCode", required=True, profile=COMFORT)
-    information = MultiStringField(
+    information: StringContainer = MultiStringField(
         NS_RAM, "Information", required=False, profile=COMFORT
     )
-    financial_card = Field(FinancialCard)
-    payer_account = Field(PayerFinancialAccount)
-    payee_account = Field(PayeeFinancialAccount)
-    payee_institution = Field(PayeeFinancialInstitution)
+    financial_card: FinancialCard = Field(FinancialCard)
+    payer_account: PayerFinancialAccount = Field(PayerFinancialAccount)
+    payee_account: PayeeFinancialAccount = Field(PayeeFinancialAccount)
+    payee_institution: PayeeFinancialInstitution = Field(PayeeFinancialInstitution)
 
     class Meta:
         namespace = NS_RAM
@@ -182,20 +183,20 @@ class PaymentTerms(Element):
     debit_mandate_id = StringField(
         NS_RAM, "DirectDebitMandateID", required=False, profile=BASIC
     )
-    partial_amount = MultiCurrencyField(
+    partial_amount: CurrencyContainer = MultiCurrencyField(
         NS_RAM,
         "PartialPaymentAmount",
         profile=EXTENDED,
         required=False,
         _d="Betrag der Teilzahlung",
     )
-    penalty_terms = Field(
+    penalty_terms: PaymentPenaltyTerms = Field(
         PaymentPenaltyTerms,
         required=False,
         profile=EXTENDED,
         _d="Detailinformationen zu Zahlungszuschlägen",
     )
-    discount_terms = Field(
+    discount_terms: PaymentDiscountTerms = Field(
         PaymentDiscountTerms,
         required=False,
         profile=EXTENDED,
