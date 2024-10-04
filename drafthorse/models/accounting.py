@@ -1,3 +1,4 @@
+from .container import CurrencyContainer, Container
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (
@@ -148,7 +149,7 @@ class MonetarySummation(Element):
     tax_total = CurrencyField(
         NS_RAM, "TaxTotalAmount", required=True, profile=BASIC, _d="Steuergesamtbetrag"
     )
-    tax_total_other_currency = MultiCurrencyField(
+    tax_total_other_currency: CurrencyContainer = MultiCurrencyField(
         NS_RAM, "TaxTotalAmount", profile=EXTENDED, _d="Steuergesamtbetrag"
     )
     rounding_amount = DecimalField(
@@ -239,7 +240,7 @@ class TradeAllowanceCharge(Element):
     )
     reason_code = StringField(NS_RAM, "ReasonCode", required=False, profile=COMFORT)
     reason = StringField(NS_RAM, "Reason", required=False, profile=COMFORT)
-    trade_tax = MultiField(CategoryTradeTax, required=False, profile=COMFORT)
+    trade_tax: Container = MultiField(CategoryTradeTax, required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM

@@ -35,7 +35,9 @@ class LogisticsTransportMovement(Element):
 
 
 class SupplyChainConsignment(Element):  # TODO: Deprecated?
-    movement = Field(LogisticsTransportMovement, required=False, profile=EXTENDED)
+    movement: LogisticsTransportMovement = Field(
+        LogisticsTransportMovement, required=False, profile=EXTENDED
+    )
 
     class Meta:
         namespace = NS_RAM
@@ -43,20 +45,26 @@ class SupplyChainConsignment(Element):  # TODO: Deprecated?
 
 
 class TradeDelivery(Element):
-    consignment = Field(
+    consignment: SupplyChainConsignment = Field(
         SupplyChainConsignment,
         default=False,
         required=False,
         _d="Detailinformationen zur Konsignation oder Sendung",
     )
-    ship_to = Field(ShipToTradeParty, required=False, profile=EXTENDED)
-    ultimate_ship_to = Field(UltimateShipToTradeParty, required=False, profile=EXTENDED)
-    ship_from = Field(ShipFromTradeParty, required=False, profile=EXTENDED)
-    event = Field(SupplyChainEvent, required=False, profile=BASIC)
-    despatch_advice = Field(
+    ship_to: ShipToTradeParty = Field(
+        ShipToTradeParty, required=False, profile=EXTENDED
+    )
+    ultimate_ship_to: UltimateShipToTradeParty = Field(
+        UltimateShipToTradeParty, required=False, profile=EXTENDED
+    )
+    ship_from: ShipFromTradeParty = Field(
+        ShipFromTradeParty, required=False, profile=EXTENDED
+    )
+    event: SupplyChainEvent = Field(SupplyChainEvent, required=False, profile=BASIC)
+    despatch_advice: DespatchAdviceReferencedDocument = Field(
         DespatchAdviceReferencedDocument, required=False, profile=EXTENDED
     )
-    delivery_note = Field(
+    delivery_note: DeliveryNoteReferencedDocument = Field(
         DeliveryNoteReferencedDocument, required=False, profile=EXTENDED
     )
 

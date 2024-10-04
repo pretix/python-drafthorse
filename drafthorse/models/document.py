@@ -1,6 +1,7 @@
 import xml.etree.cElementTree as ET
 
-from drafthorse.models.note import IncludedNote
+from .container import StringContainer, Container
+from .note import IncludedNote
 
 from . import BASIC, EXTENDED, NS_A, NS_QDT, NS_RAM, NS_RSM, NS_UDT
 from .elements import Element
@@ -35,13 +36,13 @@ class DocumentContext(Element):
     test_indicator = IndicatorField(
         NS_RAM, "TestIndicator", required=False, profile=EXTENDED, _d="Testkennzeichen"
     )
-    business_parameter = Field(
+    business_parameter: BusinessDocumentContextParameter = Field(
         BusinessDocumentContextParameter,
         required=False,
         profile=EXTENDED,
         _d="Geschäftsprozess, Wert",
     )
-    guideline_parameter = Field(
+    guideline_parameter: GuidelineDocumentContextParameter = Field(
         GuidelineDocumentContextParameter,
         required=True,
         profile=BASIC,
@@ -79,8 +80,10 @@ class Header(Element):
         profile=EXTENDED,
         _d="Indikator Original/Kopie",
     )
-    languages = MultiStringField(NS_RAM, "LanguageID", required=False, profile=EXTENDED)
-    notes = MultiField(IncludedNote)
+    languages: StringContainer = MultiStringField(
+        NS_RAM, "LanguageID", required=False, profile=EXTENDED
+    )
+    notes: Container = MultiField(IncludedNote)
     effective_period = Field(
         EffectivePeriod,
         required=False,
@@ -94,9 +97,9 @@ class Header(Element):
 
 
 class Document(Element):
-    context = Field(DocumentContext, required=True)
-    header = Field(Header, required=True)
-    trade = Field(TradeTransaction, required=True)
+    context: DocumentContext = Field(DocumentContext, required=True)
+    header: Header = Field(Header, required=True)
+    trade: TradeTransaction = Field(TradeTransaction, required=True)
 
     def __init__(self):
         super().__init__()

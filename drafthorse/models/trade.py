@@ -8,6 +8,7 @@ from .accounting import (
     TradeAllowanceCharge,
 )
 from .delivery import TradeDelivery
+from .container import Container
 from .elements import Element
 from .fields import DateTimeField, DecimalField, Field, MultiField, StringField
 from .party import (
@@ -59,28 +60,38 @@ class TradeAgreement(Element):
         profile=COMFORT,
         _d="Referenz des Käufers",
     )
-    seller = Field(
+    seller: SellerTradeParty = Field(
         SellerTradeParty, required=True, _d="Detailinformationen zum Verkäufer"
     )
-    buyer = Field(BuyerTradeParty, required=True)
-    end_user = Field(
+    buyer: BuyerTradeParty = Field(BuyerTradeParty, required=True)
+    end_user: EndUserTradeParty = Field(
         EndUserTradeParty, required=False, _d="Abweichender Endverbraucher"
     )
-    delivery_terms = Field(DeliveryTerms, required=False, profile=EXTENDED)
-    seller_order = Field(SellerOrderReferencedDocument, required=False, profile=COMFORT)
-    buyer_order = Field(BuyerOrderReferencedDocument, required=False)
-    customer_order = Field(
+    delivery_terms: DeliveryTerms = Field(
+        DeliveryTerms, required=False, profile=EXTENDED
+    )
+    seller_order: SellerOrderReferencedDocument = Field(
+        SellerOrderReferencedDocument, required=False, profile=COMFORT
+    )
+    buyer_order: BuyerOrderReferencedDocument = Field(
+        BuyerOrderReferencedDocument, required=False
+    )
+    customer_order: UltimateCustomerOrderReferencedDocument = Field(
         UltimateCustomerOrderReferencedDocument, required=False, profile=COMFORT
     )
-    contract = Field(ContractReferencedDocument, required=False, profile=COMFORT)
-    additional_references = MultiField(
+    contract: ContractReferencedDocument = Field(
+        ContractReferencedDocument, required=False, profile=COMFORT
+    )
+    additional_references: Container = MultiField(
         AdditionalReferencedDocument, required=False, profile=COMFORT
     )
     description = StringField(NS_RAM, "Description", required=False, profile=COMFORT)
-    seller_tax_representative_party = Field(
+    seller_tax_representative_party: SellerTaxRepresentativeTradeParty = Field(
         SellerTaxRepresentativeTradeParty, required=False
     )
-    procuring_project_type = Field(ProcuringProjectType, required=False)
+    procuring_project_type: ProcuringProjectType = Field(
+        ProcuringProjectType, required=False
+    )
 
     class Meta:
         namespace = NS_RAM
@@ -102,7 +113,7 @@ class LogisticsServiceCharge(Element):
         profile=COMFORT,
         _d="Betrag der Servicegebühr",
     )
-    trade_tax = MultiField(AppliedTradeTax, required=False, profile=COMFORT)
+    trade_tax: Container = MultiField(AppliedTradeTax, required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
@@ -151,7 +162,7 @@ class AdvancePayment(Element):
     received_date = DateTimeField(
         NS_RAM, "FormattedReceivedDateTime", date_time_namespace=NS_QDT
     )
-    included_trade_tax = MultiField(IncludedTradeTax)
+    included_trade_tax: Container = MultiField(IncludedTradeTax)
 
     class Meta:
         namespace = NS_RAM
@@ -166,48 +177,54 @@ class TradeSettlement(Element):
     )
     currency_code = StringField(NS_RAM, "InvoiceCurrencyCode")
     issuer_reference = StringField(NS_RAM, "InvoiceIssuerReference", profile=EXTENDED)
-    invoicer = Field(
+    invoicer: InvoicerTradeParty = Field(
         InvoicerTradeParty, required=False, profile=EXTENDED, _d="Rechnungsaussteller"
     )
-    invoicee = Field(
+    invoicee: InvoiceeTradeParty = Field(
         InvoiceeTradeParty, required=False, profile=EXTENDED, _d="Rechnungsempfänger"
     )
-    payee = Field(
+    payee: PayeeTradeParty = Field(
         PayeeTradeParty, required=False, profile=BASIC, _d="Zahlungsempfänger"
     )
-    payer = Field(
+    payer: PayerTradeParty = Field(
         PayerTradeParty, required=False, profile=EXTENDED, _d="Zahlungspflichtiger"
     )
-    invoice_currency = Field(TaxApplicableTradeCurrencyExchange, profile=EXTENDED)
-    payment_means = Field(PaymentMeans)
-    trade_tax = MultiField(ApplicableTradeTax)
-    period = Field(BillingSpecifiedPeriod, required=False, profile=BASIC)
-    allowance_charge = MultiField(
+    invoice_currency: TaxApplicableTradeCurrencyExchange = Field(
+        TaxApplicableTradeCurrencyExchange, profile=EXTENDED
+    )
+    payment_means: PaymentMeans = Field(PaymentMeans)
+    trade_tax: Container = MultiField(ApplicableTradeTax)
+    period: BillingSpecifiedPeriod = Field(
+        BillingSpecifiedPeriod, required=False, profile=BASIC
+    )
+    allowance_charge: Container = MultiField(
         TradeAllowanceCharge,
         required=False,
         profile=BASIC,
         _d="Schalter für Zu-/Abschlag",
     )
-    service_charge = MultiField(
+    service_charge: Container = MultiField(
         LogisticsServiceCharge, required=False, profile=EXTENDED
     )
-    terms = MultiField(PaymentTerms, required=False, profile=BASIC)
-    monetary_summation = Field(
+    terms: Container = MultiField(PaymentTerms, required=False, profile=BASIC)
+    monetary_summation: MonetarySummation = Field(
         MonetarySummation,
         required=True,
         profile=BASIC,
         _d="Detailinformation zu Belegsummen",
     )
-    invoice_referenced_document = Field(
+    invoice_referenced_document: InvoiceReferencedDocument = Field(
         InvoiceReferencedDocument, required=False, profile=BASIC
     )
-    accounting_account = Field(
+    accounting_account: ReceivableAccountingAccount = Field(
         ReceivableAccountingAccount,
         required=False,
         profile=BASIC,
         _d="Detailinformationen zur Buchungsreferenz",
     )
-    advance_payment = MultiField(AdvancePayment, required=False, profile=EXTENDED)
+    advance_payment: Container = MultiField(
+        AdvancePayment, required=False, profile=EXTENDED
+    )
 
     class Meta:
         namespace = NS_RAM
@@ -215,10 +232,10 @@ class TradeSettlement(Element):
 
 
 class TradeTransaction(Element):
-    items = MultiField(LineItem, required=True)
-    agreement = Field(TradeAgreement, required=True)
-    delivery = Field(TradeDelivery, required=True)
-    settlement = Field(TradeSettlement, required=True)
+    items: Container = MultiField(LineItem, required=True)
+    agreement: TradeAgreement = Field(TradeAgreement, required=True)
+    delivery: TradeDelivery = Field(TradeDelivery, required=True)
+    settlement: TradeSettlement = Field(TradeSettlement, required=True)
 
     class Meta:
         namespace = NS_RSM

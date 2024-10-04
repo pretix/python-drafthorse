@@ -1,5 +1,6 @@
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
+from .container import Container, IDContainer
 from .fields import Field, IDField, MultiField, MultiIDField, StringField
 
 
@@ -68,7 +69,9 @@ class LegalOrganization(Element):
         profile=BASIC,
         _d="Firmenname, sofern abweichend vom Namen",
     )
-    trade_address = Field(PostalTradeAddress, required=False, profile=EXTENDED)
+    trade_address: PostalTradeAddress = Field(
+        PostalTradeAddress, required=False, profile=EXTENDED
+    )
 
     class Meta:
         namespace = NS_RAM
@@ -80,9 +83,9 @@ class TradeContact(Element):
     department_name = StringField(
         NS_RAM, "DepartmentName", required=False, profile=EXTENDED
     )
-    telephone = Field(PhoneNumber, required=False, profile=EXTENDED)
-    fax = Field(FaxNumber, required=False, profile=EXTENDED)
-    email = Field(EmailURI, required=False, profile=EXTENDED)
+    telephone: PhoneNumber = Field(PhoneNumber, required=False, profile=EXTENDED)
+    fax: FaxNumber = Field(FaxNumber, required=False, profile=EXTENDED)
+    email: EmailURI = Field(EmailURI, required=False, profile=EXTENDED)
 
     class Meta:
         namespace = NS_RAM
@@ -93,7 +96,7 @@ class TradeParty(Element):
     id = StringField(
         NS_RAM, "ID", required=False, profile=COMFORT, _d="Kennung des Handelspartners"
     )
-    global_id = MultiIDField(
+    global_id: IDContainer = MultiIDField(
         NS_RAM,
         "GlobalID",
         required=False,
@@ -108,28 +111,30 @@ class TradeParty(Element):
         profile=COMFORT,
         _d="Zusätzliche rechliche Informationen des Handelspartners",
     )
-    legal_organization = Field(
+    legal_organization: LegalOrganization = Field(
         LegalOrganization,
         required=False,
         profile=BASIC,
         _d="Handelsinformationen des Handelspartners",
     )
-    contact = Field(
+    contact: TradeContact = Field(
         TradeContact,
         required=False,
         profile=EXTENDED,
         _d="Ansprechpartner des Handelspartners",
     )
-    address = Field(
+    address: PostalTradeAddress = Field(
         PostalTradeAddress,
         required=False,
         profile=BASIC,
         _d="Anschrift des Handelspartners",
     )
-    electronic_address = MultiField(
+    electronic_address: Container = MultiField(
         URIUniversalCommunication, required=False, profile=BASIC
     )
-    tax_registrations = MultiField(TaxRegistration, required=False, profile=BASIC)
+    tax_registrations: Container = MultiField(
+        TaxRegistration, required=False, profile=BASIC
+    )
 
 
 class SellerTaxRepresentativeTradeParty(TradeParty):
