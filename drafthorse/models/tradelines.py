@@ -112,7 +112,9 @@ class LineDelivery(Element):
         profile=EXTENDED,
         _d="Anzahl Packstücke",
     )
-    ship_to: ShipToTradeParty = Field(ShipToTradeParty, required=False, profile=EXTENDED)
+    ship_to: ShipToTradeParty = Field(
+        ShipToTradeParty, required=False, profile=EXTENDED
+    )
     ultimate_ship_to: UltimateShipToTradeParty = Field(
         UltimateShipToTradeParty, required=False, profile=EXTENDED
     )
@@ -162,7 +164,9 @@ class LineSettlement(Element):
         required=False,
         _d="Schalter für Zu-/Abschlag",
     )
-    monetary_summation: LineSummation = Field(LineSummation, required=False, profile=BASIC)
+    monetary_summation: LineSummation = Field(
+        LineSummation, required=False, profile=BASIC
+    )
     invoice_referenced_document: InvoiceReferencedDocument = Field(
         InvoiceReferencedDocument, required=False, profile=EXTENDED
     )

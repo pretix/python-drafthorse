@@ -69,7 +69,9 @@ class LegalOrganization(Element):
         profile=BASIC,
         _d="Firmenname, sofern abweichend vom Namen",
     )
-    trade_address: PostalTradeAddress = Field(PostalTradeAddress, required=False, profile=EXTENDED)
+    trade_address: PostalTradeAddress = Field(
+        PostalTradeAddress, required=False, profile=EXTENDED
+    )
 
     class Meta:
         namespace = NS_RAM
@@ -130,7 +132,9 @@ class TradeParty(Element):
     electronic_address: Container = MultiField(
         URIUniversalCommunication, required=False, profile=BASIC
     )
-    tax_registrations: Container = MultiField(TaxRegistration, required=False, profile=BASIC)
+    tax_registrations: Container = MultiField(
+        TaxRegistration, required=False, profile=BASIC
+    )
 
 
 class SellerTaxRepresentativeTradeParty(TradeParty):

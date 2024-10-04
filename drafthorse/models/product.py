@@ -95,11 +95,17 @@ class TradeProduct(Element):
     )
     name = StringField(NS_RAM, "Name", required=False)
     description = StringField(NS_RAM, "Description", required=False, profile=COMFORT)
-    characteristics: Container = MultiField(ProductCharacteristic, required=False, profile=COMFORT)
-    classifications: Container = MultiField(ProductClassification, required=False, profile=COMFORT)
+    characteristics: Container = MultiField(
+        ProductCharacteristic, required=False, profile=COMFORT
+    )
+    classifications: Container = MultiField(
+        ProductClassification, required=False, profile=COMFORT
+    )
     instance: Container = MultiField(ProductInstance, required=False, profile=EXTENDED)
     origins: Container = MultiField(OriginCountry, required=False, profile=COMFORT)
-    included_products: Container = MultiField(ReferencedProduct, required=False, profile=EXTENDED)
+    included_products: Container = MultiField(
+        ReferencedProduct, required=False, profile=EXTENDED
+    )
 
     class Meta:
         namespace = NS_RAM

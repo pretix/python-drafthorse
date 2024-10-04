@@ -67,13 +67,21 @@ class TradeAgreement(Element):
     end_user: EndUserTradeParty = Field(
         EndUserTradeParty, required=False, _d="Abweichender Endverbraucher"
     )
-    delivery_terms: DeliveryTerms = Field(DeliveryTerms, required=False, profile=EXTENDED)
-    seller_order: SellerOrderReferencedDocument = Field(SellerOrderReferencedDocument, required=False, profile=COMFORT)
-    buyer_order: BuyerOrderReferencedDocument = Field(BuyerOrderReferencedDocument, required=False)
+    delivery_terms: DeliveryTerms = Field(
+        DeliveryTerms, required=False, profile=EXTENDED
+    )
+    seller_order: SellerOrderReferencedDocument = Field(
+        SellerOrderReferencedDocument, required=False, profile=COMFORT
+    )
+    buyer_order: BuyerOrderReferencedDocument = Field(
+        BuyerOrderReferencedDocument, required=False
+    )
     customer_order: UltimateCustomerOrderReferencedDocument = Field(
         UltimateCustomerOrderReferencedDocument, required=False, profile=COMFORT
     )
-    contract: ContractReferencedDocument = Field(ContractReferencedDocument, required=False, profile=COMFORT)
+    contract: ContractReferencedDocument = Field(
+        ContractReferencedDocument, required=False, profile=COMFORT
+    )
     additional_references: Container = MultiField(
         AdditionalReferencedDocument, required=False, profile=COMFORT
     )
@@ -81,7 +89,9 @@ class TradeAgreement(Element):
     seller_tax_representative_party: SellerTaxRepresentativeTradeParty = Field(
         SellerTaxRepresentativeTradeParty, required=False
     )
-    procuring_project_type: ProcuringProjectType = Field(ProcuringProjectType, required=False)
+    procuring_project_type: ProcuringProjectType = Field(
+        ProcuringProjectType, required=False
+    )
 
     class Meta:
         namespace = NS_RAM
@@ -179,10 +189,14 @@ class TradeSettlement(Element):
     payer: PayerTradeParty = Field(
         PayerTradeParty, required=False, profile=EXTENDED, _d="Zahlungspflichtiger"
     )
-    invoice_currency: TaxApplicableTradeCurrencyExchange = Field(TaxApplicableTradeCurrencyExchange, profile=EXTENDED)
+    invoice_currency: TaxApplicableTradeCurrencyExchange = Field(
+        TaxApplicableTradeCurrencyExchange, profile=EXTENDED
+    )
     payment_means: PaymentMeans = Field(PaymentMeans)
     trade_tax: Container = MultiField(ApplicableTradeTax)
-    period: BillingSpecifiedPeriod = Field(BillingSpecifiedPeriod, required=False, profile=BASIC)
+    period: BillingSpecifiedPeriod = Field(
+        BillingSpecifiedPeriod, required=False, profile=BASIC
+    )
     allowance_charge: Container = MultiField(
         TradeAllowanceCharge,
         required=False,
@@ -208,7 +222,9 @@ class TradeSettlement(Element):
         profile=BASIC,
         _d="Detailinformationen zur Buchungsreferenz",
     )
-    advance_payment: Container = MultiField(AdvancePayment, required=False, profile=EXTENDED)
+    advance_payment: Container = MultiField(
+        AdvancePayment, required=False, profile=EXTENDED
+    )
 
     class Meta:
         namespace = NS_RAM

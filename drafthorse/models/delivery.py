@@ -35,7 +35,9 @@ class LogisticsTransportMovement(Element):
 
 
 class SupplyChainConsignment(Element):  # TODO: Deprecated?
-    movement: LogisticsTransportMovement = Field(LogisticsTransportMovement, required=False, profile=EXTENDED)
+    movement: LogisticsTransportMovement = Field(
+        LogisticsTransportMovement, required=False, profile=EXTENDED
+    )
 
     class Meta:
         namespace = NS_RAM
@@ -49,9 +51,15 @@ class TradeDelivery(Element):
         required=False,
         _d="Detailinformationen zur Konsignation oder Sendung",
     )
-    ship_to: ShipToTradeParty = Field(ShipToTradeParty, required=False, profile=EXTENDED)
-    ultimate_ship_to: UltimateShipToTradeParty = Field(UltimateShipToTradeParty, required=False, profile=EXTENDED)
-    ship_from: ShipFromTradeParty = Field(ShipFromTradeParty, required=False, profile=EXTENDED)
+    ship_to: ShipToTradeParty = Field(
+        ShipToTradeParty, required=False, profile=EXTENDED
+    )
+    ultimate_ship_to: UltimateShipToTradeParty = Field(
+        UltimateShipToTradeParty, required=False, profile=EXTENDED
+    )
+    ship_from: ShipFromTradeParty = Field(
+        ShipFromTradeParty, required=False, profile=EXTENDED
+    )
     event: SupplyChainEvent = Field(SupplyChainEvent, required=False, profile=BASIC)
     despatch_advice: DespatchAdviceReferencedDocument = Field(
         DespatchAdviceReferencedDocument, required=False, profile=EXTENDED
