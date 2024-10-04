@@ -80,13 +80,13 @@ class Header(Element):
         _d="Indikator Original/Kopie",
     )
     languages = MultiStringField(NS_RAM, "LanguageID", required=False, profile=EXTENDED)
+    notes = MultiField(IncludedNote)
     effective_period = Field(
         EffectivePeriod,
         required=False,
         profile=EXTENDED,
         _d="Vertragliches Fälligkeitsdatum der Rechnung",
     )
-    notes = MultiField(IncludedNote)
 
     class Meta:
         namespace = NS_RSM
