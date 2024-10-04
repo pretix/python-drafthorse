@@ -302,17 +302,29 @@ def _extract_xml_info(xml_data, level=None, metadata=None):
 
     xml_etree = etree.fromstring(xml_data)
     namespaces = xml_etree.nsmap
+    invoice_type_cii = "CrossIndustryInvoice" in xml_etree.tag
 
     # get metadata
-    number_xpath = xml_etree.xpath(
-        "//rsm:ExchangedDocument/ram:ID", namespaces=namespaces
-    )
-    number = number_xpath[0].text
-    seller_xpath = xml_etree.xpath(
-        "//ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:Name",
-        namespaces=namespaces,
-    )
-    seller = seller_xpath[0].text
+    if invoice_type_cii:
+        number_xpath = xml_etree.xpath(
+            "//rsm:ExchangedDocument/ram:ID", namespaces=namespaces
+        )
+        number = number_xpath[0].text
+        seller_xpath = xml_etree.xpath(
+            "//ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:Name",
+            namespaces=namespaces,
+        )
+        seller = seller_xpath[0].text
+    else:
+        number_xpath = xml_etree.xpath(
+            "//cbc:ID", namespaces=namespaces
+        )
+        number = number_xpath[0].text
+        seller_xpath = xml_etree.xpath(
+            "//cac:AccountingSupplierParty/cac:Party/cac:PartyName/cbc:Name",
+            namespaces=namespaces,
+        )
+        seller = seller_xpath[0].text
 
     if metadata is None:
         metadata = {}
@@ -324,12 +336,18 @@ def _extract_xml_info(xml_data, level=None, metadata=None):
     }
 
     # get profile
-    doc_id_xpath = xml_etree.xpath(
-        "//rsm:ExchangedDocumentContext"
-        "/ram:GuidelineSpecifiedDocumentContextParameter"
-        "/ram:ID",
-        namespaces=namespaces,
-    )
+    if invoice_type_cii:
+        doc_id_xpath = xml_etree.xpath(
+            "//rsm:ExchangedDocumentContext"
+            "/ram:GuidelineSpecifiedDocumentContextParameter"
+            "/ram:ID",
+            namespaces=namespaces,
+        )
+    else:
+        doc_id_xpath = xml_etree.xpath(
+            "//cbc:CustomizationID",
+            namespaces=namespaces,
+        )
     doc_id = doc_id_xpath[0].text
 
     if level is None:
