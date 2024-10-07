@@ -55,7 +55,7 @@ def attach_xml(original_pdf, xml_data, level=None, metadata=None, lang=None):
     If omitted, autodetection is performed
     :type level: string
     :param metadata: optional dict with user defined PDF metadata
-    for fields "author", "keywords", "title" and "subject". If metadata is None (default value),
+    for fields "author", "keywords", "title", "subject", "creator" and "producer". If metadata is None (default value),
     this lib will generate some metadata by extracting relevant info from the Factur-X/Order-X XML.
     Here is an example for the metadata argument:
     ```
@@ -63,6 +63,8 @@ def attach_xml(original_pdf, xml_data, level=None, metadata=None, lang=None):
         'author': 'MyCompany',
         'keywords': 'Factur-X, Invoice',
         'title': 'MyCompany: Invoice I1242',
+        'creator': 'My Company Application',
+        'producer': 'My company Accountant',
         'subject':
           'Factur-X invoice I1242 dated 2017-08-17 issued by MyCompany',
     }
@@ -137,7 +139,7 @@ def _prepare_pdf_metadata_txt(pdf_metadata):
     return {
         "/Author": pdf_metadata.get("author", ""),
         "/CreationDate": pdf_date,
-        "/Creator": "python-drafthorse",
+        "/Creator": pdf_metadata.get("creator", "python-drafthorse"),
         "/Keywords": pdf_metadata.get("keywords", ""),
         "/ModDate": pdf_date,
         "/Subject": pdf_metadata.get("subject", ""),
@@ -156,8 +158,8 @@ def _prepare_xmp_metadata(profile, pdf_metadata):
         title=pdf_metadata.get("title", ""),
         author=pdf_metadata.get("author", ""),
         subject=pdf_metadata.get("subject", ""),
-        producer="pypdf",
-        creator_tool="python-drafthorse",
+        producer=pdf_metadata.get("producer", "pypdf"),
+        creator_tool=pdf_metadata.get("creator", "python-drafthorse"),
         timestamp=datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00"),
         urn="urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#",
         documenttype="INVOICE",
@@ -321,6 +323,8 @@ def _extract_xml_info(xml_data, level=None, metadata=None):
         "keywords": metadata.get("keywords", "Factur-X"),
         "title": metadata.get("title", number),
         "subject": metadata.get("subject", number),
+        "producer": metadata.get("producer", "pypdf"),
+        "creator": metadata.get("creator", "python-drafthorse"),
     }
 
     # get profile
