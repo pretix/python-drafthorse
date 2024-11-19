@@ -219,7 +219,7 @@ def _update_metadata_add_attachment(
                 "/Data" if facturx_level in ("BASIC-WL", "MINIMUM") else "/Alternative"
             ),
             NameObject("/Desc"): create_string_object(
-                "Invoice metadata conforming to ZUGFeRD standard (http://www.ferd-net.de/)"
+                "Invoice metadata conforming to ZUGFeRD standard (https://www.ferd-net.de/)"
             ),
             NameObject("/Type"): NameObject("/Filespec"),
             NameObject("/F"): fname_obj,
