@@ -1,8 +1,8 @@
 drafthorse -- Basic ZUGFeRD implementation in Python
 ====================================================
 
-.. image:: https://travis-ci.com/pretix/python-drafthorse.svg?branch=master
-   :target: https://travis-ci.com/pretix/python-drafthorse
+.. image:: https://github.com/pretix/python-drafthorse/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/pretix/python-drafthorse/actions/workflows/tests.yml
 
 .. image:: https://codecov.io/gh/pretix/python-drafthorse/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/pretix/drafthorse
