@@ -107,6 +107,10 @@ class LineDespatchAdviceReferencedDocument(ReferencedDocument):
         namespace = NS_RAM
         tag = "DespatchAdviceReferencedDocument"
 
+class ReceivingAdviceReferencedDocument(ReferencedDocument):
+    class Meta:
+        namespace = NS_RAM
+        tag = "ReceivingAdviceReferencedDocument"
 
 class LineReceivingAdviceReferencedDocument(ReferencedDocument):
     line_id = StringField(NS_RAM, "LineID", required=False, profile=COMFORT)

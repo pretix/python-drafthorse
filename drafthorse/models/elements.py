@@ -33,6 +33,7 @@ class BaseElementMeta(type):
 class Element(metaclass=BaseElementMeta):
     def __init__(self, **kwargs):
         self.required = kwargs.get("required", False)
+        self.unknown_elements = []
         self._data = OrderedDict(
             [
                 (f.name, f.initialize() if f.default or f.required else None)
@@ -81,7 +82,7 @@ class Element(metaclass=BaseElementMeta):
         if (
             not hasattr(self, key)
             and not key.startswith("_")
-            and key not in ("required",)
+            and key not in ("required","unknown_elements")
         ):
             raise AttributeError(
                 f"Element {type(self)} has no attribute '{key}'. If you set it, it would not be included in the output."
@@ -113,7 +114,9 @@ class Element(metaclass=BaseElementMeta):
                 else:
                     getattr(self, name).from_etree(child)
             else:
-                raise TypeError("Unknown element {}".format(child.tag))
+                self.unknown_elements.append(child)
+                continue
+                # raise TypeError("Unknown element {}".format(child.tag))
         return self
 
     @classmethod
