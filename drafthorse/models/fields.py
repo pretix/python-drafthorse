@@ -218,8 +218,8 @@ class BinaryObjectField(Field):
                 "Please pass a 3-tuple of mimeCode, filename and base64-encoded binary."
             )
         instance._data[self.name]._text = value[2]
-        instance._data[self.name]._mime_code = value[0]
         instance._data[self.name]._filename = value[1]
+        instance._data[self.name]._mime_code = value[0]
 
     def initialize(self):
         return self.cls(self.namespace, self.tag)

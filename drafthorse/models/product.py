@@ -3,6 +3,7 @@ from .container import Container
 from .elements import Element
 from .fields import (
     ClassificationField,
+    Field,
     IDField,
     MultiField,
     QuantityField,
@@ -87,14 +88,25 @@ class ReferencedProduct(Element):
 class TradeProduct(Element):
     id = IDField(NS_RAM, "ID", required=False, profile=EXTENDED)
     global_id = IDField(NS_RAM, "GlobalID", required=False)
-    seller_assigned_id = StringField(
+    seller_assigned_id = IDField(
         NS_RAM, "SellerAssignedID", required=False, profile=COMFORT
     )
-    buyer_assigned_id = StringField(
+    buyer_assigned_id = IDField(
         NS_RAM, "BuyerAssignedID", required=False, profile=COMFORT
+    )
+    industry_assigned_id = IDField(
+        NS_RAM, "IndustryAssignedID", required=False, profile=EXTENDED
+    )
+    model_id = IDField(
+        NS_RAM, "ModelID", required=False, profile=EXTENDED
     )
     name = StringField(NS_RAM, "Name", required=False)
     description = StringField(NS_RAM, "Description", required=False, profile=COMFORT)
+    batch_id = IDField(
+        NS_RAM, "BatchID", required=False, profile=EXTENDED
+    )
+    brand_name = StringField(NS_RAM, "BrandName", required=False, profile=EXTENDED)
+    model_name = StringField(NS_RAM, "ModelName", required=False, profile=EXTENDED)
     characteristics: Container = MultiField(
         ProductCharacteristic, required=False, profile=COMFORT
     )
@@ -102,7 +114,7 @@ class TradeProduct(Element):
         ProductClassification, required=False, profile=COMFORT
     )
     instance: Container = MultiField(ProductInstance, required=False, profile=EXTENDED)
-    origins: Container = MultiField(OriginCountry, required=False, profile=COMFORT)
+    origin: OriginCountry = Field(OriginCountry, required=False, profile=COMFORT)
     included_products: Container = MultiField(
         ReferencedProduct, required=False, profile=EXTENDED
     )

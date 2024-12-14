@@ -104,6 +104,7 @@ class TradeParty(Element):
         _d="Globale Kennung des Handelspartners",
     )
     name = StringField(NS_RAM, "Name", required=False, profile=BASIC)
+    role_code = StringField(NS_RAM, "RoleCode", required=False, profile=EXTENDED)
     description = StringField(
         NS_RAM,
         "Description",

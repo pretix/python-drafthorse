@@ -64,6 +64,14 @@ class InvoiceReferencedDocument(ReferencedDocument):
         tag = "InvoiceReferencedDocument"
 
 
+class InvoiceSpecifiedReferencedDocument(ReferencedDocument):
+    type_code = StringField(NS_RAM, "TypeCode", profile=COMFORT, required=False)
+
+    class Meta:
+        namespace = NS_RAM
+        tag = "InvoiceSpecifiedReferencedDocument"
+
+
 class UltimateCustomerOrderReferencedDocument(ReferencedDocument):
     class Meta:
         namespace = NS_RAM

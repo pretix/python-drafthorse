@@ -167,8 +167,9 @@ class LineSettlement(Element):
     monetary_summation: LineSummation = Field(
         LineSummation, required=False, profile=BASIC
     )
-    invoice_referenced_document: InvoiceReferencedDocument = Field(
-        InvoiceReferencedDocument, required=False, profile=EXTENDED
+    invoice_referenced_document: Container = MultiField(
+        InvoiceReferencedDocument, required=False, profile=EXTENDED,
+        _d="Referenz auf die vorausgegangene Rechnung"
     )
     additional_referenced_document: LineAdditionalReferencedDocument = Field(
         LineAdditionalReferencedDocument, required=False, profile=COMFORT
