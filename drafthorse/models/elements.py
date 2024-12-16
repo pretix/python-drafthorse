@@ -88,7 +88,7 @@ class Element(metaclass=BaseElementMeta):
             )
         return super().__setattr__(key, value)
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         if (
             hasattr(self, "Meta")
             and hasattr(self.Meta, "namespace")
@@ -109,19 +109,19 @@ class Element(metaclass=BaseElementMeta):
             if child.tag in field_index:
                 name, _childel = field_index[child.tag]
                 if isinstance(getattr(self, name), Container):
-                    getattr(self, name).add_from_etree(child)
+                    getattr(self, name).add_from_etree(child, strict)
                 else:
-                    getattr(self, name).from_etree(child)
-            else:
+                    getattr(self, name).from_etree(child, strict)
+            elif strict:
                 raise TypeError("Unknown element {}".format(child.tag))
         return self
 
     @classmethod
-    def parse(cls, xmlinput):
+    def parse(cls, xmlinput, strict=True):
         from lxml import etree
 
         root = etree.fromstring(xmlinput)
-        return cls().from_etree(root)
+        return cls().from_etree(root, strict)
 
 
 class StringElement(Element):
@@ -149,7 +149,7 @@ class StringElement(Element):
         node.text = self._text
         return node
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         self._text = root.text
         self._set_on_input = True
         return self
@@ -168,7 +168,7 @@ class DecimalElement(StringElement):
     def __str__(self):
         return self._value
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         self._value = Decimal(root.text)
         self._set_on_input = True
         return self
@@ -189,7 +189,7 @@ class QuantityElement(StringElement):
     def __str__(self):
         return "{} {}".format(self._amount, self._unit_code)
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         self._amount = Decimal(root.text)
         self._unit_code = root.attrib["unitCode"]
         self._set_on_input = True
@@ -211,7 +211,7 @@ class CurrencyElement(StringElement):
             del node.attrib["currencyID"]
         return node
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         self._amount = Decimal(root.text)
         self._currency = root.attrib.get("currencyID") or None
         self._set_on_input = True
@@ -235,7 +235,7 @@ class ClassificationElement(StringElement):
         node.attrib["listVersionID"] = self._list_version_id
         return node
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         self._text = Decimal(root.text)
         self._list_id = root.attrib["listID"]
         self._list_version_id = root.attrib["listVersionID"]
@@ -260,7 +260,7 @@ class BinaryObjectElement(StringElement):
         node.text = self._text
         return node
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         self._mime_code = root.attrib["mimeCode"]
         self._filename = root.attrib["filename"]
         self._text = root.text
@@ -283,7 +283,7 @@ class AgencyIDElement(StringElement):
         node.attrib["schemeAgencyID"] = self._scheme_id
         return node
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         self._text = root.text
         self._scheme_id = root.attrib["schemeAgencyID"]
         self._set_on_input = True
@@ -306,7 +306,7 @@ class IDElement(StringElement):
             node.attrib["schemeID"] = self._scheme_id
         return node
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         self._text = root.text
         try:
             self._scheme_id = root.attrib["schemeID"]
@@ -346,11 +346,14 @@ class DateTimeElement(StringElement):
             t.append(node)
         return t
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         if len(root) != 1:
             raise TypeError("Date containers should have one child")
         if root[0].tag != "{%s}%s" % (self._date_time_namespace, "DateTimeString"):
-            raise TypeError("Tag %s not recognized" % root[0].tag)
+            if strict:
+                raise TypeError("Tag %s not recognized" % root[0].tag)
+            else:
+                return self
         self._format = root[0].attrib["format"]
         if self._format == "102":
             self._value = datetime.strptime(root[0].text, "%Y%m%d").date()
@@ -362,7 +365,7 @@ class DateTimeElement(StringElement):
                 self._value = w.monday()
             else:
                 self._value = datetime.strptime(root[0].text + "1", "%G%V%u").date()
-        else:
+        elif strict:
             raise TypeError(
                 "Date format %s cannot be parsed" % root[0].attrib["format"]
             )
@@ -384,7 +387,7 @@ class DirectDateTimeElement(StringElement):
             t.text = self._value.strftime("%Y-%m-%dT%H:%M:%S")
         return t
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         try:
             self._value = datetime.strptime(root.text, "%Y-%m-%dT%H:%M:%S").date()
         except Exception:
@@ -416,7 +419,7 @@ class IndicatorElement(StringElement):
     def __str__(self):
         return "{}".format(self._value)
 
-    def from_etree(self, root):
+    def from_etree(self, root, strict=True):
         if len(root) != 1:
             raise TypeError("Indicator containers should have one child")
         if root[0].tag != "{%s}%s" % (NS_UDT, "Indicator"):
