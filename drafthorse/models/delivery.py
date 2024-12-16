@@ -1,4 +1,4 @@
-from . import BASIC, EXTENDED, NS_RAM
+from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import DateTimeField, Field, StringField
 from .party import (
@@ -9,6 +9,7 @@ from .party import (
 from .references import (
     DeliveryNoteReferencedDocument,
     DespatchAdviceReferencedDocument,
+    ReceivingAdviceReferencedDocument,
 )
 
 
@@ -66,6 +67,9 @@ class TradeDelivery(Element):
     )
     delivery_note: DeliveryNoteReferencedDocument = Field(
         DeliveryNoteReferencedDocument, required=False, profile=EXTENDED
+    )
+    receiving_advice: ReceivingAdviceReferencedDocument = Field(
+        ReceivingAdviceReferencedDocument, required=False, profile=COMFORT
     )
 
     class Meta:
