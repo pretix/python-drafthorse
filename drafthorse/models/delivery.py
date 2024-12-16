@@ -1,4 +1,4 @@
-from . import BASIC, EXTENDED, NS_RAM
+from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import DateTimeField, Field, StringField
 from .party import (
@@ -49,10 +49,11 @@ class TradeDelivery(Element):
         SupplyChainConsignment,
         default=False,
         required=False,
+        profile=EXTENDED,
         _d="Detailinformationen zur Konsignation oder Sendung",
     )
     ship_to: ShipToTradeParty = Field(
-        ShipToTradeParty, required=False, profile=EXTENDED
+        ShipToTradeParty, required=False, profile=COMFORT
     )
     ultimate_ship_to: UltimateShipToTradeParty = Field(
         UltimateShipToTradeParty, required=False, profile=EXTENDED
@@ -62,7 +63,7 @@ class TradeDelivery(Element):
     )
     event: SupplyChainEvent = Field(SupplyChainEvent, required=False, profile=BASIC)
     despatch_advice: DespatchAdviceReferencedDocument = Field(
-        DespatchAdviceReferencedDocument, required=False, profile=EXTENDED
+        DespatchAdviceReferencedDocument, required=False, profile=COMFORT
     )
     delivery_note: DeliveryNoteReferencedDocument = Field(
         DeliveryNoteReferencedDocument, required=False, profile=EXTENDED
