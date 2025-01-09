@@ -124,8 +124,10 @@ def _get_original_output_intents(original_pdf):
                 "/DestOutputProfile"
             ].get_object()
             output_intents.append((ori_output_intent_dict, dest_output_profile_dict))
+    except KeyError as ex:
+        logger.debug("Data missing from PDF: %s", ex)
     except Exception as ex:
-        logger.error(ex)
+        logger.exception(ex)
     return output_intents
 
 
