@@ -100,14 +100,30 @@ class Document(Element):
     context: DocumentContext = Field(DocumentContext, required=True)
     header: Header = Field(Header, required=True)
     trade: TradeTransaction = Field(TradeTransaction, required=True)
+    __namespaces = {
+        "rsm": NS_RSM,
+        "qdt": NS_QDT,
+        "ram": NS_RAM,
+        "xs": "http://www.w3.org/2001/XMLSchema",
+        "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+        "udt": NS_UDT,
+    }
 
     def __init__(self):
         super().__init__()
-        ET.register_namespace("rsm", NS_RSM)
-        ET.register_namespace("qdt", NS_QDT)
-        ET.register_namespace("ram", NS_RAM)
-        ET.register_namespace("xs", "http://www.w3.org/2001/XMLSchema")
-        ET.register_namespace("udt", NS_UDT)
+        for ns, url in self.__namespaces.items():
+            ET.register_namespace(ns, url)
+
+    def serialize(self, schema="FACTUR-X_BASIC"):
+        # First pass
+        xml = super().serialize(schema)
+
+        # Second pass to ensure all namespaces are defined even if they are unused
+        root = ET.fromstring(xml)
+        for ns, url in self.__namespaces.items():
+            if ns.encode() not in xml:
+                root.set(f"xmlns:{ns}", url)
+        return ET.tostring(root, "utf-8")
 
     class Meta:
         namespace = NS_RSM

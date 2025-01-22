@@ -109,3 +109,17 @@ def test_invalid_invoice_exceptions(invoice_document, invoice_pdf17_bytes):
         attach_xml(invoice_pdf17_bytes, "invalid_xml_type")
 
     assert str(exc_info.value) == "Please supply XML data as bytes."
+
+
+@pytest.mark.parametrize("invoice_document", ["380"], indirect=True)
+def test_unused_name_spaces_included(invoice_document):
+    doc = invoice_document
+    doc.context.guideline_parameter.id = (
+        "urn:cen.eu:en16932:2017#conformant#urn:factur-x.eu:1p0:wrong"
+    )
+    xml = doc.serialize(schema="FACTUR-X_EXTENDED")
+    assert 'xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"' in xml.decode()
+    assert 'xmlns:xs="http://www.w3.org/2001/XMLSchema"' in xml.decode()
+    assert 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' in xml.decode()
+    assert 'xs:' not in xml.decode()
+    assert 'xsi:' not in xml.decode()
