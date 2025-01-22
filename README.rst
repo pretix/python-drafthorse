@@ -45,6 +45,8 @@ Parsing::
     doc = Document.parse(samplexml)
     print(doc.trade.agreement.seller.name)
 
+``Document.parse()`` taskes a boolean parameter ``strict`` which defaults to ``True``. This means that the parser will raise an error if it encounters any unknown element. If you set it to ``False``, the parser will not raise an error and parse whatever it can.
+
 Generating::
 
     import os
@@ -136,6 +138,7 @@ Generating::
     with open("output.pdf", "wb") as f:
         f.write(new_pdf_bytes)
 
+``Document.serialize()`` will validate the generated XML against the specified schema and raise an error if it is not valid. If you want to avoid validation, you can set the ``schema`` parameter to ``None``.
 
 Development
 -----------

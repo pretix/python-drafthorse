@@ -19,9 +19,9 @@ class Container:
     def empty_element(self):
         return self.child_type()
 
-    def add_from_etree(self, root):
+    def add_from_etree(self, root, strict=True):
         childel = self.empty_element()
-        childel.from_etree(root)
+        childel.from_etree(root, strict)
         self.add(childel)
 
 
@@ -46,7 +46,7 @@ class SimpleContainer(Container):
             self.set_element(el, child)
             el.append_to(node)
 
-    def add_from_etree(self, root):
+    def add_from_etree(self, root, strict=True):
         self.add(root.text)
 
 
@@ -60,7 +60,7 @@ class CurrencyContainer(SimpleContainer):
         el._amount = child[0]
         el._currency = child[1]
 
-    def add_from_etree(self, root):
+    def add_from_etree(self, root, strict=True):
         self.add((root.text, root.attrib.get("currencyID")))
 
 
@@ -74,7 +74,7 @@ class IDContainer(SimpleContainer):
         el._text = child[1]
         el._scheme_id = child[0]
 
-    def add_from_etree(self, root):
+    def add_from_etree(self, root, strict=True):
         self.add((root.attrib["schemeID"], root.text))
 
 
@@ -87,5 +87,5 @@ class StringContainer(SimpleContainer):
     def set_element(self, el, child):
         el._text = child
 
-    def add_from_etree(self, root):
+    def add_from_etree(self, root, strict=True):
         self.add(root.text)
