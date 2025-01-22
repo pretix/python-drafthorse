@@ -88,7 +88,8 @@ class TradeAgreement(Element):
         SellerTaxRepresentativeTradeParty, required=False
     )
     procuring_project_type: ProcuringProjectType = Field(
-        ProcuringProjectType, required=False)
+        ProcuringProjectType, required=False
+    )
     customer_order: UltimateCustomerOrderReferencedDocument = Field(
         UltimateCustomerOrderReferencedDocument, required=False, profile=COMFORT
     )
