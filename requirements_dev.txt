@@ -3,3 +3,4 @@ pypdf
 pytest
 flake8
 isort
+black
