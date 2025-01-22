@@ -5,3 +5,4 @@ flake8
 isort
 black
 coverage
+codecov
