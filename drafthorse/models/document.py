@@ -121,7 +121,7 @@ class Document(Element):
         # Second pass to ensure all namespaces are defined even if they are unused
         root = ET.fromstring(xml)
         for ns, url in self.__namespaces.items():
-            if ns.encode() not in xml:
+            if f"xmlns:{ns}".encode() not in xml:
                 root.set(f"xmlns:{ns}", url)
         return ET.tostring(root, "utf-8")
 
