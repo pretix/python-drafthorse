@@ -3,7 +3,7 @@ import xml.etree.cElementTree as ET
 from .container import StringContainer, Container
 from .note import IncludedNote
 
-from . import BASIC, EXTENDED, NS_A, NS_QDT, NS_RAM, NS_RSM, NS_UDT
+from . import BASIC, EXTENDED, NS_QDT, NS_RAM, NS_RSM, NS_UDT
 from .elements import Element
 from .fields import (
     DateTimeField,
@@ -103,11 +103,10 @@ class Document(Element):
 
     def __init__(self):
         super().__init__()
-        ET.register_namespace("a", NS_A)
         ET.register_namespace("rsm", NS_RSM)
         ET.register_namespace("qdt", NS_QDT)
         ET.register_namespace("ram", NS_RAM)
-        ET.register_namespace("xsi", "http://www.w3.org/2001/XMLSchema")
+        ET.register_namespace("xs", "http://www.w3.org/2001/XMLSchema")
         ET.register_namespace("udt", NS_UDT)
 
     class Meta:
