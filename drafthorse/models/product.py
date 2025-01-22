@@ -97,14 +97,10 @@ class TradeProduct(Element):
     industry_assigned_id = IDField(
         NS_RAM, "IndustryAssignedID", required=False, profile=EXTENDED
     )
-    model_id = IDField(
-        NS_RAM, "ModelID", required=False, profile=EXTENDED
-    )
+    model_id = IDField(NS_RAM, "ModelID", required=False, profile=EXTENDED)
     name = StringField(NS_RAM, "Name", required=False)
     description = StringField(NS_RAM, "Description", required=False, profile=COMFORT)
-    batch_id = IDField(
-        NS_RAM, "BatchID", required=False, profile=EXTENDED
-    )
+    batch_id = IDField(NS_RAM, "BatchID", required=False, profile=EXTENDED)
     brand_name = StringField(NS_RAM, "BrandName", required=False, profile=EXTENDED)
     model_name = StringField(NS_RAM, "ModelName", required=False, profile=EXTENDED)
     characteristics: Container = MultiField(

@@ -53,9 +53,7 @@ class TradeDelivery(Element):
         profile=EXTENDED,
         _d="Detailinformationen zur Konsignation oder Sendung",
     )
-    ship_to: ShipToTradeParty = Field(
-        ShipToTradeParty, required=False, profile=COMFORT
-    )
+    ship_to: ShipToTradeParty = Field(ShipToTradeParty, required=False, profile=COMFORT)
     ultimate_ship_to: UltimateShipToTradeParty = Field(
         UltimateShipToTradeParty, required=False, profile=EXTENDED
     )

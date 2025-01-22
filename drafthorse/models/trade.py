@@ -164,7 +164,9 @@ class AdvancePayment(Element):
         NS_RAM, "FormattedReceivedDateTime", date_time_namespace=NS_QDT
     )
     included_trade_tax: Container = MultiField(IncludedTradeTax)
-    referenced_document: InvoiceSpecifiedReferencedDocument = Field(InvoiceSpecifiedReferencedDocument, required=False, profile=EXTENDED)
+    referenced_document: InvoiceSpecifiedReferencedDocument = Field(
+        InvoiceSpecifiedReferencedDocument, required=False, profile=EXTENDED
+    )
 
     class Meta:
         namespace = NS_RAM
