@@ -54,6 +54,7 @@ Generating::
     from drafthorse.models.accounting import ApplicableTradeTax
     from drafthorse.models.document import Document
     from drafthorse.models.note import IncludedNote
+    from drafthorse.models.party import TaxRegistration
     from drafthorse.models.tradelines import LineItem
     from drafthorse.pdf import attach_xml
 
@@ -71,7 +72,7 @@ Generating::
     doc.header.notes.add(note)
 
     doc.trade.agreement.seller.name = "Lieferant GmbH"
-    doc.trade.settlement.payee.name = "Kunde GmbH"
+    doc.trade.settlement.payee.name = "Lieferant GmbH"
 
     doc.trade.agreement.buyer.name = "Kunde GmbH"
     doc.trade.settlement.invoicee.name = "Kunde GmbH"
@@ -81,6 +82,11 @@ Generating::
 
     doc.trade.agreement.seller.address.country_id = "DE"
     doc.trade.agreement.seller.address.country_subdivision = "Bayern"
+    doc.trade.agreement.seller.tax_registrations.add(
+        TaxRegistration(
+            id=("VA", "DE000000000")
+        )
+    )
 
     doc.trade.agreement.seller_order.issue_date_time = datetime.now(timezone.utc)
     doc.trade.agreement.buyer_order.issue_date_time = datetime.now(timezone.utc)
@@ -98,7 +104,7 @@ Generating::
     li.settlement.trade_tax.type_code = "VAT"
     li.settlement.trade_tax.category_code = "E"
     li.settlement.trade_tax.rate_applicable_percent = Decimal("0.00")
-    li.settlement.monetary_summation.total_amount = Decimal("999.00")
+    li.settlement.monetary_summation.total_amount = (Decimal("999.00"), "EUR")
     doc.trade.items.add(li)
 
     trade_tax = ApplicableTradeTax()
@@ -114,7 +120,7 @@ Generating::
     doc.trade.settlement.monetary_summation.charge_total = Decimal("0.00")
     doc.trade.settlement.monetary_summation.allowance_total = Decimal("0.00")
     doc.trade.settlement.monetary_summation.tax_basis_total = Decimal("999.00")
-    doc.trade.settlement.monetary_summation.tax_total = Decimal("0.00")
+    doc.trade.settlement.monetary_summation.tax_total = (Decimal("0.00"), "EUR")
     doc.trade.settlement.monetary_summation.grand_total = Decimal("999.00")
     doc.trade.settlement.monetary_summation.due_amount = Decimal("999.00")
 

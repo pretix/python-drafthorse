@@ -6,6 +6,7 @@ from decimal import Decimal
 from drafthorse.models.accounting import ApplicableTradeTax
 from drafthorse.models.document import Document
 from drafthorse.models.note import IncludedNote
+from drafthorse.models.party import TaxRegistration
 from drafthorse.models.tradelines import LineItem
 
 
@@ -26,7 +27,7 @@ def invoice_document(request):
     doc.header.notes.add(note)
 
     doc.trade.agreement.seller.name = "Lieferant GmbH"
-    doc.trade.settlement.payee.name = "Kunde GmbH"
+    doc.trade.settlement.payee.name = "Lieferant GmbH"
 
     doc.trade.agreement.buyer.name = "Kunde GmbH"
     doc.trade.settlement.invoicee.name = "Kunde GmbH"
@@ -36,6 +37,11 @@ def invoice_document(request):
 
     doc.trade.agreement.seller.address.country_id = "DE"
     doc.trade.agreement.seller.address.country_subdivision = "Bayern"
+    doc.trade.agreement.seller.tax_registrations.add(
+        TaxRegistration(
+            id=("VA", "DE000000000")
+        )
+    )
 
     doc.trade.agreement.seller_order.issue_date_time = datetime.now(timezone.utc)
     doc.trade.agreement.buyer_order.issue_date_time = datetime.now(timezone.utc)
@@ -68,7 +74,7 @@ def invoice_document(request):
     doc.trade.settlement.monetary_summation.charge_total = Decimal("0.00")
     doc.trade.settlement.monetary_summation.allowance_total = Decimal("0.00")
     doc.trade.settlement.monetary_summation.tax_basis_total = Decimal("999.00")
-    doc.trade.settlement.monetary_summation.tax_total = Decimal("0.00")
+    doc.trade.settlement.monetary_summation.tax_total = (Decimal("0.00"), "EUR")
     doc.trade.settlement.monetary_summation.grand_total = Decimal("999.00")
     doc.trade.settlement.monetary_summation.due_amount = Decimal("999.00")
 
