@@ -118,8 +118,11 @@ def test_unused_name_spaces_included(invoice_document):
         "urn:cen.eu:en16932:2017#conformant#urn:factur-x.eu:1p0:wrong"
     )
     xml = doc.serialize(schema="FACTUR-X_EXTENDED")
-    assert 'xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"' in xml.decode()
+    assert (
+        'xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"'
+        in xml.decode()
+    )
     assert 'xmlns:xs="http://www.w3.org/2001/XMLSchema"' in xml.decode()
     assert 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' in xml.decode()
-    assert 'xs:' not in xml.decode()
-    assert 'xsi:' not in xml.decode()
+    assert "xs:" not in xml.decode()
+    assert "xsi:" not in xml.decode()
