@@ -9,6 +9,7 @@ from .party import (
 from .references import (
     DeliveryNoteReferencedDocument,
     DespatchAdviceReferencedDocument,
+    ReceivingAdviceReferencedDocument,
 )
 
 
@@ -67,6 +68,9 @@ class TradeDelivery(Element):
     )
     delivery_note: DeliveryNoteReferencedDocument = Field(
         DeliveryNoteReferencedDocument, required=False, profile=EXTENDED
+    )
+    receiving_advice: ReceivingAdviceReferencedDocument = Field(
+        ReceivingAdviceReferencedDocument, required=False, profile=COMFORT
     )
 
     class Meta:
