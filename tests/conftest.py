@@ -54,7 +54,7 @@ def invoice_document(request):
     li.agreement.gross.amount = Decimal("999.00")
     li.agreement.gross.basis_quantity = (Decimal("1.0000"), "C62")  # C62 == pieces
     li.agreement.net.amount = Decimal("999.00")
-    li.agreement.net.basis_quantity = (Decimal("999.00"), "EUR")
+    li.agreement.net.basis_quantity = (Decimal("999.00"), "C62")
     li.delivery.billed_quantity = (Decimal("1.0000"), "C62")  # C62 == pieces
     li.settlement.trade_tax.type_code = "VAT"
     li.settlement.trade_tax.category_code = "E"
