@@ -1,15 +1,14 @@
-from .container import StringContainer
 from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
-from .fields import MultiStringField, StringField
+from .fields import StringField
 
 
 class IncludedNote(Element):
-    content_code = StringField(NS_RAM, "ContentCode", required=False, profile=EXTENDED)
-    content: StringContainer = MultiStringField(
+    content_code: StringField = StringField(NS_RAM, "ContentCode", required=False, profile=EXTENDED)
+    content: StringField = StringField(
         NS_RAM, "Content", required=False, profile=BASIC
     )
-    subject_code = StringField(NS_RAM, "SubjectCode", required=False, profile=COMFORT)
+    subject_code: StringField = StringField(NS_RAM, "SubjectCode", required=False, profile=COMFORT)
 
     class Meta:
         namespace = NS_RAM
