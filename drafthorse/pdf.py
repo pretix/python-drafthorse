@@ -34,6 +34,7 @@ from pypdf.generic import (
     DecodedStreamObject,
     DictionaryObject,
     NameObject,
+    NumberObject,
     create_string_object,
 )
 
@@ -198,7 +199,7 @@ def _update_metadata_add_attachment(
             # NameObject('/CheckSum'): md5sum_obj,
             NameObject("/ModDate"): create_string_object(pdf_date),
             NameObject("/CreationDate"): create_string_object(pdf_date),
-            NameObject("/Size"): create_string_object(str(len(facturx_xml_str))),
+            NameObject("/Size"): NumberObject(len(facturx_xml_str)),
         }
     )
     file_entry = DecodedStreamObject()
