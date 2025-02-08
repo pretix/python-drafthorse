@@ -39,9 +39,7 @@ from pypdf.generic import (
 
 from drafthorse.xmp_schema import XMP_SCHEMA
 
-logging.basicConfig()
 logger = logging.getLogger("drafthorse")
-logger.setLevel(logging.INFO)
 
 
 def attach_xml(original_pdf, xml_data, level=None, metadata=None, lang=None):
