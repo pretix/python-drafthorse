@@ -196,7 +196,7 @@ class TradeSettlement(Element):
     invoice_currency: TaxApplicableTradeCurrencyExchange = Field(
         TaxApplicableTradeCurrencyExchange, profile=EXTENDED
     )
-    payment_means: PaymentMeans = Field(PaymentMeans)
+    payment_means: Container = MultiField(PaymentMeans, required=False, profile=EXTENDED)
     trade_tax: Container = MultiField(ApplicableTradeTax)
     period: BillingSpecifiedPeriod = Field(
         BillingSpecifiedPeriod, required=False, profile=BASIC
