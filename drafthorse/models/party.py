@@ -130,7 +130,7 @@ class TradeParty(Element):
         profile=BASIC,
         _d="Anschrift des Handelspartners",
     )
-    electronic_address: Container = Field(
+    electronic_address: URIUniversalCommunication = Field(
         URIUniversalCommunication, required=False, profile=BASIC
     )
     tax_registrations: Container = MultiField(
