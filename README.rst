@@ -49,7 +49,6 @@ Parsing::
 
 Generating::
 
-    import os
     from datetime import date, datetime, timezone
     from decimal import Decimal
 
@@ -106,7 +105,7 @@ Generating::
     li.settlement.trade_tax.type_code = "VAT"
     li.settlement.trade_tax.category_code = "E"
     li.settlement.trade_tax.rate_applicable_percent = Decimal("0.00")
-    li.settlement.monetary_summation.total_amount = (Decimal("999.00"), "EUR")
+    li.settlement.monetary_summation.total_amount = Decimal("999.00")
     doc.trade.items.add(li)
 
     trade_tax = ApplicableTradeTax()
