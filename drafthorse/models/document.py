@@ -123,7 +123,7 @@ class Document(Element):
         for ns, url in self.__namespaces.items():
             if f"xmlns:{ns}".encode() not in xml:
                 root.set(f"xmlns:{ns}", url)
-        return ET.tostring(root, "utf-8")
+        return ET.tostring(root, "utf-8", xml_declaration=True)
 
     class Meta:
         namespace = NS_RSM
