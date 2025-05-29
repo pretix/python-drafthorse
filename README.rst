@@ -160,6 +160,10 @@ To validate files using mustang::
     ./mvnw clean package
     java -jar Mustang-CLI/target/Mustang-CLI-2.7.4-SNAPSHOT.jar --action validate --source invoice.pdf
 
+Security
+--------
+
+If you discover a security issue, please contact us at security@pretix.eu and see our [Responsible Disclosure Policy](https://docs.pretix.eu/trust/security/disclosure/) further information.
 
 Credits and License
 -------------------
