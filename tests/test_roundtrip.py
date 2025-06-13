@@ -4,7 +4,6 @@ import pytest
 from difflib import unified_diff
 from io import BytesIO
 from pypdf import PdfReader
-from pypdf.errors import PdfReadError
 from xml.dom import minidom
 
 from drafthorse.models.document import Document
@@ -59,16 +58,7 @@ def test_sample_roundtrip(filename):
     # Read back the PDF. We don't support extensive parsing, but this way we can assert that metadata is at least present
     # and syntactically valid.
     pdf_reader = PdfReader(BytesIO(created_pdf_bytes))
-
-    if filename in (
-        "zugferd_2p3_XRECHNUNG_Betriebskostenabrechnung.xml",
-        "zugferd_2p1_EN16931_Betriebskostenabrechnung.xml",
-        "zugferd_2p1_XRECHNUNG_Betriebskostenabrechnung.xml",
-    ):
-        with pytest.raises(PdfReadError):
-            pdf_reader.xmp_metadata
-    else:
-        assert pdf_reader.xmp_metadata
+    assert pdf_reader.xmp_metadata
 
     # Parse the sample file into our internal python structure
     doc = Document.parse(origxml)

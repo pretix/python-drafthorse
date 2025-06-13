@@ -37,6 +37,7 @@ from pypdf.generic import (
     NumberObject,
     create_string_object,
 )
+from xml.sax.saxutils import escape as xml_escape
 
 from drafthorse.xmp_schema import XMP_SCHEMA
 
@@ -155,12 +156,18 @@ def _prepare_xmp_metadata(profile, pdf_metadata):
     :param pdf_metadata: PDF metadata
     :return: metadata XML
     """
+    # Input metadata gets embedded in the XMP metadata inside XML nodes.
+    # All values _should_ be strings, but that's not asserted anywhere so convert just in case
+    escaped_metadata = {
+        key: xml_escape(str(value)) for key, value in pdf_metadata.items()
+    }
+
     xml_str = XMP_SCHEMA.format(
-        title=pdf_metadata.get("title", ""),
-        author=pdf_metadata.get("author", ""),
-        subject=pdf_metadata.get("subject", ""),
-        producer=pdf_metadata.get("producer", "pypdf"),
-        creator_tool=pdf_metadata.get("creator", "python-drafthorse"),
+        title=escaped_metadata.get("title", ""),
+        author=escaped_metadata.get("author", ""),
+        subject=escaped_metadata.get("subject", ""),
+        producer=escaped_metadata.get("producer", "pypdf"),
+        creator_tool=escaped_metadata.get("creator", "python-drafthorse"),
         timestamp=datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00"),
         urn="urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#",
         documenttype="INVOICE",
