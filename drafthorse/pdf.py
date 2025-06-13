@@ -340,7 +340,7 @@ def _extract_xml_info(xml_data, level=None, metadata=None):
     if level is None:
         # autodetection of Factur-X profile
         profile = doc_id.split(":")[-1]
-        if doc_id.split(":")[-1] in ["basic", "extended"]:
+        if doc_id.split(":")[-1] in ["minimum", "basic", "basicwl", "extended"]:
             profile = doc_id.split(":")[-1]
         elif doc_id.split(":")[-1].startswith("xrechnung"):
             profile = "xrechnung"
