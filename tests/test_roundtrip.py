@@ -2,9 +2,12 @@ import lxml.etree
 import os
 import pytest
 from difflib import unified_diff
+from io import BytesIO
+from pypdf import PdfReader
 from xml.dom import minidom
 
 from drafthorse.models.document import Document
+from drafthorse.pdf import attach_xml
 from drafthorse.utils import validate_xml
 
 samples = [
@@ -43,6 +46,19 @@ def test_sample_roundtrip(filename):
 
     # Validate that the sample file is valid, otherwise the test is moot
     validate_xml(xmlout=origxml, schema=schema)
+
+    # Attach the XML to an empty PDF doc
+    with open(
+        os.path.join(os.path.dirname(__file__), "samples", "Empty.pdf"), "rb"
+    ) as f:
+        original_pdf_bytes = f.read()
+
+    created_pdf_bytes = attach_xml(original_pdf_bytes, origxml)
+
+    # Read back the PDF. We don't support extensive parsing, but this way we can assert that metadata is at least present
+    # and syntactically valid.
+    pdf_reader = PdfReader(BytesIO(created_pdf_bytes))
+    assert pdf_reader.xmp_metadata
 
     # Parse the sample file into our internal python structure
     doc = Document.parse(origxml)
