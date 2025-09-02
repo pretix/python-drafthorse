@@ -98,10 +98,10 @@ Generating::
     li.document.line_id = "1"
     li.product.name = "Rainbow"
     li.agreement.gross.amount = Decimal("999.00")
-    li.agreement.gross.basis_quantity = (Decimal("1.0000"), "C62")  # C62 == pieces
+    li.agreement.gross.basis_quantity = (Decimal("1.0000"), "H87")  # H87 == pieces
     li.agreement.net.amount = Decimal("999.00")
     li.agreement.net.basis_quantity = (Decimal("999.00"), "EUR")
-    li.delivery.billed_quantity = (Decimal("1.0000"), "C62")  # C62 == pieces
+    li.delivery.billed_quantity = (Decimal("1.0000"), "H87")  # H87 == pieces
     li.settlement.trade_tax.type_code = "VAT"
     li.settlement.trade_tax.category_code = "E"
     li.settlement.trade_tax.rate_applicable_percent = Decimal("0.00")
