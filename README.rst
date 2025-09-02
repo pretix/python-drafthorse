@@ -121,7 +121,7 @@ Generating::
     doc.trade.settlement.monetary_summation.charge_total = Decimal("0.00")
     doc.trade.settlement.monetary_summation.allowance_total = Decimal("0.00")
     doc.trade.settlement.monetary_summation.tax_basis_total = Decimal("999.00")
-    doc.trade.settlement.monetary_summation.tax_total = (Decimal("0.00"), "EUR")
+    doc.trade.settlement.monetary_summation.tax_total = Decimal("0.00")
     doc.trade.settlement.monetary_summation.grand_total = Decimal("999.00")
     doc.trade.settlement.monetary_summation.due_amount = Decimal("999.00")
 
