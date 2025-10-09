@@ -68,9 +68,7 @@ Generating::
     doc.header.issue_date_time = date.today()
     doc.header.languages.add("de")
 
-    note = IncludedNote()
-    note.content.add("Test Node 1")
-    doc.header.notes.add(note)
+    doc.header.notes.add(IncludedNote(content="Test Node 1"))
 
     doc.trade.agreement.seller.name = "Lieferant GmbH"
     doc.trade.settlement.payee.name = "Lieferant GmbH"
