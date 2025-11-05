@@ -158,15 +158,15 @@ class StringElement(Element):
 class DecimalElement(StringElement):
     def __init__(self, namespace, tag, value=None):
         super().__init__(namespace, tag)
-        self._value = value
+        self._value = None if value is None else Decimal(value)
 
     def to_etree(self):
         node = self._etree_node()
         node.text = str(self._value) if self._value is not None else ""
         return node
 
-    def __str__(self):
-        return self._value
+    def __format__(self, fmt):
+        return self._value.__format__(fmt)
 
     def from_etree(self, root, strict=True):
         self._value = Decimal(root.text)
