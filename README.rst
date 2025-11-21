@@ -57,8 +57,11 @@ Generating::
     from drafthorse.models.note import IncludedNote
     from drafthorse.models.party import TaxRegistration
     from drafthorse.models.payment import PaymentTerms
+    from drafthorse.models.payment import PaymentMeans
+    from drafthorse.models.trade import AdvancePayment, IncludedTradeTax
     from drafthorse.models.tradelines import LineItem
     from drafthorse.pdf import attach_xml
+
 
     # Build data structure
     doc = Document()
@@ -69,14 +72,13 @@ Generating::
 
     doc.header.notes.add(IncludedNote(content="Test Note 1"))
 
-    doc.trade.agreement.seller.name = "Lieferant GmbH"
-
     doc.trade.agreement.buyer.name = "Kunde GmbH"
     doc.trade.agreement.buyer.address.country_id = "DE"
 
     doc.trade.settlement.currency_code = "EUR"
-    doc.trade.settlement.payment_means.type_code = "ZZZ"
+    doc.trade.settlement.payment_means.add(PaymentMeans(type_code="ZZZ"))
 
+    doc.trade.agreement.seller.name = "Lieferant GmbH"
     doc.trade.agreement.seller.address.country_id = "DE"
     doc.trade.agreement.seller.address.country_subdivision = "Bayern"
     doc.trade.agreement.seller.tax_registrations.add(
@@ -85,7 +87,18 @@ Generating::
         )
     )
 
-    doc.trade.settlement.advance_payment.received_date = datetime.now(timezone.utc)
+    advance = AdvancePayment(
+        received_date=datetime.now(timezone.utc), paid_amount=Decimal(42)
+    )
+    advance.included_trade_tax.add(
+        IncludedTradeTax(
+            calculated_amount=Decimal(0),
+            type_code="VAT",
+            category_code="E",
+            rate_applicable_percent=Decimal(0),
+        )
+    )
+    doc.trade.settlement.advance_payment.add(advance)
 
     li = LineItem()
     li.document.line_id = "1"
