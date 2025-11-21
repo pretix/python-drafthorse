@@ -47,6 +47,17 @@ Parsing::
 
 ``Document.parse()`` taskes a boolean parameter ``strict`` which defaults to ``True``. This means that the parser will raise an error if it encounters any unknown element. If you set it to ``False``, the parser will not raise an error and parse whatever it can.
 
+.. [[[cog
+    # Re-run this with `cog -r README.rst`
+
+    from pathlib import Path
+    from textwrap import indent
+
+    import cog
+
+    cog.outl("Generating::\n")
+    cog.outl(indent(Path("example.py").read_text(encoding="UTF-8"), "    "), dedent=False)
+.. ]]]
 Generating::
 
     from datetime import date, datetime, timedelta, timezone
@@ -56,12 +67,10 @@ Generating::
     from drafthorse.models.document import Document
     from drafthorse.models.note import IncludedNote
     from drafthorse.models.party import TaxRegistration
-    from drafthorse.models.payment import PaymentTerms
-    from drafthorse.models.payment import PaymentMeans
+    from drafthorse.models.payment import PaymentMeans, PaymentTerms
     from drafthorse.models.trade import AdvancePayment, IncludedTradeTax
     from drafthorse.models.tradelines import LineItem
     from drafthorse.pdf import attach_xml
-
 
     # Build data structure
     doc = Document()
@@ -136,6 +145,8 @@ Generating::
 
     # Generate XML file
     xml = doc.serialize(schema="FACTUR-X_EXTENDED")
+
+.. [[[end]]]
 
     # Attach XML to an existing PDF.
     # Note that the existing PDF should be compliant to PDF/A-3!

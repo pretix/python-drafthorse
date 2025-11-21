@@ -1,24 +1,11 @@
 import os
 import pytest
-import re
-from pathlib import Path
-from textwrap import dedent
-
-README_PATH = Path(__file__).parent.parent / "README.rst"
+from example import doc
 
 
 @pytest.fixture
 def invoice_document(request):
-    readme = README_PATH.read_text(encoding="UTF-8")
-    readme_example = re.search(
-        "Generating::$" "(?P<example>.*)" "# Attach XML to an existing PDF.$",
-        readme,
-        flags=re.MULTILINE | re.DOTALL,
-    )
-    assert readme_example
-    local_ns = {}
-    exec(dedent(readme_example["example"]), locals=local_ns)
-    return local_ns['doc']
+    return doc
 
 
 @pytest.fixture
