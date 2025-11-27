@@ -93,9 +93,7 @@ Generating::
     doc.trade.agreement.seller.address.country_id = "DE"
     doc.trade.agreement.seller.address.country_subdivision = "Bayern"
     doc.trade.agreement.seller.tax_registrations.add(
-        TaxRegistration(
-            id=("VA", "DE000000000")
-        )
+        TaxRegistration(id=("VA", "DE000000000"))
     )
 
     advance = AdvancePayment(
