@@ -1,3 +1,5 @@
+.. highlight:: python
+
 drafthorse -- Basic ZUGFeRD implementation in Python
 ====================================================
 
@@ -140,17 +142,23 @@ Generating::
 Development
 -----------
 
-To run the included tests::
+To run the included tests:
+
+.. code-block:: bash
 
     pip install -r requirements_dev.txt
     py.test tests
 
-To automatically sort your Imports as required by CI::
+To automatically sort your Imports as required by CI:
+
+.. code-block:: bash
 
     pip install isort
     isort -rc .
 
-To validate files using mustang::
+To validate files using mustang:
+
+.. code-block:: bash
 
     git clone https://github.com/ZUGFeRD/mustangproject.git
     cd mustangproject
