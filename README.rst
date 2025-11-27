@@ -30,7 +30,7 @@ Maintenance note
 
 With the possibly upcoming legal obligation to use digital formats for all B2B invoices in
 Germany, interest in this library is increasing. We built this library to ble able to use it
-in the [pretix-zugferd](https://github.com/pretix/pretix-zugferd) module and we are planning
+in the `pretix-zugferd <https://github.com/pretix/pretix-zugferd>`_ module and we are planning
 to keep maintaining the library. However, it is not our core business and turnaround time on
 issus or PR reviews might be longer than usual due to other priorities. We do not offer paid
 consulting services around this library.
@@ -163,7 +163,7 @@ To validate files using mustang::
 Security
 --------
 
-If you discover a security issue, please contact us at security@pretix.eu and see our [Responsible Disclosure Policy](https://docs.pretix.eu/trust/security/disclosure/) further information.
+If you discover a security issue, please contact us at security@pretix.eu and see our `Responsible Disclosure Policy <https://docs.pretix.eu/trust/security/disclosure/>`_ further information.
 
 Credits and License
 -------------------
