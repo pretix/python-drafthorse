@@ -80,7 +80,7 @@ class Header(Element):
         profile=EXTENDED,
         _d="Indikator Original/Kopie",
     )
-    languages: StringContainer = MultiStringField(
+    language = StringField(
         NS_RAM, "LanguageID", required=False, profile=EXTENDED
     )
     notes: Container = MultiField(IncludedNote)
