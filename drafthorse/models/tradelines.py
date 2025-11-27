@@ -141,7 +141,39 @@ class LineDelivery(Element):
 
 class LineSummation(Element):
     total_amount = DecimalField(
-        NS_RAM, "LineTotalAmount", required=True, profile=COMFORT
+        NS_RAM,
+        "LineTotalAmount",
+        required=True,
+        profile=COMFORT,
+        _d="Nettobetrag der Rechnungsposition",
+    )
+    charge_total = DecimalField(
+        NS_RAM,
+        "ChargeTotalAmount",
+        required=False,
+        profile=EXTENDED,
+        _d="Gesamtbetrag der Positionszuschläge",
+    )
+    allowance_total = DecimalField(
+        NS_RAM,
+        "AllowanceTotalAmount",
+        required=False,
+        profile=EXTENDED,
+        _d="Gesamtbetrag der Positionsabschläge",
+    )
+    tax_total = DecimalField(
+        NS_RAM,
+        "TaxTotalAmount",
+        required=False,
+        profile=EXTENDED,
+        _d="Gesamtbetrag der Positionssteuern",
+    )
+    grand_total = DecimalField(
+        NS_RAM,
+        "GrandTotalAmount",
+        required=False,
+        profile=EXTENDED,
+        _d="Gesamtbruttobetrag der Position",
     )
     total_allowance_charge = DecimalField(
         NS_RAM,
