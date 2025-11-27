@@ -80,9 +80,7 @@ class Header(Element):
         profile=EXTENDED,
         _d="Indikator Original/Kopie",
     )
-    language = StringField(
-        NS_RAM, "LanguageID", required=False, profile=EXTENDED
-    )
+    language = StringField(NS_RAM, "LanguageID", required=False, profile=EXTENDED)
     notes: Container = MultiField(IncludedNote)
     effective_period = Field(
         EffectivePeriod,
