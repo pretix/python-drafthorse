@@ -160,6 +160,8 @@ GLN 4304171000002
 				</ram:ApplicableTradeTax>
 				<ram:SpecifiedTradeSettlementLineMonetarySummation>
 					<ram:LineTotalAmount>52.00</ram:LineTotalAmount>
+					<ram:TaxTotalAmount>9.88</ram:TaxTotalAmount>
+					<ram:GrandTotalAmount>61.88</ram:GrandTotalAmount>
 				</ram:SpecifiedTradeSettlementLineMonetarySummation>
 			</ram:SpecifiedLineTradeSettlement>
 		</ram:IncludedSupplyChainTradeLineItem>
@@ -191,6 +193,8 @@ GLN 4304171000002
 				</ram:ApplicableTradeTax>
 				<ram:SpecifiedTradeSettlementLineMonetarySummation>
 					<ram:LineTotalAmount>20.50</ram:LineTotalAmount>
+					<ram:TaxTotalAmount>3.9</ram:TaxTotalAmount>
+					<ram:GrandTotalAmount>24.4</ram:GrandTotalAmount>
 				</ram:SpecifiedTradeSettlementLineMonetarySummation>
 			</ram:SpecifiedLineTradeSettlement>
 		</ram:IncludedSupplyChainTradeLineItem>
@@ -229,6 +233,8 @@ GLN 4304171000002
 				</ram:ApplicableTradeTax>
 				<ram:SpecifiedTradeSettlementLineMonetarySummation>
 					<ram:LineTotalAmount>288.75</ram:LineTotalAmount>
+					<ram:TaxTotalAmount>54.86</ram:TaxTotalAmount>
+					<ram:GrandTotalAmount>343.61</ram:GrandTotalAmount>
 				</ram:SpecifiedTradeSettlementLineMonetarySummation>
 			</ram:SpecifiedLineTradeSettlement>
 		</ram:IncludedSupplyChainTradeLineItem>
@@ -260,6 +266,8 @@ GLN 4304171000002
 				</ram:ApplicableTradeTax>
 				<ram:SpecifiedTradeSettlementLineMonetarySummation>
 					<ram:LineTotalAmount>36.75</ram:LineTotalAmount>
+					<ram:TaxTotalAmount>6.98</ram:TaxTotalAmount>
+					<ram:GrandTotalAmount>43.73</ram:GrandTotalAmount>
 				</ram:SpecifiedTradeSettlementLineMonetarySummation>
 			</ram:SpecifiedLineTradeSettlement>
 		</ram:IncludedSupplyChainTradeLineItem>
@@ -296,6 +304,8 @@ GLN 4304171000002
 				</ram:ApplicableTradeTax>
 				<ram:SpecifiedTradeSettlementLineMonetarySummation>
 					<ram:LineTotalAmount>12.10</ram:LineTotalAmount>
+					<ram:TaxTotalAmount>2.30</ram:TaxTotalAmount>
+					<ram:GrandTotalAmount>14.40</ram:GrandTotalAmount>
 				</ram:SpecifiedTradeSettlementLineMonetarySummation>
 			</ram:SpecifiedLineTradeSettlement>
 		</ram:IncludedSupplyChainTradeLineItem>
