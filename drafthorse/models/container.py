@@ -1,6 +1,4 @@
 class Container:
-    __slots__ = ("children", "child_type")
-
     def __init__(self, child_type):
         super().__init__()
         self.children = []
@@ -28,8 +26,6 @@ class Container:
 
 
 class SimpleContainer(Container):
-    __slots__ = ("children", "child_type", "namespace", "tag")
-
     def __init__(self, child_type, namespace, tag):
         super().__init__(child_type)
         self.namespace = namespace
@@ -55,8 +51,6 @@ class SimpleContainer(Container):
 
 
 class CurrencyContainer(SimpleContainer):
-    __slots__ = ("children", "child_type", "namespace", "tag")
-
     def empty_element(self):
         from .elements import CurrencyElement
 
@@ -71,8 +65,6 @@ class CurrencyContainer(SimpleContainer):
 
 
 class IDContainer(SimpleContainer):
-    __slots__ = ("children", "child_type", "namespace", "tag")
-
     def empty_element(self):
         from .elements import IDElement
 
@@ -87,8 +79,6 @@ class IDContainer(SimpleContainer):
 
 
 class StringContainer(SimpleContainer):
-    __slots__ = ("children", "child_type", "namespace", "tag")
-
     def empty_element(self):
         from .elements import StringElement
 
