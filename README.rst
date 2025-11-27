@@ -66,7 +66,7 @@ Generating::
     doc.header.type_code = "380"
     doc.header.name = "RECHNUNG"
     doc.header.issue_date_time = date.today()
-    doc.header.languages("ger")
+    doc.header.language = "ger"
 
     note = IncludedNote()
     note.content.add("Test Node 1")

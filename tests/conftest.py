@@ -20,7 +20,7 @@ def invoice_document(request):
     doc.header.type_code = request.param
     doc.header.name = "RECHNUNG"
     doc.header.issue_date_time = date.today()
-    doc.header.languages = "ger"
+    doc.header.language = "ger"
 
     doc.header.notes.add(IncludedNote(content="Test Node 1"))
 
