@@ -4,6 +4,6 @@ pypdf
 pytest
 flake8
 isort
-black==25.11.0
+black==26.3.1
 coverage
 codecov
