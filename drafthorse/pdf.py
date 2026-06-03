@@ -149,6 +149,10 @@ def _prepare_pdf_metadata_txt(pdf_metadata):
     }
 
 
+def _get_xml_attachment_filename(profile):
+    return "xrechnung.xml" if profile == "XRECHNUNG" else "factur-x.xml"
+
+
 def _prepare_xmp_metadata(profile, pdf_metadata):
     """
     Prepare pdf metadata using the FACTUR-X XMP extension schema
@@ -161,6 +165,7 @@ def _prepare_xmp_metadata(profile, pdf_metadata):
     escaped_metadata = {
         key: xml_escape(str(value)) for key, value in pdf_metadata.items()
     }
+    xml_filename = _get_xml_attachment_filename(profile)
 
     xml_str = XMP_SCHEMA.format(
         title=escaped_metadata.get("title", ""),
@@ -171,7 +176,7 @@ def _prepare_xmp_metadata(profile, pdf_metadata):
         timestamp=datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00"),
         urn="urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#",
         documenttype="INVOICE",
-        xml_filename="factur-x.xml",
+        xml_filename=xml_filename,
         version="1.0",
         xmp_level=profile,
     )
@@ -222,7 +227,8 @@ def _update_metadata_add_attachment(
         {NameObject("/F"): file_entry_obj, NameObject("/UF"): file_entry_obj}
     )
 
-    fname_obj = create_string_object("factur-x.xml")
+    xml_filename = _get_xml_attachment_filename(facturx_level)
+    fname_obj = create_string_object(xml_filename)
     filespec_dict = DictionaryObject(
         {
             NameObject("/AFRelationship"): NameObject(

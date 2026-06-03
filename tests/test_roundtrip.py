@@ -58,6 +58,16 @@ def test_sample_roundtrip(filename):
     # Read back the PDF. We don't support extensive parsing, but this way we can assert that metadata is at least present
     # and syntactically valid.
     pdf_reader = PdfReader(BytesIO(created_pdf_bytes))
+    expected_xml_filename = (
+        "xrechnung.xml" if filename.split("_")[2] == "XRECHNUNG" else "factur-x.xml"
+    )
+    embedded_names = (
+        pdf_reader.trailer["/Root"]["/Names"]["/EmbeddedFiles"]["/Names"]
+    ).get_object()
+    metadata_xml = pdf_reader.trailer["/Root"]["/Metadata"].get_object().get_data()
+
+    assert str(embedded_names[0]) == expected_xml_filename
+    assert expected_xml_filename.encode() in metadata_xml
     assert pdf_reader.xmp_metadata
 
     # Parse the sample file into our internal python structure
