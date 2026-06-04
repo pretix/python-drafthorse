@@ -292,6 +292,35 @@ class DirectDateTimeField(Field):
         return self.cls(self.namespace, self.tag)
 
 
+class DateField(Field):
+    def __init__(
+        self,
+        namespace,
+        tag,
+        default=False,
+        required=False,
+        profile=BASIC,
+        _d=None,
+        date_namespace=NS_UDT,
+    ):
+        from .elements import DateElement
+
+        super().__init__(DateElement, default, required, profile, _d)
+        self.namespace = namespace
+        self.tag = tag
+        self._date_namespace = date_namespace
+
+    def __set__(self, instance, value):
+        if instance._data.get(self.name, None) is None:
+            instance._data[self.name] = self.initialize()
+        instance._data[self.name]._value = value
+
+    def initialize(self):
+        return self.cls(
+            self.namespace, self.tag, date_namespace=self._date_namespace
+        )
+
+
 class MultiField(Field):
     def __init__(
         self, inner_type, default=False, required=False, profile=BASIC, _d=None

@@ -3,6 +3,7 @@ from . import BASIC, COMFORT, EXTENDED, NS_RAM
 from .elements import Element
 from .fields import (
     CurrencyField,
+    DateField,
     DateTimeField,
     DecimalField,
     IndicatorField,
@@ -78,7 +79,7 @@ class ApplicableTradeTax(Element):
         profile=BASIC,
         _d="Grund der Steuerbefreiung (Code)",
     )
-    tax_point_date = DateTimeField(
+    tax_point_date = DateField(
         NS_RAM, "TaxPointDate", required=False, profile=COMFORT
     )
     due_date_type_code = StringField(

@@ -399,6 +399,62 @@ class DirectDateTimeElement(StringElement):
         return "{}".format(self._value)
 
 
+class DateElement(StringElement):
+    def __init__(
+        self, namespace, tag, value=None, format="102", date_namespace=NS_UDT
+    ):
+        super().__init__(namespace, tag)
+        self._value = value
+        self._format = format
+        self._date_namespace = date_namespace
+
+    def to_etree(self):
+        t = self._etree_node()
+        node = ET.Element("{%s}%s" % (self._date_namespace, "DateString"))
+        if self._value:
+            if self._format == "102":
+                node.text = self._value.strftime("%Y%m%d")
+            elif self._format == "616":
+                if sys.version_info < (3, 6):
+                    node.text = "{}{}".format(
+                        self._value.isocalendar()[0], self._value.isocalendar()[1]
+                    )
+                else:
+                    node.text = self._value.strftime("%G%V")
+            node.attrib["format"] = self._format
+            t.append(node)
+        return t
+
+    def from_etree(self, root, strict=True):
+        if len(root) != 1:
+            raise TypeError("Date containers should have one child")
+        if root[0].tag != "{%s}%s" % (self._date_namespace, "DateString"):
+            if strict:
+                raise TypeError("Tag %s not recognized" % root[0].tag)
+            else:
+                return self
+        self._format = root[0].attrib["format"]
+        if self._format == "102":
+            self._value = datetime.strptime(root[0].text, "%Y%m%d").date()
+        elif self._format == "616":
+            if sys.version_info < (3, 6):
+                from isoweek import Week
+
+                w = Week(int(root[0].text[:4]), int(root[0].text[4:]))
+                self._value = w.monday()
+            else:
+                self._value = datetime.strptime(root[0].text + "1", "%G%V%u").date()
+        elif strict:
+            raise TypeError(
+                "Date format %s cannot be parsed" % root[0].attrib["format"]
+            )
+        self._set_on_input = True
+        return self
+
+    def __str__(self):
+        return "{}".format(self._value)
+
+
 class IndicatorElement(StringElement):
     def __init__(self, namespace, tag, value=None):
         super().__init__(namespace, tag)
