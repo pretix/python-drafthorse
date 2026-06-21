@@ -154,6 +154,8 @@ class DeliveryNoteReferencedDocument(ReferencedDocument):
 
 
 class LineDeliveryNoteReferencedDocument(ReferencedDocument):
+    line_id = StringField(NS_RAM, "LineID", required=False, profile=COMFORT)
+
     class Meta:
         namespace = NS_RAM
         tag = "DeliveryNoteReferencedDocument"
