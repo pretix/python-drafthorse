@@ -36,3 +36,11 @@ def test_direct_datetime_invalid_raises_in_strict_mode():
     node.text = "not-a-date"
     with pytest.raises(ValueError):
         DirectDateTimeElement(NS_RAM, "CreationDateTime").from_etree(node, strict=True)
+
+
+def test_id_container_accepts_missing_scheme_id():
+    node = ET.Element("{%s}GlobalID" % NS_RAM)
+    node.text = "4000001123452"
+    container = IDContainer(child_type=(tuple, list), namespace=NS_RAM, tag="GlobalID")
+    container.add_from_etree(node)
+    assert container.children == [(None, "4000001123452")]
