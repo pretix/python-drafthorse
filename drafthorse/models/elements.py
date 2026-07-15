@@ -389,9 +389,11 @@ class DirectDateTimeElement(StringElement):
 
     def from_etree(self, root, strict=True):
         try:
-            self._value = datetime.strptime(root.text, "%Y-%m-%dT%H:%M:%S").date()
-        except Exception:
-            self._value = ""
+            self._value = datetime.strptime(root.text, "%Y-%m-%dT%H:%M:%S")
+        except ValueError:
+            if strict:
+                raise
+            self._value = None
         self._set_on_input = True
         return self
 
