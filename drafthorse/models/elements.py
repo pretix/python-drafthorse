@@ -236,7 +236,7 @@ class ClassificationElement(StringElement):
         return node
 
     def from_etree(self, root, strict=True):
-        self._text = Decimal(root.text)
+        self._text = root.text
         self._list_id = root.attrib["listID"]
         self._list_version_id = root.attrib["listVersionID"]
         self._set_on_input = True
@@ -389,9 +389,11 @@ class DirectDateTimeElement(StringElement):
 
     def from_etree(self, root, strict=True):
         try:
-            self._value = datetime.strptime(root.text, "%Y-%m-%dT%H:%M:%S").date()
-        except Exception:
-            self._value = ""
+            self._value = datetime.strptime(root.text, "%Y-%m-%dT%H:%M:%S")
+        except ValueError:
+            if strict:
+                raise
+            self._value = None
         self._set_on_input = True
         return self
 

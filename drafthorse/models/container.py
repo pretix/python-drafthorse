@@ -80,10 +80,10 @@ class IDContainer(SimpleContainer):
 
     def set_element(self, el, child):
         el._text = child[1]
-        el._scheme_id = child[0]
+        el._scheme_id = child[0] or ""
 
     def add_from_etree(self, root, strict=True):
-        self.add((root.attrib["schemeID"], root.text))
+        self.add((root.attrib.get("schemeID"), root.text))
 
 
 class StringContainer(SimpleContainer):
