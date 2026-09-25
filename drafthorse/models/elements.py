@@ -236,7 +236,7 @@ class ClassificationElement(StringElement):
         return node
 
     def from_etree(self, root, strict=True):
-        self._text = Decimal(root.text)
+        self._text = root.text
         self._list_id = root.attrib["listID"]
         self._list_version_id = root.attrib["listVersionID"]
         self._set_on_input = True
